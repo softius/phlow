@@ -12,7 +12,7 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase {
         $flow = $this->getPipeline();
         $out = $flow->advance(4);
         $this->assertEquals(true, $flow->isCompleted());
-        $this->assertEquals(3, $out['c']);
+        $this->assertEquals(4, $out['c']);
     }
 
     public function testPipelineError()
