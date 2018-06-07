@@ -1,0 +1,31 @@
+{
+    "name": "softius/phlow",
+    "description": "Workflow Engine",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Iacovos Constantinou",
+            "email": "softius@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phlow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phlow\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@composer install",
+            "phpunit"
+        ]
+    }
+}
