@@ -1,6 +1,7 @@
 {
     "name": "softius/phlow",
-    "description": "Workflow Engine",
+    "description": "PHP Workflow Engine",
+    "keywords": ["workflow", "process", "pipeline"],
     "type": "library",
     "license": "MIT",
     "authors": [
