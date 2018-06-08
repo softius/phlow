@@ -13,13 +13,6 @@ class StartEvent implements Event
         $this->nextStep = $nextStep;
     }
 
-    public function execute($exchange)
-    {
-        // auto advance to the next workflow step
-        return $exchange;
-        // $this->next()->execute($exchange);
-    }
-
     public function next()
     {
         return $this->nextStep;

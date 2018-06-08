@@ -69,7 +69,8 @@ class Workflow
      */
     public function catch(callable $func)
     {
-        $this->errorEvent = $this->add(new ErrorEvent($func));
+        $task = new Task($func);
+        $this->errorEvent = $this->add(new ErrorEvent($task));
         return $this->errorEvent;
     }
 
@@ -101,7 +102,8 @@ class Workflow
      */
     public function error(callable $func = null)
     {
-        return ($func === null) ? $this->errorEvent : $this->add(new ErrorEvent($func));
+        $task = new Task($func);
+        return ($func === null) ? $this->errorEvent : $this->add(new ErrorEvent($task));
     }
 
     /**
@@ -128,14 +130,18 @@ class Workflow
             throw new \RuntimeException("Workflow has been already completed.");
         }
 
-        // Execute the next step
-        $this->exchange->setOut(
-            $this->next()->execute($this->exchange->in())
-        );
+        // Retrieve and execute the next step
+        $step = $this->next();
+        if ($step instanceof ExecutableStep) {
+            $this->exchange->setOut(
+                $step->execute($this->exchange->in())
+            );
 
-        // Prepare an exchange for the next step
-        $this->exchange = new Exchange($this->exchange->out());
+            // Prepare an exchange for the next step
+            $this->exchange = new Exchange($this->exchange->out());
+        }
 
+        $this->currentStep = $step;
         return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
     }
 
@@ -148,8 +154,8 @@ class Workflow
         if ($this->currentStep === null && $this->startEvent === null)
             throw new \RuntimeException('Start event is missing');
 
-        $this->currentStep = ($this->currentStep === null) ? $this->startEvent : $this->currentStep->next();
-        return $this->currentStep;
+        $this->currentStep = $this->currentStep ?? $this->startEvent;
+        return $this->currentStep->next();
     }
 
     /**
@@ -159,5 +165,9 @@ class Workflow
     public function isCompleted()
     {
         return $this->currentStep instanceof EndEvent;
+    }
+
+    public function current() {
+        return $this->currentStep;
     }
 }

@@ -2,12 +2,19 @@
 
 namespace Phlow\Event;
 
-use Phlow\Activity\Task;
+use Phlow\Workflow\WorkflowStep;
 
-class ErrorEvent extends Task
+class ErrorEvent implements Event
 {
-    public function __construct($cb)
+    private $nextStep;
+
+    public function __construct(WorkflowStep $nextStep)
     {
-        parent::__construct($cb);
+        $this->nextStep = $nextStep;
+    }
+
+    public function next()
+    {
+        return $this->nextStep;
     }
 }
