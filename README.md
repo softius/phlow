@@ -6,18 +6,42 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Phlow is a workflow engine for PHP. Heavily inspired by BPMN 2.0 , this project attempts to create an engine to represent and implement business processes. 
+Phlow is a workflow engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], this project attempts to provide a solution to represent and implement business processes in PHP projects.
 
-## Install
+Phlow is a framework agnostic solution. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.  
 
-Via Composer
+## Installation
+
+Phlow can be installed to your PHP project by executing the following composer command. Please note that currently there is no stable version available yet.
 
 ``` bash
-$ composer require softius/phlow
+$ composer require softius/phlow:dev-master
 ```
+
 ## Usage
 [...]
 
+## Concepts
+Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
+
+Workflow steps are useful to describe the process and consist of the following tree categories: activities, events and gateways.  
+
+### Events
+An event denotes something that happens. 
+
+* **Start Event**: Acts as a workflow trigger. A workflow can have only Start Event.
+* **End Event**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
+* **Error Event**: Represents an exception within the workflow which might trigger a different path in workflow execution.
+
+### Activities
+An activity denotes something that must be _done_.
+
+* **Task**: A task is an atomic workflow step. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
+
+### Gateways
+A gateway determines forking and merging of workflow paths. Phlow does not provide support for any
+ gateway, at the moment.
+ 
 ## Testing
 
 ``` bash
@@ -51,3 +75,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-downloads]: https://packagist.org/packages/softius/phlow
 [link-author]: https://github.com/softius
 [link-contributors]: ../../contributors
+[link-bpmn2]: http://www.bpmn.org/
