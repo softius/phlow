@@ -151,8 +151,9 @@ class Workflow
      */
     private function next()
     {
-        if ($this->currentStep === null && $this->startEvent === null)
+        if ($this->currentStep === null && $this->startEvent === null) {
             throw new \RuntimeException('Start event is missing');
+        }
 
         $this->currentStep = $this->currentStep ?? $this->startEvent;
         return $this->currentStep->next();
@@ -167,7 +168,8 @@ class Workflow
         return $this->currentStep instanceof EndEvent;
     }
 
-    public function current() {
+    public function current()
+    {
         return $this->currentStep;
     }
 }

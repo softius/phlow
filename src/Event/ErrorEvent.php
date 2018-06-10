@@ -2,6 +2,6 @@
 
 namespace Phlow\Event;
 
-class ErrorEvent extends BaseEvent {
-
+class ErrorEvent extends BaseEvent
+{
 }

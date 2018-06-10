@@ -6,5 +6,4 @@ use Phlow\Workflow\WorkflowStep;
 
 interface Event extends WorkflowStep
 {
-
 }

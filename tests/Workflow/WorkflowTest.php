@@ -6,7 +6,8 @@ use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
 use Phlow\Workflow\Workflow;
 
-class WorkflowTest extends \PHPUnit\Framework\TestCase {
+class WorkflowTest extends \PHPUnit\Framework\TestCase
+{
     public function testPipelineHappyPath()
     {
         $flow = $this->getPipeline();
@@ -20,7 +21,7 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase {
         $obj = (object) ['invoked' => false];
         $flow = new Workflow([]);
         $flow->start(
-            $flow->error(function ($e) use($obj) {
+            $flow->error(function ($e) use ($obj) {
                 $obj->invoked = true;
             })
         );
@@ -34,7 +35,6 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase {
         $flow = new Workflow([]);
         $this->expectException(\RuntimeException::class);
         $flow->advance();
-
     }
 
     public function testAlreadyCompleted()
@@ -49,18 +49,18 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase {
     {
         $in = ['a' => null, 'b' => null, 'c' => null];
 
-        $getInput = function($d) {
+        $getInput = function ($d) {
             $d['a'] = 1;
             $d['b'] = 2;
             return $d;
         };
 
-        $sum = function($d) {
+        $sum = function ($d) {
             $d['c'] = $d['a'] + $d['b'];
             return $d;
         };
 
-        $error = function($e) {
+        $error = function ($e) {
             throw $e;
         };
 

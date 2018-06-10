@@ -9,7 +9,8 @@ use Phlow\Workflow\WorkflowStep;
  * An atomic event within a workflow.
  * @package Phlow\Activity
  */
-class Task implements Activity {
+class Task implements Activity
+{
     private $handler;
 
     private $exceptionObject;
