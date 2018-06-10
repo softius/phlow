@@ -10,7 +10,7 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase {
     public function testPipelineHappyPath()
     {
         $flow = $this->getPipeline();
-        $out = $flow->advance(4);
+        $out = $flow->advance(3);
         $this->assertEquals(true, $flow->isCompleted());
         $this->assertEquals(3, $out['c']);
     }
