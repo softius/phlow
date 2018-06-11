@@ -13,7 +13,7 @@ abstract class BaseEvent implements Event
         $this->nextStep = $nextStep;
     }
 
-    public function next()
+    public function next($message = null)
     {
         return $this->nextStep;
     }

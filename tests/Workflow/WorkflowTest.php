@@ -75,4 +75,43 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
 
         return $flow;
     }
+
+    public function testConditionalFlow()
+    {
+        $helloName  = function ($d) {
+            $d->message = sprintf("Hello %s!", $d->name);
+            return $d;
+        };
+        $helloWorld  = function ($d) {
+            $d->message = 'Hello world';
+            return $d;
+        };
+
+        $d = (object) ['name' => 'phlow', 'message' => null];
+        $flow = new Workflow($d);
+        $flow->start(
+            $flow->exclusive()
+                ->when(
+                    function ($d) {
+                        return empty($d);
+                    },
+                    $flow->task(
+                        $helloWorld,
+                        $flow->end()
+                    )
+                )
+                ->when(
+                    function ($d) {
+                        return !empty($d);
+                    },
+                    $flow->task(
+                        $helloName,
+                        $flow->end()
+                    )
+                )
+        );
+
+        $r = $flow->advance(2);
+        $this->assertEquals("Hello phlow!", $r->message);
+    }
 }

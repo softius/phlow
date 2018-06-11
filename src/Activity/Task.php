@@ -37,7 +37,7 @@ class Task implements Activity
         }
     }
 
-    public function next()
+    public function next($message = null)
     {
         return $this->exceptionObject === null ? $this->nextStep : $this->exceptionStep;
     }

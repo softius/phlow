@@ -6,6 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Event\EndEvent;
+use Phlow\Gateway\ExclusiveGateway;
 
 /**
  * Class Workflow
@@ -120,6 +121,15 @@ class Workflow
     }
 
     /**
+     * Creates an Exclusive Gateway for this workflow
+     * @return ExclusiveGateway
+     */
+    public function exclusive()
+    {
+        return $this->add(new ExclusiveGateway());
+    }
+
+    /**
      * Proceeds to the next workflow step and execute it
      * @param int $howMany
      * @return Exchange
@@ -156,7 +166,10 @@ class Workflow
         }
 
         $this->currentStep = $this->currentStep ?? $this->startEvent;
-        return $this->currentStep->next();
+
+        return $this->currentStep->next(
+            $this->exchange->in()
+        );
     }
 
     /**

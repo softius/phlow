@@ -9,7 +9,8 @@ interface WorkflowStep
 {
     /**
      * Returns the next workflow step
+     * @param $message
      * @return WorkflowStep
      */
-    public function next();
+    public function next($message = null);
 }
