@@ -156,7 +156,10 @@ class Workflow
         }
 
         $this->currentStep = $this->currentStep ?? $this->startEvent;
-        return $this->currentStep->next();
+
+        return $this->currentStep->next(
+            $this->exchange->in()
+        );
     }
 
     /**
