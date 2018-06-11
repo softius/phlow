@@ -6,6 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Event\EndEvent;
+use Phlow\Gateway\ExclusiveGateway;
 
 /**
  * Class Workflow
@@ -117,6 +118,15 @@ class Workflow
     {
         $errorStep = $errorStep === null ? $this->errorEvent : $errorStep;
         return $this->add(new Task($task, $nextStep, $errorStep));
+    }
+
+    /**
+     * Creates an Exclusive Gateway for this workflow
+     * @return ExclusiveGateway
+     */
+    public function exclusive()
+    {
+        return $this->add(new ExclusiveGateway());
     }
 
     /**

@@ -12,6 +12,7 @@ class ExclusiveGateway implements Gateway
     public function when(callable $condition, WorkflowStep $nextStep)
     {
         $this->flows[] = [$condition, $nextStep];
+        return $this;
     }
 
     /**
