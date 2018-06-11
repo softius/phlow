@@ -45,15 +45,15 @@ A gateway denotes forking and merging of workflow paths. Phlow does not provide 
 ## Roadmap
 
 ### v1.0
-* PSR-3 Logging
-* Workflow API
-* Exclusive Gateway
+- [x] Exclusive Gateway
+- [ ] Workflow API
+- [ ] PSR-3 Logging
 
 ### v1.x
-* Persistent Workflow
-* HTML Workflow Visualiation
-* SVG Workflow Visualiation
-* Metrics
+- [ ] Persistent Workflow
+- [ ] HTML Workflow Visualiation
+- [ ] SVG Workflow Visualiation
+- [ ] Metrics
  
 ## Testing
 
