@@ -7,8 +7,20 @@ use Phlow\Workflow\WorkflowNode;
 class ExclusiveGateway implements Gateway
 {
     private $flows;
-    private $message;
 
+    /**
+     * ExclusiveGateway constructor.
+     */
+    public function __construct()
+    {
+        $this->flows = [];
+    }
+
+    /**
+     * @param callable $condition
+     * @param WorkflowNode $nextNode
+     * @return $this
+     */
     public function when(callable $condition, WorkflowNode $nextNode)
     {
         $this->flows[] = [$condition, $nextNode];
@@ -20,7 +32,7 @@ class ExclusiveGateway implements Gateway
      * @param $message
      * @return WorkflowNode
      */
-    public function next($message = null)
+    public function next($message = null): WorkflowNode
     {
         foreach ($this->flows as $flow) {
             list($condition, $nextNode) = $flow;

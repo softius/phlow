@@ -12,5 +12,5 @@ interface WorkflowNode
      * @param $message
      * @return WorkflowNode
      */
-    public function next($message = null);
+    public function next($message = null): WorkflowNode;
 }

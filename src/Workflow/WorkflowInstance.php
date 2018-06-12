@@ -42,7 +42,7 @@ class WorkflowInstance
     /**
      * Proceeds to the next workflow node and executes it
      * @param int $howMany
-     * @return Exchange
+     * @return object
      */
     public function advance($howMany = 1)
     {
@@ -69,7 +69,7 @@ class WorkflowInstance
      * Finds and return the next node to be executed
      * @return WorkflowNode
      */
-    private function next()
+    private function next(): WorkflowNode
     {
         $startEvents = $this->workflow->getAllByClass(StartEvent::class);
         if ($this->currentNode === null && empty($startEvents)) {
@@ -87,7 +87,7 @@ class WorkflowInstance
      * Returns true only and only if the execution has reached and End event.
      * @return bool
      */
-    public function isCompleted()
+    public function isCompleted(): bool
     {
         return $this->currentNode instanceof EndEvent;
     }
@@ -96,7 +96,7 @@ class WorkflowInstance
      * Returns the last executed node.
      * @return null|WorkflowNode
      */
-    public function current()
+    public function current(): WorkflowNode
     {
         return $this->currentNode;
     }

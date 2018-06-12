@@ -35,7 +35,7 @@ class WorkflowBuilder
     /**
      * @return Workflow
      */
-    public function getWorkflow()
+    public function getWorkflow(): Workflow
     {
         return $this->workflow;
     }
@@ -46,7 +46,7 @@ class WorkflowBuilder
      * @param callable $func
      * @return ErrorEvent|WorkflowNode
      */
-    public function catch(callable $func)
+    public function catch(callable $func): WorkflowNode
     {
         $task = new Task($func);
         $this->errorEvent = $this->workflow->add(new ErrorEvent($task));
@@ -58,7 +58,7 @@ class WorkflowBuilder
      * @param WorkflowNode $nextNode
      * @return WorkflowNode
      */
-    public function start(WorkflowNode $nextNode)
+    public function start(WorkflowNode $nextNode): WorkflowNode
     {
         return $this->workflow->add(new StartEvent($nextNode));
     }
@@ -67,7 +67,7 @@ class WorkflowBuilder
      * Creates an End event for this workflow.
      * @return WorkflowNode
      */
-    public function end()
+    public function end(): WorkflowNode
     {
         return $this->workflow->add(new EndEvent());
     }
@@ -78,7 +78,7 @@ class WorkflowBuilder
      * @param callable|null $func
      * @return ErrorEvent|WorkflowNode
      */
-    public function error(callable $func = null)
+    public function error(callable $func = null): WorkflowNode
     {
         $task = new Task($func);
         return ($func === null) ? $this->errorEvent : $this->workflow->add(new ErrorEvent($task));
@@ -91,7 +91,7 @@ class WorkflowBuilder
      * @param WorkflowNode|null $errorNode
      * @return WorkflowNode
      */
-    public function task(callable $task, WorkflowNode $nextNode, WorkflowNode $errorNode = null)
+    public function task(callable $task, WorkflowNode $nextNode, WorkflowNode $errorNode = null): WorkflowNode
     {
         $errorNode = $errorNode === null ? $this->errorEvent : $errorNode;
         return $this->workflow->add(new Task($task, $nextNode, $errorNode));
@@ -101,7 +101,7 @@ class WorkflowBuilder
      * Creates an Exclusive Gateway for this workflow
      * @return ExclusiveGateway
      */
-    public function exclusive()
+    public function exclusive(): WorkflowNode
     {
         return $this->workflow->add(new ExclusiveGateway());
     }

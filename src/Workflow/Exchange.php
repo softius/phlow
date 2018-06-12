@@ -12,6 +12,10 @@ class Exchange
 
     private $outbound;
 
+    /**
+     * Exchange constructor.
+     * @param object $inbound
+     */
     public function __construct($inbound = null)
     {
         $this->inbound = $inbound;

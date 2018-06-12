@@ -19,6 +19,12 @@ class Task implements Activity
 
     private $exceptionNode;
 
+    /**
+     * Task constructor.
+     * @param callable $handler
+     * @param WorkflowNode|null $nextNode
+     * @param WorkflowNode|null $exceptionNode
+     */
     public function __construct(callable $handler, WorkflowNode $nextNode = null, WorkflowNode $exceptionNode = null)
     {
         $this->handler = $handler;
@@ -27,6 +33,10 @@ class Task implements Activity
         $this->exceptionObject = null;
     }
 
+    /**
+     * @param object $in
+     * @return object
+     */
     public function execute($in)
     {
         try {
@@ -37,7 +47,11 @@ class Task implements Activity
         }
     }
 
-    public function next($message = null)
+    /**
+     * @param null $message
+     * @return WorkflowNode
+     */
+    public function next($message = null): WorkflowNode
     {
         return $this->exceptionObject === null ? $this->nextNode : $this->exceptionNode;
     }
