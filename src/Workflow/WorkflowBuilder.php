@@ -42,7 +42,7 @@ class WorkflowBuilder
 
     /**
      * Workflow level error handling.
-     * Catches all errors raised by workflow steps.
+     * Catches all errors raised by workflow nodes.
      * @param callable $func
      * @return ErrorEvent|WorkflowNode
      */
@@ -55,12 +55,12 @@ class WorkflowBuilder
 
     /**
      * Creates a Start event for this workflow
-     * @param WorkflowNode $nextStep
+     * @param WorkflowNode $nextNode
      * @return WorkflowNode
      */
-    public function start(WorkflowNode $nextStep)
+    public function start(WorkflowNode $nextNode)
     {
-        return $this->workflow->add(new StartEvent($nextStep));
+        return $this->workflow->add(new StartEvent($nextNode));
     }
 
     /**
@@ -73,7 +73,7 @@ class WorkflowBuilder
     }
 
     /**
-     * Step level error handling.
+     * Node level error handling.
      * Creates an Error event for this workflow.
      * @param callable|null $func
      * @return ErrorEvent|WorkflowNode
@@ -87,14 +87,14 @@ class WorkflowBuilder
     /**
      * Creates a Task for this workflow
      * @param callable $task
-     * @param WorkflowNode $nextStep
-     * @param WorkflowNode|null $errorStep
+     * @param WorkflowNode $nextNode
+     * @param WorkflowNode|null $errorNode
      * @return WorkflowNode
      */
-    public function task(callable $task, WorkflowNode $nextStep, WorkflowNode $errorStep = null)
+    public function task(callable $task, WorkflowNode $nextNode, WorkflowNode $errorNode = null)
     {
-        $errorStep = $errorStep === null ? $this->errorEvent : $errorStep;
-        return $this->workflow->add(new Task($task, $nextStep, $errorStep));
+        $errorNode = $errorNode === null ? $this->errorEvent : $errorNode;
+        return $this->workflow->add(new Task($task, $nextNode, $errorNode));
     }
 
     /**

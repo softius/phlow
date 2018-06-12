@@ -15,15 +15,15 @@ class Task implements Activity
 
     private $exceptionObject;
 
-    private $nextStep;
+    private $nextNode;
 
-    private $exceptionStep;
+    private $exceptionNode;
 
-    public function __construct(callable $handler, WorkflowNode $nextStep = null, WorkflowNode $exceptionStep = null)
+    public function __construct(callable $handler, WorkflowNode $nextNode = null, WorkflowNode $exceptionNode = null)
     {
         $this->handler = $handler;
-        $this->nextStep = $nextStep;
-        $this->exceptionStep = $exceptionStep;
+        $this->nextNode = $nextNode;
+        $this->exceptionNode = $exceptionNode;
         $this->exceptionObject = null;
     }
 
@@ -39,6 +39,6 @@ class Task implements Activity
 
     public function next($message = null)
     {
-        return $this->exceptionObject === null ? $this->nextStep : $this->exceptionStep;
+        return $this->exceptionObject === null ? $this->nextNode : $this->exceptionNode;
     }
 }

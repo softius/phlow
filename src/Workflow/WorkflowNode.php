@@ -8,7 +8,7 @@ namespace Phlow\Workflow;
 interface WorkflowNode
 {
     /**
-     * Returns the next workflow step
+     * Returns the next workflow node
      * @param $message
      * @return WorkflowNode
      */

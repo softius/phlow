@@ -18,14 +18,14 @@ class WorkflowInstance
     private $workflow;
 
     /**
-     * @var Exchange Last exchange between workflow steps
+     * @var Exchange Last exchange between workflow nodes
      */
     private $exchange;
 
     /**
-     * @var WorkflowNode Last executed step
+     * @var WorkflowNode Last executed node
      */
-    private $currentStep;
+    private $currentNode;
 
     /**
      * WorkflowInstance constructor.
@@ -36,11 +36,11 @@ class WorkflowInstance
     {
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
-        $this->currentStep = null;
+        $this->currentNode = null;
     }
 
     /**
-     * Proceeds to the next workflow step and execute it
+     * Proceeds to the next workflow node and executes it
      * @param int $howMany
      * @return Exchange
      */
@@ -50,35 +50,35 @@ class WorkflowInstance
             throw new \RuntimeException("Workflow has been already completed.");
         }
 
-        // Retrieve and execute the next step
-        $step = $this->next();
-        if ($step instanceof ExecutableStep) {
+        // Retrieve and execute the next node
+        $node = $this->next();
+        if ($node instanceof ExecutableNode) {
             $this->exchange->setOut(
-                $step->execute($this->exchange->in())
+                $node->execute($this->exchange->in())
             );
 
-            // Prepare an exchange for the next step
+            // Prepare an exchange for the next node
             $this->exchange = new Exchange($this->exchange->out());
         }
 
-        $this->currentStep = $step;
+        $this->currentNode = $node;
         return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
     }
 
     /**
-     * Finds and return the next step to be executed
+     * Finds and return the next node to be executed
      * @return WorkflowNode
      */
     private function next()
     {
         $startEvents = $this->workflow->getAllByClass(StartEvent::class);
-        if ($this->currentStep === null && empty($startEvents)) {
+        if ($this->currentNode === null && empty($startEvents)) {
             throw new \RuntimeException('Start event is missing');
         }
 
-        $this->currentStep = $this->currentStep ?? $startEvents[0];
+        $this->currentNode = $this->currentNode ?? $startEvents[0];
 
-        return $this->currentStep->next(
+        return $this->currentNode->next(
             $this->exchange->in()
         );
     }
@@ -89,15 +89,15 @@ class WorkflowInstance
      */
     public function isCompleted()
     {
-        return $this->currentStep instanceof EndEvent;
+        return $this->currentNode instanceof EndEvent;
     }
 
     /**
-     * Returns the last executed step.
+     * Returns the last executed node.
      * @return null|WorkflowNode
      */
     public function current()
     {
-        return $this->currentStep;
+        return $this->currentNode;
     }
 }

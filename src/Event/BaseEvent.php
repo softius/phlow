@@ -6,15 +6,15 @@ use Phlow\Workflow\WorkflowNode;
 
 abstract class BaseEvent implements Event
 {
-    private $nextStep;
+    private $nextNode;
 
-    public function __construct(WorkflowNode $nextStep)
+    public function __construct(WorkflowNode $nextNode)
     {
-        $this->nextStep = $nextStep;
+        $this->nextNode = $nextNode;
     }
 
     public function next($message = null)
     {
-        return $this->nextStep;
+        return $this->nextNode;
     }
 }
