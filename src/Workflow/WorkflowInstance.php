@@ -3,6 +3,7 @@
 namespace Phlow\Workflow;
 
 use Phlow\Event\EndEvent;
+use Phlow\Event\StartEvent;
 
 /**
  * Class WorkflowInstance
@@ -70,11 +71,12 @@ class WorkflowInstance
      */
     private function next()
     {
-        if ($this->currentStep === null && !$this->workflow->hasStartEvent()) {
+        $startEvents = $this->workflow->getAllByClass(StartEvent::class);
+        if ($this->currentStep === null && empty($startEvents)) {
             throw new \RuntimeException('Start event is missing');
         }
 
-        $this->currentStep = $this->currentStep ?? $this->workflow->getStartEvent();
+        $this->currentStep = $this->currentStep ?? $startEvents[0];
 
         return $this->currentStep->next(
             $this->exchange->in()

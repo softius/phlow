@@ -2,18 +2,21 @@
 
 namespace Phlow\Workflow;
 
-use Phlow\Activity\Task;
-use Phlow\Event\ErrorEvent;
-use Phlow\Event\StartEvent;
-use Phlow\Event\EndEvent;
-use Phlow\Gateway\ExclusiveGateway;
-
 /**
  * Class Workflow
  * @package Phlow\Workflow
  */
 class Workflow
 {
+    /**
+     * @var string The name of this workflow
+     */
+    private $name;
+
+    /**
+     * @var string Short description or any other comments about this workflow
+     */
+    private $comments;
 
     /**
      * @var array Unordered list of the steps, that composite this workflow.
@@ -21,22 +24,31 @@ class Workflow
     private $steps;
 
     /**
-     * @var StartEvent First event to be executed
-     */
-    private $startEvent;
-
-    /**
-     * @var ErrorEvent Catch-all errors event
-     */
-    private $errorEvent;
-
-    /**
      * Workflow constructor.
+     * @param string $name
+     * @param string $comments
      */
-    public function __construct()
+    public function __construct(string $name = null, string $comments = null)
     {
+        $this->name = $name;
+        $this->comments = $comments;
         $this->steps = [];
-        $this->errorEvent = $this->startEvent = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComments(): string
+    {
+        return $this->comments;
     }
 
     /**
@@ -45,23 +57,80 @@ class Workflow
      * @param WorkflowStep $step
      * @return WorkflowStep
      */
-    public function add(WorkflowStep $step)
+    public function add(WorkflowStep $step): WorkflowStep
     {
-        if ($step instanceof StartEvent) {
-            $this->startEvent = $step;
-        }
-
         $this->steps[] = $step;
         return $step;
     }
 
-    public function hasStartEvent()
+    /**
+     * Adds the provided the steps in this workflow
+     * @param WorkFlowStep ...$steps
+     * @return void
+     */
+    public function addAll(WorkFlowStep ...$steps): void
     {
-        return !($this->startEvent === null);
+        foreach ($steps as $step) {
+            $this->add($step);
+        }
     }
 
-    public function getStartEvent()
+    /**
+     * Removes the provided step from the list.
+     * @param WorkflowStep $step
+     * @return void
+     * @throws NotFoundException
+     */
+    public function remove(WorkflowStep $step): void
     {
-        return $this->startEvent;
+        $key = array_search($step, $this->steps, true);
+        if ($key === false) {
+            throw new NotFoundException("Step was not found");
+        }
+
+        array_splice($this->steps, $key, 1);
+    }
+
+    /**
+     * Returns all the steps currently associated with this workflow, in no particular order
+     * @param callable|null $filter
+     * @return iterable
+     */
+    public function getAll(callable $filter = null): iterable
+    {
+        return ($filter) ? array_values(array_filter($this->steps, $filter)) : $this->steps;
+    }
+
+    /**
+     * Retrieves and returns the step associated with the specified id
+     * @param string $id
+     * @return WorkflowStep
+     * @throws NotFoundException
+     */
+    public function get(string $id): WorkflowStep
+    {
+        $steps = $this->getAll(function ($step) use ($id) {
+           // return $step->getId() === $id;
+        });
+
+        if (count($steps) > 1) {
+            throw new \RuntimeException(sprintf("More than one steps found with the same id (%s)", $id));
+        } elseif (count($steps) === 0) {
+            throw new NotFoundException("Step was not found");
+        }
+
+        return $steps[0];
+    }
+
+    /**
+     * Returns all steps that are instances of the specified class
+     * @param $class
+     * @return iterable
+     */
+    public function getAllByClass($class): iterable
+    {
+        return $this->getAll(function ($step) use ($class) {
+            return $step instanceof $class;
+        });
     }
 }

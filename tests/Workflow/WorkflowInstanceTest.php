@@ -8,7 +8,7 @@ use Phlow\Workflow\Workflow;
 use Phlow\Workflow\WorkflowBuilder;
 use Phlow\Workflow\WorkflowInstance;
 
-class WorkflowTest extends \PHPUnit\Framework\TestCase
+class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
 {
     public function testPipelineHappyPath()
     {
