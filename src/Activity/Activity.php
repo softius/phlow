@@ -2,7 +2,7 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 use Phlow\Workflow\ExecutableStep;
 
 /**
@@ -10,6 +10,6 @@ use Phlow\Workflow\ExecutableStep;
  * Represents any action or task executed by end users or by the application
  * @package Phlow\Activity
  */
-interface Activity extends WorkflowStep, ExecutableStep
+interface Activity extends WorkflowNode, ExecutableStep
 {
 }

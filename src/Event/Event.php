@@ -2,8 +2,8 @@
 
 namespace Phlow\Event;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
-interface Event extends WorkflowStep
+interface Event extends WorkflowNode
 {
 }

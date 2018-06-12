@@ -2,15 +2,15 @@
 namespace Phlow\Workflow;
 
 /**
- * Interface WorkflowStep
+ * Interface WorkflowNode
  * @package Phlow\Workflow
  */
-interface WorkflowStep
+interface WorkflowNode
 {
     /**
      * Returns the next workflow step
      * @param $message
-     * @return WorkflowStep
+     * @return WorkflowNode
      */
     public function next($message = null);
 }

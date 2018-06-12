@@ -2,14 +2,14 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
 class ExclusiveGateway implements Gateway
 {
     private $flows;
     private $message;
 
-    public function when(callable $condition, WorkflowStep $nextStep)
+    public function when(callable $condition, WorkflowNode $nextStep)
     {
         $this->flows[] = [$condition, $nextStep];
         return $this;
@@ -18,7 +18,7 @@ class ExclusiveGateway implements Gateway
     /**
      * Returns the next workflow step
      * @param $message
-     * @return WorkflowStep
+     * @return WorkflowNode
      */
     public function next($message = null)
     {

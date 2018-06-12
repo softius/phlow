@@ -2,13 +2,13 @@
 
 namespace Phlow\Event;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
 abstract class BaseEvent implements Event
 {
     private $nextStep;
 
-    public function __construct(WorkflowStep $nextStep)
+    public function __construct(WorkflowNode $nextStep)
     {
         $this->nextStep = $nextStep;
     }

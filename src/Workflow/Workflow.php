@@ -54,10 +54,10 @@ class Workflow
     /**
      * Adds the provided step in the list of steps.
      * Maintains reference for all the steps, that composite this workflow.
-     * @param WorkflowStep $step
-     * @return WorkflowStep
+     * @param WorkflowNode $step
+     * @return WorkflowNode
      */
-    public function add(WorkflowStep $step): WorkflowStep
+    public function add(WorkflowNode $step): WorkflowNode
     {
         $this->steps[] = $step;
         return $step;
@@ -65,10 +65,10 @@ class Workflow
 
     /**
      * Adds the provided the steps in this workflow
-     * @param WorkFlowStep ...$steps
+     * @param WorkflowNode ...$steps
      * @return void
      */
-    public function addAll(WorkFlowStep ...$steps): void
+    public function addAll(WorkflowNode ...$steps): void
     {
         foreach ($steps as $step) {
             $this->add($step);
@@ -77,11 +77,11 @@ class Workflow
 
     /**
      * Removes the provided step from the list.
-     * @param WorkflowStep $step
+     * @param WorkflowNode $step
      * @return void
      * @throws NotFoundException
      */
-    public function remove(WorkflowStep $step): void
+    public function remove(WorkflowNode $step): void
     {
         $key = array_search($step, $this->steps, true);
         if ($key === false) {
@@ -104,10 +104,10 @@ class Workflow
     /**
      * Retrieves and returns the step associated with the specified id
      * @param string $id
-     * @return WorkflowStep
+     * @return WorkflowNode
      * @throws NotFoundException
      */
-    public function get(string $id): WorkflowStep
+    public function get(string $id): WorkflowNode
     {
         $steps = $this->getAll(function ($step) use ($id) {
            // return $step->getId() === $id;

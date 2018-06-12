@@ -3,9 +3,9 @@
 namespace Phlow\Gateway;
 
 use Phlow\Workflow\MessageAware;
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
-interface Gateway extends WorkflowStep
+interface Gateway extends WorkflowNode
 {
 
 }

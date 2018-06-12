@@ -44,7 +44,7 @@ class WorkflowBuilder
      * Workflow level error handling.
      * Catches all errors raised by workflow steps.
      * @param callable $func
-     * @return ErrorEvent|WorkflowStep
+     * @return ErrorEvent|WorkflowNode
      */
     public function catch(callable $func)
     {
@@ -55,17 +55,17 @@ class WorkflowBuilder
 
     /**
      * Creates a Start event for this workflow
-     * @param WorkflowStep $nextStep
-     * @return WorkflowStep
+     * @param WorkflowNode $nextStep
+     * @return WorkflowNode
      */
-    public function start(WorkflowStep $nextStep)
+    public function start(WorkflowNode $nextStep)
     {
         return $this->workflow->add(new StartEvent($nextStep));
     }
 
     /**
      * Creates an End event for this workflow.
-     * @return WorkflowStep
+     * @return WorkflowNode
      */
     public function end()
     {
@@ -76,7 +76,7 @@ class WorkflowBuilder
      * Step level error handling.
      * Creates an Error event for this workflow.
      * @param callable|null $func
-     * @return ErrorEvent|WorkflowStep
+     * @return ErrorEvent|WorkflowNode
      */
     public function error(callable $func = null)
     {
@@ -87,11 +87,11 @@ class WorkflowBuilder
     /**
      * Creates a Task for this workflow
      * @param callable $task
-     * @param WorkflowStep $nextStep
-     * @param WorkflowStep|null $errorStep
-     * @return WorkflowStep
+     * @param WorkflowNode $nextStep
+     * @param WorkflowNode|null $errorStep
+     * @return WorkflowNode
      */
-    public function task(callable $task, WorkflowStep $nextStep, WorkflowStep $errorStep = null)
+    public function task(callable $task, WorkflowNode $nextStep, WorkflowNode $errorStep = null)
     {
         $errorStep = $errorStep === null ? $this->errorEvent : $errorStep;
         return $this->workflow->add(new Task($task, $nextStep, $errorStep));

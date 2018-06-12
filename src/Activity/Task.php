@@ -2,7 +2,7 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
 /**
  * Class Task
@@ -19,7 +19,7 @@ class Task implements Activity
 
     private $exceptionStep;
 
-    public function __construct(callable $handler, WorkflowStep $nextStep = null, WorkflowStep $exceptionStep = null)
+    public function __construct(callable $handler, WorkflowNode $nextStep = null, WorkflowNode $exceptionStep = null)
     {
         $this->handler = $handler;
         $this->nextStep = $nextStep;

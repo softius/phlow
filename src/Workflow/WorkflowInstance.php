@@ -23,7 +23,7 @@ class WorkflowInstance
     private $exchange;
 
     /**
-     * @var WorkflowStep Last executed step
+     * @var WorkflowNode Last executed step
      */
     private $currentStep;
 
@@ -67,7 +67,7 @@ class WorkflowInstance
 
     /**
      * Finds and return the next step to be executed
-     * @return WorkflowStep
+     * @return WorkflowNode
      */
     private function next()
     {
@@ -94,7 +94,7 @@ class WorkflowInstance
 
     /**
      * Returns the last executed step.
-     * @return null|WorkflowStep
+     * @return null|WorkflowNode
      */
     public function current()
     {
