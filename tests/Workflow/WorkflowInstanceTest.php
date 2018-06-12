@@ -5,6 +5,7 @@ namespace Phlow\Tests\Workflow;
 use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
 use Phlow\Workflow\Workflow;
+use Phlow\Workflow\WorkflowBuilder;
 use Phlow\Workflow\WorkflowInstance;
 
 class WorkflowTest extends \PHPUnit\Framework\TestCase
@@ -20,14 +21,14 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
     public function testPipelineError()
     {
         $obj = (object) ['invoked' => false];
-        $flow = new Workflow();
-        $flow->start(
-            $flow->error(function ($e) use ($obj) {
+        $builder = new WorkflowBuilder();
+        $builder->start(
+            $builder->error(function ($e) use ($obj) {
                 $obj->invoked = true;
             })
         );
 
-        $instance = new WorkflowInstance($flow, []);
+        $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $instance->advance(2);
         $this->assertEquals(true, $obj->invoked);
     }
@@ -42,9 +43,9 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
 
     public function testAlreadyCompleted()
     {
-        $flow = new Workflow();
-        $flow->start($flow->end());
-        $instance = new WorkflowInstance($flow, []);
+        $builder = new WorkflowBuilder();
+        $builder->start($builder->end());
+        $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $this->expectException(\RuntimeException::class);
         $instance->advance(3);
     }
@@ -66,17 +67,17 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
             throw $e;
         };
 
-        $flow = new Workflow();
-        $flow->catch($error);
-        $flow->start(
-            $flow->task(
+        $builder = new WorkflowBuilder();
+        $builder->catch($error);
+        $builder->start(
+            $builder->task(
                 $getInput,
-                $flow->task($sum, $flow->end())
+                $builder->task($sum, $builder->end())
             )
         );
 
         $in = ['a' => null, 'b' => null, 'c' => null];
-        return new WorkflowInstance($flow, $in);
+        return new WorkflowInstance($builder->getWorkflow(), $in);
     }
 
     public function testConditionalFlow()
@@ -90,31 +91,31 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
             return $d;
         };
 
-        $flow = new Workflow();
-        $flow->start(
-            $flow->exclusive()
+        $builder = new WorkflowBuilder();
+        $builder->start(
+            $builder->exclusive()
                 ->when(
                     function ($d) {
                         return empty($d);
                     },
-                    $flow->task(
+                    $builder->task(
                         $helloWorld,
-                        $flow->end()
+                        $builder->end()
                     )
                 )
                 ->when(
                     function ($d) {
                         return !empty($d);
                     },
-                    $flow->task(
+                    $builder->task(
                         $helloName,
-                        $flow->end()
+                        $builder->end()
                     )
                 )
         );
 
         $d = (object) ['name' => 'phlow', 'message' => null];
-        $instance = new WorkflowInstance($flow, $d);
+        $instance = new WorkflowInstance($builder->getWorkflow(), $d);
         $r = $instance->advance(2);
         $this->assertEquals("Hello phlow!", $r->message);
     }
