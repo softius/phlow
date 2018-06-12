@@ -14,20 +14,11 @@ use Phlow\Gateway\ExclusiveGateway;
  */
 class Workflow
 {
-    /**
-     * @var Exchange Last exchange between workflow steps
-     */
-    private $exchange;
 
     /**
      * @var array Unordered list of the steps, that composite this workflow.
      */
     private $steps;
-
-    /**
-     * @var WorkflowStep Last executed step
-     */
-    private $currentStep;
 
     /**
      * @var StartEvent First event to be executed
@@ -41,13 +32,11 @@ class Workflow
 
     /**
      * Workflow constructor.
-     * @param $inbound array|object
      */
-    public function __construct($inbound)
+    public function __construct()
     {
-        $this->exchange = new Exchange($inbound);
         $this->steps = [];
-        $this->currentStep = $this->errorEvent = $this->startEvent = null;
+        $this->errorEvent = $this->startEvent = null;
     }
 
     /**
@@ -129,60 +118,13 @@ class Workflow
         return $this->add(new ExclusiveGateway());
     }
 
-    /**
-     * Proceeds to the next workflow step and execute it
-     * @param int $howMany
-     * @return Exchange
-     */
-    public function advance($howMany = 1)
+    public function hasStartEvent()
     {
-        if ($this->isCompleted()) {
-            throw new \RuntimeException("Workflow has been already completed.");
-        }
-
-        // Retrieve and execute the next step
-        $step = $this->next();
-        if ($step instanceof ExecutableStep) {
-            $this->exchange->setOut(
-                $step->execute($this->exchange->in())
-            );
-
-            // Prepare an exchange for the next step
-            $this->exchange = new Exchange($this->exchange->out());
-        }
-
-        $this->currentStep = $step;
-        return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
+        return !($this->startEvent === null);
     }
 
-    /**
-     * Finds and return the next step to be executed
-     * @return WorkflowStep
-     */
-    private function next()
+    public function getStartEvent()
     {
-        if ($this->currentStep === null && $this->startEvent === null) {
-            throw new \RuntimeException('Start event is missing');
-        }
-
-        $this->currentStep = $this->currentStep ?? $this->startEvent;
-
-        return $this->currentStep->next(
-            $this->exchange->in()
-        );
-    }
-
-    /**
-     * Returns true only and only if the execution has reached and End event.
-     * @return bool
-     */
-    public function isCompleted()
-    {
-        return $this->currentStep instanceof EndEvent;
-    }
-
-    public function current()
-    {
-        return $this->currentStep;
+        return $this->startEvent;
     }
 }
