@@ -3,6 +3,7 @@
 namespace Phlow\Gateway;
 
 use Phlow\Workflow\WorkflowNode;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class ExclusiveGateway implements Gateway
 {
@@ -17,12 +18,22 @@ class ExclusiveGateway implements Gateway
     }
 
     /**
-     * @param callable $condition
+     * @param $condition
      * @param WorkflowNode $nextNode
      * @return $this
      */
-    public function when(callable $condition, WorkflowNode $nextNode)
+    public function when($condition, WorkflowNode $nextNode)
     {
+        if (is_string($condition)) {
+            $expression = $condition;
+            $condition = function ($data) use ($expression) {
+                $expressionLanguage = new ExpressionLanguage();
+                return $expressionLanguage->evaluate($expression, (array) $data);
+            };
+        } elseif (!is_callable($condition)) {
+            throw new \InvalidArgumentException("Condition provided was not a valid expression or callback");
+        }
+
         $this->flows[] = [$condition, $nextNode];
         return $this;
     }
