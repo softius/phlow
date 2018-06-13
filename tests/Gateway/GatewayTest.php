@@ -22,9 +22,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             return $d->num < 10;
         }, $nextTask);
 
-        $gateway->when(function ($d) {
-            return $d->num > 100;
-        }, $nextTask2);
+        $gateway->when('num > 100', $nextTask2);
 
         $d = (object) ['num' => 5];
         $this->assertEquals($nextTask, $gateway->next($d));

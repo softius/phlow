@@ -99,12 +99,8 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         $builder
             ->start('start', 'nameIsProvided')
             ->choice('nameIsProvided')
-            ->when(function ($d) {
-                return empty($d);
-            }, 'helloWorld')
-            ->when(function ($d) {
-                return !empty($d);
-            }, 'hello')
+            ->when('name == null', 'helloWorld')
+            ->when('true', 'hello')
             ->script('helloWorld', $helloWorld, 'end', 'end')
             ->script('hello', $helloName, 'end', 'end')
             ->end('end');
