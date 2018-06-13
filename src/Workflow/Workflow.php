@@ -24,6 +24,11 @@ class Workflow
     private $nodes;
 
     /**
+     * @var array Mapping between IDs and the actual node
+     */
+    private $id2Node;
+
+    /**
      * Workflow constructor.
      * @param string $name
      * @param string $comments
@@ -32,7 +37,7 @@ class Workflow
     {
         $this->name = $name;
         $this->comments = $comments;
-        $this->nodes = [];
+        $this->nodes = $this->id2Node = [];
     }
 
     /**
@@ -55,10 +60,20 @@ class Workflow
      * Adds the provided node in the list of nodes.
      * Maintains reference for all the nodes, that composite this workflow.
      * @param WorkflowNode $node
+     * @param string $id
      * @return WorkflowNode
+     * @throws \RuntimeException
      */
-    public function add(WorkflowNode $node): WorkflowNode
+    public function add(WorkflowNode $node, string $id = null): WorkflowNode
     {
+        if (!empty($id)) {
+            if (array_key_exists($id, $this->id2Node)) {
+                throw new \RuntimeException(sprintf("Node %s already exists", $id));
+            }
+
+            $this->id2Node[$id] = $node;
+        }
+
         $this->nodes[] = $node;
         return $node;
     }
@@ -109,17 +124,11 @@ class Workflow
      */
     public function get(string $id): WorkflowNode
     {
-        $nodes = $this->getAll(function ($node) use ($id) {
-           // return $node->getId() === $id;
-        });
-
-        if (count($nodes) > 1) {
-            throw new \RuntimeException(sprintf("More than one nodes found with the same id (%s)", $id));
-        } elseif (count($nodes) === 0) {
-            throw new NotFoundException("Node was not found");
+        if (array_key_exists($id, $this->id2Node)) {
+            return $this->id2Node[$id];
+        } else {
+            throw new NotFoundException(sprintf("Node %s was not found", $id));
         }
-
-        return $nodes[0];
     }
 
     /**

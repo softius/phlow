@@ -15,9 +15,9 @@ use Phlow\Gateway\ExclusiveGateway;
 class WorkflowBuilder
 {
     /**
-     * @var Workflow
+     * @var array Nodes to be added in
      */
-    private $workflow;
+    private $nodes;
 
     /**
      * @var ErrorEvent Catch-all errors event
@@ -25,84 +25,223 @@ class WorkflowBuilder
     private $errorEvent;
 
     /**
+     * @var string The ID of the last created Gateway
+     */
+    private $lastGateway;
+
+    /**
      * WorkflowBuilder constructor.
      */
     public function __construct()
     {
-        $this->workflow = new Workflow();
+        $this->nodes = [];
     }
 
     /**
      * @return Workflow
+     * @throws NotFoundException
      */
     public function getWorkflow(): Workflow
     {
-        return $this->workflow;
+        $workflow = new Workflow();
+        foreach ($this->nodes as $id => $definition) {
+            // Another option is to resolve the StartEvent and everything will be auto-magic-ally resolved
+            $this->resolveNode($workflow, $id);
+        }
+
+        return $workflow;
+    }
+
+    /**
+     * Attempt to retrieve the Node having the specified id.
+     * If the Node does not exist, we will resolve any dependencies and then try to create it.
+     * @param Workflow $workflow
+     * @param string $id
+     * @return WorkflowNode
+     * @throws NotFoundException
+     */
+    private function resolveNode(Workflow $workflow, string $id): WorkflowNode
+    {
+        try {
+            return $workflow->get($id);
+        } catch (NotFoundException $e) {
+            // Node not found in Workflow
+            return $this->createNodeInstance($workflow, $id);
+        }
+    }
+
+    /**
+     * @param Workflow $workflow
+     * @param string $id
+     * @return WorkflowNode
+     * @throws NotFoundException
+     */
+    private function createNodeInstance(Workflow $workflow, string $id): WorkflowNode
+    {
+        $this->resolveNodeDependencies($workflow, $id);
+
+        $nodeDef = $this->nodes[$id];
+        $class = $nodeDef['class'];
+
+        $node = null;
+        if ($class === StartEvent::class) {
+            $node = new StartEvent($workflow->get($nodeDef['next']));
+        } elseif ($class === EndEvent::class) {
+            $node = new EndEvent();
+        } elseif ($class === ErrorEvent::class) {
+            $node = new ErrorEvent($workflow->get($nodeDef['next']));
+        } elseif ($class === Task::class) {
+            $node = new Task($nodeDef['handler'], $workflow->get($nodeDef['next']), $workflow->get($nodeDef['error']));
+        } elseif ($class === ExclusiveGateway::class) {
+            $node = new ExclusiveGateway();
+            foreach ($nodeDef['when'] as $when) {
+                $node->when($when['condition'], $workflow->get($when['next']));
+            }
+        }
+
+        if ($node) {
+            return $workflow->add($node, $id);
+        }
+
+        throw new \RuntimeException(sprintf("Unable to create node instance for %s", $class));
+    }
+
+    /**
+     * @param Workflow $workflow
+     * @param string $id
+     * @throws NotFoundException
+     */
+    private function resolveNodeDependencies(Workflow $workflow, string $id): void
+    {
+        $definition = $this->nodes[$id];
+
+        $dependencies = [];
+        if (isset($definition['next'])) {
+            $dependencies[] = $definition['next'];
+        }
+
+        if (isset($definition['error'])) {
+            $dependencies[] = $definition['error'];
+        }
+
+        if (isset($definition['when'])) {
+            foreach ($definition['when'] as $when) {
+                $dependencies[] = $when['next'];
+            }
+        }
+
+        foreach ($dependencies as $nodeId) {
+            if (!array_key_exists($nodeId, $this->nodes)) {
+                throw new \RuntimeException(sprintf("%s is specified as dependency node for %s, but it was never created.", $nodeId, $id));
+            }
+
+            $this->resolveNode($workflow, $nodeId);
+        }
+    }
+
+    /**
+     * Adds the specified node information in the list to be used when building the final workflow
+     * @param string $id
+     * @param array $nodeArray
+     */
+    private function add(string $id, array $nodeArray)
+    {
+        if (array_key_exists($id, $this->nodes)) {
+            throw new \RuntimeException(sprintf("Node %s already exists", $id));
+        }
+
+        $this->nodes[$id] = $nodeArray;
     }
 
     /**
      * Workflow level error handling.
      * Catches all errors raised by workflow nodes.
      * @param callable $func
-     * @return ErrorEvent|WorkflowNode
+     * @return WorkflowBuilder
      */
-    public function catch(callable $func): WorkflowNode
+    public function catch(callable $func): WorkflowBuilder
     {
-        $task = new Task($func);
-        $this->errorEvent = $this->workflow->add(new ErrorEvent($task));
-        return $this->errorEvent;
+        // @todo
+        return $this;
     }
 
     /**
      * Creates a Start event for this workflow
-     * @param WorkflowNode $nextNode
-     * @return WorkflowNode
+     * @param string $id
+     * @param mixed $nextNode
+     * @return WorkflowBuilder
      */
-    public function start(WorkflowNode $nextNode): WorkflowNode
+    public function start(string $id, $nextNode): WorkflowBuilder
     {
-        return $this->workflow->add(new StartEvent($nextNode));
+        $this->add($id, ['class' => StartEvent::class, 'next' => $nextNode]);
+        return $this;
     }
 
     /**
      * Creates an End event for this workflow.
-     * @return WorkflowNode
+     * @param string $id
+     * @return WorkflowBuilder
      */
-    public function end(): WorkflowNode
+    public function end(string $id): WorkflowBuilder
     {
-        return $this->workflow->add(new EndEvent());
+        $this->add($id, ['class' => EndEvent::class]);
+        return $this;
     }
 
     /**
      * Node level error handling.
      * Creates an Error event for this workflow.
-     * @param callable|null $func
-     * @return ErrorEvent|WorkflowNode
+     * @param $id
+     * @param mixed $nextNode
+     * @return WorkflowBuilder
      */
-    public function error(callable $func = null): WorkflowNode
+    public function error($id, $nextNode): WorkflowBuilder
     {
-        $task = new Task($func);
-        return ($func === null) ? $this->errorEvent : $this->workflow->add(new ErrorEvent($task));
+        $this->add($id, ['class' => ErrorEvent::class, 'next' => $nextNode]);
+        return $this;
     }
 
     /**
      * Creates a Task for this workflow
-     * @param callable $task
-     * @param WorkflowNode $nextNode
-     * @param WorkflowNode|null $errorNode
-     * @return WorkflowNode
+     * @param string $id
+     * @param callable $handler
+     * @param mixed $nextNode
+     * @param mixed $errorNode
+     * @return WorkflowBuilder
      */
-    public function task(callable $task, WorkflowNode $nextNode, WorkflowNode $errorNode = null): WorkflowNode
+    public function script(string $id, callable $handler, $nextNode, $errorNode = null): WorkflowBuilder
     {
-        $errorNode = $errorNode === null ? $this->errorEvent : $errorNode;
-        return $this->workflow->add(new Task($task, $nextNode, $errorNode));
+        if (empty($errorNode) && empty($this->errorEvent)) {
+            throw new \RuntimeException(sprintf("Error node was not specified for the node %s", $id));
+        }
+
+        $errorNode = $errorNode ?? $this->errorEvent;
+        $this->add($id, ['class' => Task::class, 'handler' => $handler, 'next' => $nextNode, 'error' => $errorNode]);
+        return $this;
     }
 
     /**
      * Creates an Exclusive Gateway for this workflow
-     * @return ExclusiveGateway
+     * @param string $id
+     * @return WorkflowBuilder
      */
-    public function exclusive(): WorkflowNode
+    public function choice(string $id): WorkflowBuilder
     {
-        return $this->workflow->add(new ExclusiveGateway());
+        // @todo add support for when method
+        $this->add($id, ['class' => ExclusiveGateway::class, 'conditions' => []]);
+        $this->lastGateway = $id;
+        return $this;
+    }
+
+    /**
+     * Add conditional flows on the last created gateway
+     * @param $condition
+     * @param $nextNode
+     * @return WorkflowBuilder
+     */
+    public function when($condition, $nextNode): WorkflowBuilder
+    {
+        $this->nodes[$this->lastGateway]['when'][] = ['condition' => $condition, 'next' => $nextNode];
+        return $this;
     }
 }

@@ -22,11 +22,13 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
     {
         $obj = (object) ['invoked' => false];
         $builder = new WorkflowBuilder();
-        $builder->start(
-            $builder->error(function ($e) use ($obj) {
+        $builder
+            ->start('start', 'error')
+            ->error('error', 'script')
+            ->script('script', function ($e) use ($obj) {
                 $obj->invoked = true;
-            })
-        );
+            }, 'end', 'end')
+            ->end('end');
 
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $instance->advance(2);
@@ -44,7 +46,9 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
     public function testAlreadyCompleted()
     {
         $builder = new WorkflowBuilder();
-        $builder->start($builder->end());
+        $builder
+            ->start('start', 'end')
+            ->end('end');
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $this->expectException(\RuntimeException::class);
         $instance->advance(3);
@@ -69,12 +73,12 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
 
         $builder = new WorkflowBuilder();
         $builder->catch($error);
-        $builder->start(
-            $builder->task(
-                $getInput,
-                $builder->task($sum, $builder->end())
-            )
-        );
+        $builder
+            ->start('start', 'getInput')
+            ->script('getInput', $getInput, 'sum', 'error')
+            ->script('sum', $sum, 'end', 'error')
+            ->end('end')
+            ->error('error', 'end');
 
         $in = ['a' => null, 'b' => null, 'c' => null];
         return new WorkflowInstance($builder->getWorkflow(), $in);
@@ -92,27 +96,18 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         };
 
         $builder = new WorkflowBuilder();
-        $builder->start(
-            $builder->exclusive()
-                ->when(
-                    function ($d) {
-                        return empty($d);
-                    },
-                    $builder->task(
-                        $helloWorld,
-                        $builder->end()
-                    )
-                )
-                ->when(
-                    function ($d) {
-                        return !empty($d);
-                    },
-                    $builder->task(
-                        $helloName,
-                        $builder->end()
-                    )
-                )
-        );
+        $builder
+            ->start('start', 'nameIsProvided')
+            ->choice('nameIsProvided')
+            ->when(function ($d) {
+                return empty($d);
+            }, 'helloWorld')
+            ->when(function ($d) {
+                return !empty($d);
+            }, 'hello')
+            ->script('helloWorld', $helloWorld, 'end', 'end')
+            ->script('hello', $helloName, 'end', 'end')
+            ->end('end');
 
         $d = (object) ['name' => 'phlow', 'message' => null];
         $instance = new WorkflowInstance($builder->getWorkflow(), $d);
