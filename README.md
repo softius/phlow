@@ -37,14 +37,17 @@ An activity denotes something that must be _done_.
 * **Task**: A task is an atomic workflow step. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
 
 ### Gateways
-A gateway denotes forking and merging of workflow paths. Phlow does not provide support for any
- gateway, at the moment. 
+A gateway denotes forking and merging of workflow paths. 
+
+* **Exclusive Gateway**: Represents alternative flows in a process. Only one of the alternative paths can be tasken.
  
 ## Roadmap
 
 ### v1.0
 - [x] Exclusive Gateway
+- [ ] Connections
 - [ ] Workflow API
+- [ ] Worfklow Engine
 - [ ] PSR-3 Logging
 
 ### v1.x
