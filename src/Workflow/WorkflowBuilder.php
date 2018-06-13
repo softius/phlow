@@ -132,7 +132,7 @@ class WorkflowBuilder
 
         foreach ($dependencies as $nodeId) {
             if (!array_key_exists($nodeId, $this->nodes)) {
-                throw new \RuntimeException(sprintf("%s is specified as dependency node for %s, but it was never created.", $nodeId, $id));
+                throw new \RuntimeException(sprintf("Node %s (referred by %s) was not found.", $nodeId, $id));
             }
 
             $this->resolveNode($workflow, $nodeId);
