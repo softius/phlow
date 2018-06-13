@@ -3,115 +3,50 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Event\EndEvent;
-use Phlow\Event\ErrorEvent;
+use Phlow\Event\StartEvent;
+use Phlow\Workflow\NotFoundException;
 use Phlow\Workflow\Workflow;
 
 class WorkflowTest extends \PHPUnit\Framework\TestCase
 {
-    public function testPipelineHappyPath()
+    public function testGet()
     {
-        $flow = $this->getPipeline();
-        $out = $flow->advance(3);
-        $this->assertEquals(true, $flow->isCompleted());
-        $this->assertEquals(3, $out['c']);
+        $workflow = $this->getWorkflow();
+
+        $this->expectException(NotFoundException::class);
+        $this->assertEquals(null, $workflow->get('id-does-not-exist'));
     }
 
-    public function testPipelineError()
+    public function testGetAll()
     {
-        $obj = (object) ['invoked' => false];
-        $flow = new Workflow([]);
-        $flow->start(
-            $flow->error(function ($e) use ($obj) {
-                $obj->invoked = true;
-            })
-        );
-
-        $flow->advance(2);
-        $this->assertEquals(true, $obj->invoked);
+        $workflow = $this->getWorkflow();
+        $this->assertEquals(2, count($workflow->getAll()));
+        $this->assertEquals(1, count($workflow->getAllByClass(StartEvent::class)));
     }
 
-    public function testNoStartEvent()
+    public function testRemove()
     {
-        $flow = new Workflow([]);
-        $this->expectException(\RuntimeException::class);
-        $flow->advance();
+        $workflow = new Workflow();
+        $end = new EndEvent();
+        $start = new StartEvent($end);
+        $workflow->addAll($start, $end);
+
+        $this->expectException(NotFoundException::class);
+        $workflow->remove(new EndEvent());
+        $this->assertEquals(2, count($workflow->getAll()));
+
+        $workflow->remove($end);
+        $this->assertEquals(1, count($workflow->getAll()));
     }
 
-    public function testAlreadyCompleted()
+    private function getWorkflow()
     {
-        $flow = new Workflow([]);
-        $flow->start($flow->end());
-        $this->expectException(\RuntimeException::class);
-        $flow->advance(3);
-    }
+        $workflow = new Workflow();
+        $end = new EndEvent();
+        $start = new StartEvent($end);
 
-    private function getPipeline()
-    {
-        $in = ['a' => null, 'b' => null, 'c' => null];
+        $workflow->addAll($start, $end);
 
-        $getInput = function ($d) {
-            $d['a'] = 1;
-            $d['b'] = 2;
-            return $d;
-        };
-
-        $sum = function ($d) {
-            $d['c'] = $d['a'] + $d['b'];
-            return $d;
-        };
-
-        $error = function ($e) {
-            throw $e;
-        };
-
-        $flow = new Workflow($in);
-        $flow->catch($error);
-        $flow->start(
-            $flow->task(
-                $getInput,
-                $flow->task($sum, $flow->end())
-            )
-        );
-
-        return $flow;
-    }
-
-    public function testConditionalFlow()
-    {
-        $helloName  = function ($d) {
-            $d->message = sprintf("Hello %s!", $d->name);
-            return $d;
-        };
-        $helloWorld  = function ($d) {
-            $d->message = 'Hello world';
-            return $d;
-        };
-
-        $d = (object) ['name' => 'phlow', 'message' => null];
-        $flow = new Workflow($d);
-        $flow->start(
-            $flow->exclusive()
-                ->when(
-                    function ($d) {
-                        return empty($d);
-                    },
-                    $flow->task(
-                        $helloWorld,
-                        $flow->end()
-                    )
-                )
-                ->when(
-                    function ($d) {
-                        return !empty($d);
-                    },
-                    $flow->task(
-                        $helloName,
-                        $flow->end()
-                    )
-                )
-        );
-
-        $r = $flow->advance(2);
-        $this->assertEquals("Hello phlow!", $r->message);
+        return $workflow;
     }
 }

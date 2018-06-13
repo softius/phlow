@@ -2,7 +2,7 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowStep;
+use Phlow\Workflow\WorkflowNode;
 
 /**
  * Class Task
@@ -15,18 +15,28 @@ class Task implements Activity
 
     private $exceptionObject;
 
-    private $nextStep;
+    private $nextNode;
 
-    private $exceptionStep;
+    private $exceptionNode;
 
-    public function __construct(callable $handler, WorkflowStep $nextStep = null, WorkflowStep $exceptionStep = null)
+    /**
+     * Task constructor.
+     * @param callable $handler
+     * @param WorkflowNode|null $nextNode
+     * @param WorkflowNode|null $exceptionNode
+     */
+    public function __construct(callable $handler, WorkflowNode $nextNode = null, WorkflowNode $exceptionNode = null)
     {
         $this->handler = $handler;
-        $this->nextStep = $nextStep;
-        $this->exceptionStep = $exceptionStep;
+        $this->nextNode = $nextNode;
+        $this->exceptionNode = $exceptionNode;
         $this->exceptionObject = null;
     }
 
+    /**
+     * @param object $in
+     * @return object
+     */
     public function execute($in)
     {
         try {
@@ -37,8 +47,12 @@ class Task implements Activity
         }
     }
 
-    public function next($message = null)
+    /**
+     * @param null $message
+     * @return WorkflowNode
+     */
+    public function next($message = null): WorkflowNode
     {
-        return $this->exceptionObject === null ? $this->nextStep : $this->exceptionStep;
+        return $this->exceptionObject === null ? $this->nextNode : $this->exceptionNode;
     }
 }

@@ -2,12 +2,6 @@
 
 namespace Phlow\Workflow;
 
-use Phlow\Activity\Task;
-use Phlow\Event\ErrorEvent;
-use Phlow\Event\StartEvent;
-use Phlow\Event\EndEvent;
-use Phlow\Gateway\ExclusiveGateway;
-
 /**
  * Class Workflow
  * @package Phlow\Workflow
@@ -15,174 +9,137 @@ use Phlow\Gateway\ExclusiveGateway;
 class Workflow
 {
     /**
-     * @var Exchange Last exchange between workflow steps
+     * @var string The name of this workflow
      */
-    private $exchange;
+    private $name;
 
     /**
-     * @var array Unordered list of the steps, that composite this workflow.
+     * @var string Short description or any other comments about this workflow
      */
-    private $steps;
+    private $comments;
 
     /**
-     * @var WorkflowStep Last executed step
+     * @var array Unordered list of the nodes, that composite this workflow.
      */
-    private $currentStep;
+    private $nodes;
 
     /**
-     * @var StartEvent First event to be executed
+     * @var array Mapping between IDs and the actual node
      */
-    private $startEvent;
-
-    /**
-     * @var ErrorEvent Catch-all errors event
-     */
-    private $errorEvent;
+    private $id2Node;
 
     /**
      * Workflow constructor.
-     * @param $inbound array|object
+     * @param string $name
+     * @param string $comments
      */
-    public function __construct($inbound)
+    public function __construct(string $name = null, string $comments = null)
     {
-        $this->exchange = new Exchange($inbound);
-        $this->steps = [];
-        $this->currentStep = $this->errorEvent = $this->startEvent = null;
+        $this->name = $name;
+        $this->comments = $comments;
+        $this->nodes = $this->id2Node = [];
     }
 
     /**
-     * Adds the provided step in the list of steps.
-     * Maintains reference for all the steps, that composite this workflow.
-     * @param WorkflowStep $step
-     * @return WorkflowStep
+     * @return string
      */
-    private function add(WorkflowStep $step)
+    public function getName(): string
     {
-        $this->steps[] = $step;
-        return $step;
+        return $this->name;
     }
 
     /**
-     * Workflow level error handling.
-     * Catches all errors raised by workflow steps.
-     * @param callable $func
-     * @return ErrorEvent|WorkflowStep
+     * @return string
      */
-    public function catch(callable $func)
+    public function getComments(): string
     {
-        $task = new Task($func);
-        $this->errorEvent = $this->add(new ErrorEvent($task));
-        return $this->errorEvent;
+        return $this->comments;
     }
 
     /**
-     * Creates a Start event for this workflow
-     * @param WorkflowStep $nextStep
-     * @return StartEvent|WorkflowStep
+     * Adds the provided node in the list of nodes.
+     * Maintains reference for all the nodes, that composite this workflow.
+     * @param WorkflowNode $node
+     * @param string $id
+     * @return WorkflowNode
+     * @throws \RuntimeException
      */
-    public function start(WorkflowStep $nextStep)
+    public function add(WorkflowNode $node, string $id = null): WorkflowNode
     {
-        $this->startEvent = $this->add(new StartEvent($nextStep));
-        return $this->startEvent;
-    }
+        if (!empty($id)) {
+            if (array_key_exists($id, $this->id2Node)) {
+                throw new \RuntimeException(sprintf("Node %s already exists", $id));
+            }
 
-    /**
-     * Creates an End event for this workflow.
-     * @return WorkflowStep
-     */
-    public function end()
-    {
-        return $this->add(new EndEvent());
-    }
-
-    /**
-     * Step level error handling.
-     * Creates an Error event for this workflow.
-     * @param callable|null $func
-     * @return ErrorEvent|WorkflowStep
-     */
-    public function error(callable $func = null)
-    {
-        $task = new Task($func);
-        return ($func === null) ? $this->errorEvent : $this->add(new ErrorEvent($task));
-    }
-
-    /**
-     * Creates a Task for this workflow
-     * @param callable $task
-     * @param WorkflowStep $nextStep
-     * @param WorkflowStep|null $errorStep
-     * @return WorkflowStep
-     */
-    public function task(callable $task, WorkflowStep $nextStep, WorkflowStep $errorStep = null)
-    {
-        $errorStep = $errorStep === null ? $this->errorEvent : $errorStep;
-        return $this->add(new Task($task, $nextStep, $errorStep));
-    }
-
-    /**
-     * Creates an Exclusive Gateway for this workflow
-     * @return ExclusiveGateway
-     */
-    public function exclusive()
-    {
-        return $this->add(new ExclusiveGateway());
-    }
-
-    /**
-     * Proceeds to the next workflow step and execute it
-     * @param int $howMany
-     * @return Exchange
-     */
-    public function advance($howMany = 1)
-    {
-        if ($this->isCompleted()) {
-            throw new \RuntimeException("Workflow has been already completed.");
+            $this->id2Node[$id] = $node;
         }
 
-        // Retrieve and execute the next step
-        $step = $this->next();
-        if ($step instanceof ExecutableStep) {
-            $this->exchange->setOut(
-                $step->execute($this->exchange->in())
-            );
-
-            // Prepare an exchange for the next step
-            $this->exchange = new Exchange($this->exchange->out());
-        }
-
-        $this->currentStep = $step;
-        return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
+        $this->nodes[] = $node;
+        return $node;
     }
 
     /**
-     * Finds and return the next step to be executed
-     * @return WorkflowStep
+     * Adds the provided the nodes in this workflow
+     * @param WorkflowNode ...$nodes
+     * @return void
      */
-    private function next()
+    public function addAll(WorkflowNode ...$nodes): void
     {
-        if ($this->currentStep === null && $this->startEvent === null) {
-            throw new \RuntimeException('Start event is missing');
+        foreach ($nodes as $node) {
+            $this->add($node);
         }
-
-        $this->currentStep = $this->currentStep ?? $this->startEvent;
-
-        return $this->currentStep->next(
-            $this->exchange->in()
-        );
     }
 
     /**
-     * Returns true only and only if the execution has reached and End event.
-     * @return bool
+     * Removes the provided node from the list.
+     * @param WorkflowNode $node
+     * @return void
+     * @throws NotFoundException
      */
-    public function isCompleted()
+    public function remove(WorkflowNode $node): void
     {
-        return $this->currentStep instanceof EndEvent;
+        $key = array_search($node, $this->nodes, true);
+        if ($key === false) {
+            throw new NotFoundException("Node was not found");
+        }
+
+        array_splice($this->nodes, $key, 1);
     }
 
-    public function current()
+    /**
+     * Returns all the nodes currently associated with this workflow, in no particular order
+     * @param callable|null $filter
+     * @return iterable
+     */
+    public function getAll(callable $filter = null): iterable
     {
-        return $this->currentStep;
+        return ($filter) ? array_values(array_filter($this->nodes, $filter)) : $this->nodes;
+    }
+
+    /**
+     * Retrieves and returns the node associated with the specified id
+     * @param string $id
+     * @return WorkflowNode
+     * @throws NotFoundException
+     */
+    public function get(string $id): WorkflowNode
+    {
+        if (array_key_exists($id, $this->id2Node)) {
+            return $this->id2Node[$id];
+        } else {
+            throw new NotFoundException(sprintf("Node %s was not found", $id));
+        }
+    }
+
+    /**
+     * Returns all nodes that are instances of the specified class
+     * @param $class
+     * @return iterable
+     */
+    public function getAllByClass($class): iterable
+    {
+        return $this->getAll(function ($node) use ($class) {
+            return $node instanceof $class;
+        });
     }
 }

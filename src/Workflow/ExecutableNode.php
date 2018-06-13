@@ -3,13 +3,13 @@
 namespace Phlow\Workflow;
 
 /**
- * Interface ExecutableStep
+ * Interface ExecutableNode
  * @package Phlow\Workflow
  */
-interface ExecutableStep
+interface ExecutableNode
 {
     /**
-     * Executes this step and update the provided workflow message
+     * Executes this node and update the provided workflow message
      * @param $in object Inbound message
      * @return object Outbound message
      */
