@@ -47,6 +47,7 @@ A gateway denotes forking and merging of workflow paths.
 - [x] Exclusive Gateway
 - [ ] Connections
 - [ ] Workflow API
+- [ ] Expressions
 - [ ] Worfklow Engine
 - [ ] PSR-3 Logging
 
