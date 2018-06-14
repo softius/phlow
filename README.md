@@ -6,7 +6,9 @@
 
 Phlow is a workflow engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], this project attempts to provide a solution to represent and implement business processes in PHP projects.
 
-Phlow is a framework agnostic solution. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.  
+Phlow is a framework agnostic solution. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
+
+<img src="https://raw.githubusercontent.com/softius/Phlow/docs/docs/article-approval.svg?sanitize=true">
 
 ## Installation
 
