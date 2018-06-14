@@ -3,6 +3,7 @@
 namespace Phlow\Tests\Gateway;
 
 use Phlow\Activity\Task;
+use Phlow\Engine\ExpressionEngine;
 use Phlow\Gateway\ExclusiveGateway;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase
@@ -22,9 +23,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
             return $d->num < 10;
         }, $nextTask);
 
-        $gateway->when(function ($d) {
-            return $d->num > 100;
-        }, $nextTask2);
+        $gateway->when('num > 100', $nextTask2);
 
         $d = (object) ['num' => 5];
         $this->assertEquals($nextTask, $gateway->next($d));
@@ -35,5 +34,15 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 
         $d = (object) ['num' => 500];
         $this->assertEquals($nextTask2, $gateway->next($d));
+    }
+
+    public function testDefaultExpressionEngine()
+    {
+        $gateway = new ExclusiveGateway();
+        $this->assertNotInstanceOf(ExpressionEngine::class, $gateway);
+
+        $engine = new ExpressionEngine();
+        $gateway->setExpressionEngine($engine);
+        $this->assertEquals($engine, $gateway->getExpressionEngine());
     }
 }

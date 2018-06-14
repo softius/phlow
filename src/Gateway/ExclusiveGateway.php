@@ -2,11 +2,18 @@
 
 namespace Phlow\Gateway;
 
+use Phlow\Engine\ExpressionEngine;
 use Phlow\Workflow\WorkflowNode;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class ExclusiveGateway implements Gateway
 {
     private $flows;
+
+    /**
+     * @var ExpressionEngine
+     */
+    private $expressionEngine;
 
     /**
      * ExclusiveGateway constructor.
@@ -17,13 +24,18 @@ class ExclusiveGateway implements Gateway
     }
 
     /**
-     * @param callable $condition
+     * @param $condition
      * @param WorkflowNode $nextNode
      * @return $this
      */
-    public function when(callable $condition, WorkflowNode $nextNode)
+    public function when($condition, WorkflowNode $nextNode)
     {
-        $this->flows[] = [$condition, $nextNode];
+        if (!is_string($condition) && !is_callable($condition)) {
+            throw new \InvalidArgumentException("Condition provided was not a valid expression or callback");
+        }
+
+        $expression = is_callable($condition) ? $condition : $this->getExpressionEngine()->wrap($condition);
+        $this->flows[] = [$expression, $nextNode];
         return $this;
     }
 
@@ -42,5 +54,25 @@ class ExclusiveGateway implements Gateway
         }
 
         throw new \RuntimeException("No condition was matched. Unable to calculate the next node.");
+    }
+
+    /**
+     * @return ExpressionEngine
+     */
+    public function getExpressionEngine(): ExpressionEngine
+    {
+        if (empty($this->expressionEngine)) {
+            $this->expressionEngine = new ExpressionEngine();
+        }
+
+        return $this->expressionEngine;
+    }
+
+    /**
+     * @param ExpressionEngine $expressionEngine
+     */
+    public function setExpressionEngine(ExpressionEngine $expressionEngine): void
+    {
+        $this->expressionEngine = $expressionEngine;
     }
 }
