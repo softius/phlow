@@ -4,11 +4,32 @@
 [![Build Status][ico-travis]][link-travis]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Phlow is a workflow engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], this project attempts to provide a solution to represent and implement business processes in PHP projects.
+Phlow is a workflow modeller and engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], Phlow attempts to provide a library to design and implement business processes in PHP projects. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
 
-Phlow is a framework agnostic solution. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
+Phlow process models can be created using PHP. No third party tools are required to model and/or execute your process.  
+
+Phlow is a framework agnostic solution.
+
+## Getting Started
+The following images illustrate a simple approval process.
 
 <img src="https://raw.githubusercontent.com/softius/Phlow/docs/docs/article-approval.svg?sanitize=true">
+
+Also, the following code illustrates the same process. 
+
+``` php
+$builder = new WorkflowBuilder();
+$builder
+  ->start('Start', 'ComposeArticle')
+  ->task('ComposeArticle', 'ReviewArticle')
+  ->task('ReviewArticle')
+  ->choice('IsApproved')
+    ->when('approved == true', 'PublishArticle')
+    ->when('approved == false', 'UpdateArticle')
+  ->task('UpdateArticle', 'ReviewArticle')
+  ->task('PublishArticle', 'End')
+  ->end('End');
+```
 
 ## Installation
 
@@ -18,30 +39,8 @@ Phlow can be installed to your PHP project by executing the following composer c
 $ composer require softius/phlow:dev-master
 ```
 
-## Usage
-[...]
-
-## Concepts
-Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
-
-Workflow steps are useful to describe the process and consist of the following tree categories: activities, events and gateways.  
-
-### Events
-An event denotes something that happens. 
-
-* **Start Event**: Acts as a workflow trigger. A workflow can have only Start Event.
-* **End Event**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
-* **Error Event**: Represents an exception within the workflow which might trigger a different path in workflow execution.
-
-### Activities
-An activity denotes something that must be _done_.
-
-* **Task**: A task is an atomic workflow step. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
-
-### Gateways
-A gateway denotes forking and merging of workflow paths. 
-
-* **Exclusive Gateway**: Represents alternative flows in a process. Only one of the alternative paths can be tasken.
+## Documents
+* [Concepts][link-concepts]
  
 ## Roadmap
 
@@ -76,7 +75,7 @@ If you discover any security related issues, please email softius@gmail.com inst
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/softius/phlow.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
@@ -89,3 +88,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-author]: https://github.com/softius
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
+[link-concepts]: https://github.com/softius/Phlow/blob/docs/docs/concepts.md
