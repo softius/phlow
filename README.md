@@ -31,6 +31,14 @@ $builder
   ->end('End');
 ```
 
+Once the model bas been built, you can execute it by creating a new instance. When creating the instance, it is possible data that will be passed throughout the whole process.
+
+``` php
+$workflow = $builder->getWorkflow();
+$instance = new WorkflowInstance($workflow, $data);
+$instance->advance();
+```
+
 ## Installation
 
 Phlow can be installed to your PHP project by executing the following composer command. Please note that currently there is no stable version available yet.
