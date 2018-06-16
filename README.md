@@ -11,11 +11,11 @@ Phlow process models can be created using PHP. No third party tools are required
 Phlow is a framework agnostic solution.
 
 ## Getting Started
-The following images illustrate a simple approval process.
+The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. As the result of the review, the reviewer can request further updates or publish the article.
 
 <img src="https://raw.githubusercontent.com/softius/Phlow/docs/docs/article-approval.svg?sanitize=true">
 
-Also, the following code illustrates the same process. 
+Also, the following code illustrates the model for the same process. 
 
 ``` php
 $builder = new WorkflowBuilder();
@@ -31,7 +31,7 @@ $builder
   ->end('End');
 ```
 
-Once the model bas been built, you can execute it by creating a new instance. When creating the instance, it is possible data that will be passed throughout the whole process.
+Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that would be made available throughout the process. The data can be any object which could be also updated as part of the process.
 
 ``` php
 $workflow = $builder->getWorkflow();
