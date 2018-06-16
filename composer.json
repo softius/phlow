@@ -1,6 +1,6 @@
 {
     "name": "softius/phlow",
-    "description": "PHP Workflow Engine",
+    "description": "A framework agnostic PHP library to build and execute workflows",
     "keywords": ["workflow", "process", "pipeline"],
     "type": "library",
     "license": "MIT",
