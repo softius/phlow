@@ -13,7 +13,7 @@ Phlow is a framework agnostic solution.
 ## Getting Started
 The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. As the result of the review, the reviewer can request further updates or publish the article.
 
-<img src="https://raw.githubusercontent.com/softius/Phlow/docs/docs/article-approval.svg?sanitize=true">
+<img src="https://raw.githubusercontent.com/softius/Phlow/master/docs/article-approval.svg?sanitize=true">
 
 Also, the following code illustrates the model for the same process. 
 
