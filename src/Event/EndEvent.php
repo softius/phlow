@@ -2,7 +2,7 @@
 
 namespace Phlow\Event;
 
-use Phlow\Workflow\WorkflowNode;
+use Phlow\Model\Workflow\WorkflowNode;
 
 class EndEvent implements Event
 {

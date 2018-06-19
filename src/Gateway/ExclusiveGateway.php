@@ -3,8 +3,7 @@
 namespace Phlow\Gateway;
 
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Workflow\WorkflowNode;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Phlow\Model\Workflow\WorkflowNode;
 
 class ExclusiveGateway implements Gateway
 {

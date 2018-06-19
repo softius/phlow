@@ -2,7 +2,7 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Workflow\WorkflowNode;
+use Phlow\Model\Workflow\WorkflowNode;
 
 interface Gateway extends WorkflowNode
 {

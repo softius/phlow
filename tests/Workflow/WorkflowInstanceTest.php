@@ -2,11 +2,9 @@
 
 namespace Phlow\Tests\Workflow;
 
-use Phlow\Event\EndEvent;
-use Phlow\Event\ErrorEvent;
-use Phlow\Workflow\Workflow;
-use Phlow\Workflow\WorkflowBuilder;
-use Phlow\Workflow\WorkflowInstance;
+use Phlow\Model\Workflow\Workflow;
+use Phlow\Model\Workflow\WorkflowBuilder;
+use Phlow\Engine\WorkflowInstance;
 
 class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
 {

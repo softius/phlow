@@ -2,8 +2,8 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowNode;
-use Phlow\Workflow\ExecutableNode;
+use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Engine\ExecutableNode;
 
 /**
  * Interface Activity

@@ -2,7 +2,7 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowNode;
+use Phlow\Model\Workflow\WorkflowNode;
 
 /**
  * Class Task

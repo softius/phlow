@@ -3,7 +3,6 @@
 namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
-use Phlow\Workflow\Exchange;
 
 class TaskTest extends \PHPUnit\Framework\TestCase
 {

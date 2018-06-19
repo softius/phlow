@@ -1,9 +1,11 @@
 <?php
 
-namespace Phlow\Workflow;
+namespace Phlow\Engine;
 
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
+use Phlow\Model\Workflow\Workflow;
+use Phlow\Model\Workflow\WorkflowNode;
 
 /**
  * Class WorkflowInstance

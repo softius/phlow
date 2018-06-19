@@ -1,5 +1,5 @@
 <?php
-namespace Phlow\Workflow;
+namespace Phlow\Model\Workflow;
 
 /**
  * Interface WorkflowNode
