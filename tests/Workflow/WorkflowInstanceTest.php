@@ -24,7 +24,7 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
             ->start('start', 'error')
             ->error('error', 'script')
             ->script('script', 'end', 'end')
-                ->process(function ($e) use ($obj) {
+                ->process(function () use ($obj) {
                     $obj->invoked = true;
                 })
             ->end('end');
