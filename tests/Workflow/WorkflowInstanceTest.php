@@ -23,9 +23,10 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         $builder
             ->start('start', 'error')
             ->error('error', 'script')
-            ->script('script', function ($e) use ($obj) {
-                $obj->invoked = true;
-            }, 'end', 'end')
+            ->script('script', 'end', 'end')
+                ->process(function ($e) use ($obj) {
+                    $obj->invoked = true;
+                })
             ->end('end');
 
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
@@ -73,8 +74,10 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         $builder->catch($error);
         $builder
             ->start('start', 'getInput')
-            ->script('getInput', $getInput, 'sum', 'error')
-            ->script('sum', $sum, 'end', 'error')
+            ->script('getInput', 'sum', 'error')
+                ->process($getInput)
+            ->script('sum', 'end', 'error')
+                ->process($sum)
             ->end('end')
             ->error('error', 'end');
 
@@ -99,8 +102,10 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
             ->choice('nameIsProvided')
             ->when('name == null', 'helloWorld')
             ->when('true', 'hello')
-            ->script('helloWorld', $helloWorld, 'end', 'end')
-            ->script('hello', $helloName, 'end', 'end')
+            ->script('helloWorld', 'end', 'end')
+                ->process($helloWorld)
+            ->script('hello', 'end', 'end')
+                ->process($helloName)
             ->end('end');
 
         $d = (object) ['name' => 'phlow', 'message' => null];

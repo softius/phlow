@@ -25,9 +25,9 @@ class WorkflowBuilder
     private $errorEvent;
 
     /**
-     * @var string The ID of the last created Gateway
+     * @var string The ID of the last created Node
      */
-    private $lastGateway;
+    private $lastNode;
 
     /**
      * WorkflowBuilder constructor.
@@ -35,6 +35,7 @@ class WorkflowBuilder
     public function __construct()
     {
         $this->nodes = [];
+        $this->lastNode = null;
     }
 
     /**
@@ -151,6 +152,7 @@ class WorkflowBuilder
         }
 
         $this->nodes[$id] = $nodeArray;
+        $this->lastNode = $id;
     }
 
     /**
@@ -204,19 +206,18 @@ class WorkflowBuilder
     /**
      * Creates a Task for this workflow
      * @param string $id
-     * @param callable $handler
      * @param mixed $nextNode
      * @param mixed $errorNode
      * @return WorkflowBuilder
      */
-    public function script(string $id, callable $handler, $nextNode, $errorNode = null): WorkflowBuilder
+    public function script(string $id, $nextNode, $errorNode = null): WorkflowBuilder
     {
         if (empty($errorNode) && empty($this->errorEvent)) {
             throw new \RuntimeException(sprintf("Error node was not specified for the node %s", $id));
         }
 
         $errorNode = $errorNode ?? $this->errorEvent;
-        $this->add($id, ['class' => Task::class, 'handler' => $handler, 'next' => $nextNode, 'error' => $errorNode]);
+        $this->add($id, ['class' => Task::class, 'handler' => null, 'next' => $nextNode, 'error' => $errorNode]);
         return $this;
     }
 
@@ -227,9 +228,7 @@ class WorkflowBuilder
      */
     public function choice(string $id): WorkflowBuilder
     {
-        // @todo add support for when method
         $this->add($id, ['class' => ExclusiveGateway::class, 'conditions' => []]);
-        $this->lastGateway = $id;
         return $this;
     }
 
@@ -241,7 +240,18 @@ class WorkflowBuilder
      */
     public function when($condition, $nextNode): WorkflowBuilder
     {
-        $this->nodes[$this->lastGateway]['when'][] = ['condition' => $condition, 'next' => $nextNode];
+        $this->nodes[$this->lastNode]['when'][] = ['condition' => $condition, 'next' => $nextNode];
+        return $this;
+    }
+
+    /**
+     * Add a handler to the last created task
+     * @param callable $func
+     * @return WorkflowBuilder
+     */
+    public function process(callable $func): WorkflowBuilder
+    {
+        $this->nodes[$this->lastNode]['handler'] = $func;
         return $this;
     }
 }
