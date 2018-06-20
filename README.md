@@ -97,3 +97,5 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
 [link-concepts]: https://github.com/softius/Phlow/blob/docs/docs/concepts.md
+
+.
