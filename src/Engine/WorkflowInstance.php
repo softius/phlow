@@ -56,15 +56,15 @@ class WorkflowInstance
         $node = $this->next();
         if ($node instanceof ExecutableNode) {
             $this->exchange->setOut(
-                $node->execute($this->exchange->in())
+                $node->execute($this->exchange->getIn())
             );
 
             // Prepare an exchange for the next node
-            $this->exchange = new Exchange($this->exchange->out());
+            $this->exchange = new Exchange($this->exchange->getOut());
         }
 
         $this->currentNode = $node;
-        return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
+        return $howMany === 1 ? $this->exchange->getIn() : $this->advance($howMany - 1);
     }
 
     /**
@@ -81,7 +81,7 @@ class WorkflowInstance
         $this->currentNode = $this->currentNode ?? $startEvents[0];
 
         return $this->currentNode->next(
-            $this->exchange->in()
+            $this->exchange->getIn()
         );
     }
 

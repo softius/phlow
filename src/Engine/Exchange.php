@@ -26,7 +26,7 @@ class Exchange
      * Returns the inbound message
      * @return mixed
      */
-    public function in()
+    public function getIn()
     {
         return $this->inbound;
     }
@@ -35,7 +35,7 @@ class Exchange
      * Returns the outbound message, if specified.
      * @return mixed
      */
-    public function out()
+    public function getOut()
     {
         return $this->outbound;
     }
