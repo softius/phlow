@@ -2,6 +2,9 @@
 
 namespace Phlow\Event;
 
-class ErrorEvent extends BaseEvent
+use Phlow\Model\Workflow\WorkflowNodeTrait;
+
+class ErrorEvent implements Event
 {
+    use WorkflowNodeTrait;
 }

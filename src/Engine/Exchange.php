@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Workflow;
+namespace Phlow\Engine;
 
 /**
  * Class Exchange
@@ -26,7 +26,7 @@ class Exchange
      * Returns the inbound message
      * @return mixed
      */
-    public function in()
+    public function getIn()
     {
         return $this->inbound;
     }
@@ -35,7 +35,7 @@ class Exchange
      * Returns the outbound message, if specified.
      * @return mixed
      */
-    public function out()
+    public function getOut()
     {
         return $this->outbound;
     }
@@ -47,5 +47,14 @@ class Exchange
     public function setOut($outbound)
     {
         $this->outbound = $outbound;
+    }
+
+    /**
+     * Returns true only and only if an outbound message has been defined
+     * @return bool
+     */
+    public function hasOut(): bool
+    {
+        return !empty($this->outbound);
     }
 }

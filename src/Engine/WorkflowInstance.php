@@ -1,9 +1,17 @@
 <?php
 
-namespace Phlow\Workflow;
+namespace Phlow\Engine;
 
+use Phlow\Activity\Task;
+use Phlow\Engine\Handler\ConditionalConnectionHandler;
+use Phlow\Engine\Handler\SingleConnectionHandler;
+use Phlow\Engine\Handler\TaskHandler;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
+use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Model\Workflow\NotFoundException;
+use Phlow\Model\Workflow\Workflow;
+use Phlow\Model\Workflow\WorkflowNode;
 
 /**
  * Class WorkflowInstance
@@ -27,6 +35,8 @@ class WorkflowInstance
      */
     private $currentNode;
 
+    private $handlers;
+
     /**
      * WorkflowInstance constructor.
      * @param Workflow $workflow
@@ -36,7 +46,17 @@ class WorkflowInstance
     {
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
-        $this->currentNode = null;
+        $this->initHandlers();
+    }
+
+    private function initHandlers()
+    {
+        $this->handlers = [
+            StartEvent::class => SingleConnectionHandler::class,
+            EndEvent::class => SingleConnectionHandler::class,
+            Task::class => TaskHandler::class,
+            ExclusiveGateway::class => ConditionalConnectionHandler::class
+        ];
     }
 
     /**
@@ -46,41 +66,43 @@ class WorkflowInstance
      */
     public function advance($howMany = 1)
     {
+        $this->initNodes();
         if ($this->isCompleted()) {
             throw new \RuntimeException("Workflow has been already completed.");
         }
 
         // Retrieve and execute the next node
-        $node = $this->next();
-        if ($node instanceof ExecutableNode) {
-            $this->exchange->setOut(
-                $node->execute($this->exchange->in())
-            );
-
-            // Prepare an exchange for the next node
-            $this->exchange = new Exchange($this->exchange->out());
+        $nodeClass = get_class($this->current());
+        if (array_key_exists($nodeClass, $this->handlers)) {
+            $handlerClass = $this->handlers[$nodeClass];
+            $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
         }
 
-        $this->currentNode = $node;
-        return $howMany === 1 ? $this->exchange->in() : $this->advance($howMany - 1);
+        // Prepare an exchange for the next node
+        if ($this->exchange->hasOut()) {
+            $this->exchange = new Exchange($this->exchange->getOut());
+        } else {
+            $this->exchange = new Exchange($this->exchange->getIn());
+        }
+
+        return $howMany === 1 ? $this->exchange->getIn() : $this->advance($howMany - 1);
     }
 
     /**
-     * Finds and return the next node to be executed
-     * @return WorkflowNode
+     * Prepares node for execution
      */
-    private function next(): WorkflowNode
+    private function initNodes(): void
     {
+        if (!empty($this->currentNode)) {
+            return;
+        }
+
         $startEvents = $this->workflow->getAllByClass(StartEvent::class);
-        if ($this->currentNode === null && empty($startEvents)) {
+        if (empty($startEvents)) {
             throw new \RuntimeException('Start event is missing');
         }
 
-        $this->currentNode = $this->currentNode ?? $startEvents[0];
-
-        return $this->currentNode->next(
-            $this->exchange->in()
-        );
+        $this->currentNode = $startEvents[0];
     }
 
     /**

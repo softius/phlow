@@ -2,7 +2,7 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Workflow\WorkflowNode;
+use Phlow\Model\Workflow\WorkflowNodeTrait;
 
 /**
  * Class Task
@@ -11,48 +11,34 @@ use Phlow\Workflow\WorkflowNode;
  */
 class Task implements Activity
 {
-    private $handler;
-
-    private $exceptionObject;
-
-    private $nextNode;
-
-    private $exceptionNode;
+    use WorkflowNodeTrait;
 
     /**
-     * Task constructor.
-     * @param callable $handler
-     * @param WorkflowNode|null $nextNode
-     * @param WorkflowNode|null $exceptionNode
+     * @var array Callback to be invoked when processing this Task
      */
-    public function __construct(callable $handler, WorkflowNode $nextNode = null, WorkflowNode $exceptionNode = null)
+    private $callback = null;
+
+    /**
+     * @return callable
+     */
+    public function getCallback(): callable
     {
-        $this->handler = $handler;
-        $this->nextNode = $nextNode;
-        $this->exceptionNode = $exceptionNode;
-        $this->exceptionObject = null;
+        return $this->callback;
     }
 
     /**
-     * @param object $in
-     * @return object
+     * @param callable $callback
      */
-    public function execute($in)
+    public function addCallback(callable $callback): void
     {
-        try {
-            $func = $this->handler;
-            return $func($in);
-        } catch (\Exception $e) {
-            $this->exceptionObject = $e;
-        }
+        $this->callback = $callback;
     }
 
     /**
-     * @param null $message
-     * @return WorkflowNode
+     * @return bool
      */
-    public function next($message = null): WorkflowNode
+    public function hasCallback(): bool
     {
-        return $this->exceptionObject === null ? $this->nextNode : $this->exceptionNode;
+        return is_callable($this->callback);
     }
 }

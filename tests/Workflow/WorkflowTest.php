@@ -4,15 +4,30 @@ namespace Phlow\Tests\Workflow;
 
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
-use Phlow\Workflow\NotFoundException;
-use Phlow\Workflow\Workflow;
+use Phlow\Model\Workflow\NotFoundException;
+use Phlow\Model\Workflow\Workflow;
 
 class WorkflowTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGet()
+    public function testAddGetFound()
+    {
+        $workflow = new Workflow();
+        $startEvent = new StartEvent();
+        $workflow->add($startEvent, 'start');
+        $this->assertEquals($startEvent, $workflow->get('start'));
+    }
+
+    public function testDuplicates()
+    {
+        $workflow = new Workflow();
+        $workflow->add(new StartEvent(), 'start');
+        $this->expectException(\RuntimeException::class);
+        $workflow->add(new StartEvent(), 'start');
+    }
+
+    public function testGetNotFound()
     {
         $workflow = $this->getWorkflow();
-
         $this->expectException(NotFoundException::class);
         $this->assertEquals(null, $workflow->get('id-does-not-exist'));
     }
@@ -28,7 +43,7 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
     {
         $workflow = new Workflow();
         $end = new EndEvent();
-        $start = new StartEvent($end);
+        $start = new StartEvent();
         $workflow->addAll($start, $end);
 
         $this->expectException(NotFoundException::class);

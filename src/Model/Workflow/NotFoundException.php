@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Workflow;
+namespace Phlow\Model\Workflow;
 
 class NotFoundException extends \Exception
 {

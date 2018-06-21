@@ -54,10 +54,10 @@ $ composer require softius/phlow:dev-master
 
 ### v1.0
 - [x] Exclusive Gateway
-- [ ] Connections
+- [x] Connections
 - [x] Workflow API
 - [x] Expressions
-- [ ] Worfklow Engine
+- [x] Worfklow Engine
 - [ ] PSR-3 Logging
 
 ### v1.x
