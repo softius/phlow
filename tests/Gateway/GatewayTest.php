@@ -3,43 +3,39 @@
 namespace Phlow\Tests\Gateway;
 
 use Phlow\Activity\Task;
+use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
+use Phlow\Engine\Handler\ConditionalConnectionHandler;
 use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Model\Workflow\WorkflowConnection;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase
 {
     public function testFlows()
     {
-        $nextTask = new Task(function ($d) {
-            return $d;
-        });
-
-        $nextTask2 = new Task(function ($d) {
-            return $d;
-        });
+        $nextTask = new Task();
+        $nextTask2 = new Task();
 
         $gateway = new ExclusiveGateway();
-        $gateway->when(function ($d) {
-            return $d->num < 10;
-        }, $nextTask);
+        new WorkflowConnection($gateway, $nextTask, 'num < 10');
+        new WorkflowConnection($gateway, $nextTask2, 'num > 100');
 
-        $gateway->when('num > 100', $nextTask2);
+        $handler = new ConditionalConnectionHandler();
 
-        $d = (object) ['num' => 5];
-        $this->assertEquals($nextTask, $gateway->next($d));
+        $exchange = new Exchange((object) ['num' => 5]);
+        $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
 
-        $d = (object) ['num' => 50];
+        $exchange = new Exchange((object) ['num' => 50]);
         $this->expectException(\RuntimeException::class);
-        $this->assertEquals($nextTask, $gateway->next($d));
+        $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
 
-        $d = (object) ['num' => 500];
-        $this->assertEquals($nextTask2, $gateway->next($d));
+        $exchange = new Exchange((object) ['num' => 500]);
+        $this->assertEquals($nextTask2, $handler->handle($gateway, $exchange));
     }
 
     public function testDefaultExpressionEngine()
     {
-        $gateway = new ExclusiveGateway();
-        $this->assertNotInstanceOf(ExpressionEngine::class, $gateway);
+        $gateway = new ConditionalConnectionHandler();
 
         $engine = new ExpressionEngine();
         $gateway->setExpressionEngine($engine);

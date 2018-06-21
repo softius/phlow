@@ -2,6 +2,9 @@
 
 namespace Phlow\Event;
 
-class StartEvent extends BaseEvent
+use Phlow\Model\Workflow\WorkflowNodeTrait;
+
+class StartEvent implements Event
 {
+    use WorkflowNodeTrait;
 }

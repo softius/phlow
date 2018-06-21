@@ -2,36 +2,19 @@
 
 namespace Phlow\Tests\Workflow;
 
+use Phlow\Activity\Task;
 use Phlow\Model\Workflow\Workflow;
 use Phlow\Model\Workflow\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
+use PHPUnit\Framework\TestCase;
 
-class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
+class WorkflowInstanceTest extends TestCase
 {
-    public function testPipelineHappyPath()
+    public function testAdvance()
     {
-        $instance = $this->getPipeline();
-        $out = $instance->advance(3);
-        $this->assertEquals(true, $instance->isCompleted());
-        $this->assertEquals(3, $out['c']);
-    }
-
-    public function testPipelineError()
-    {
-        $obj = (object) ['invoked' => false];
-        $builder = new WorkflowBuilder();
-        $builder
-            ->start('start', 'error')
-            ->error('error', 'script')
-            ->script('script', 'end', 'end')
-                ->process(function () use ($obj) {
-                    $obj->invoked = true;
-                })
-            ->end('end');
-
-        $instance = new WorkflowInstance($builder->getWorkflow(), []);
-        $instance->advance(2);
-        $this->assertEquals(true, $obj->invoked);
+        $workflow = $this->getPipeline();
+        $workflow->advance(1);
+        $this->assertTrue($workflow->current() instanceof Task);
     }
 
     public function testNoStartEvent()
@@ -75,16 +58,16 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         $builder
             ->start('start', 'getInput')
             ->script('getInput', 'sum', 'error')
-                ->process($getInput)
+                ->callback($getInput)
             ->script('sum', 'end', 'error')
-                ->process($sum)
+                ->callback($sum)
             ->end('end')
             ->error('error', 'end');
 
         $in = ['a' => null, 'b' => null, 'c' => null];
         return new WorkflowInstance($builder->getWorkflow(), $in);
     }
-
+    /*
     public function testConditionalFlow()
     {
         $helloName  = function ($d) {
@@ -103,9 +86,9 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
             ->when('name == null', 'helloWorld')
             ->when('true', 'hello')
             ->script('helloWorld', 'end', 'end')
-                ->process($helloWorld)
+                ->callback($helloWorld)
             ->script('hello', 'end', 'end')
-                ->process($helloName)
+                ->callback($helloName)
             ->end('end');
 
         $d = (object) ['name' => 'phlow', 'message' => null];
@@ -113,4 +96,5 @@ class WorkflowInstanceTest extends \PHPUnit\Framework\TestCase
         $r = $instance->advance(2);
         $this->assertEquals("Hello phlow!", $r->message);
     }
+    */
 }

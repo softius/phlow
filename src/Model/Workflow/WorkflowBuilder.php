@@ -84,27 +84,22 @@ class WorkflowBuilder
         $nodeDef = $this->nodes[$id];
         $class = $nodeDef['class'];
 
-        $node = null;
-        if ($class === StartEvent::class) {
-            $node = new StartEvent($workflow->get($nodeDef['next']));
-        } elseif ($class === EndEvent::class) {
-            $node = new EndEvent();
-        } elseif ($class === ErrorEvent::class) {
-            $node = new ErrorEvent($workflow->get($nodeDef['next']));
-        } elseif ($class === Task::class) {
-            $node = new Task($nodeDef['handler'], $workflow->get($nodeDef['next']), $workflow->get($nodeDef['error']));
-        } elseif ($class === ExclusiveGateway::class) {
-            $node = new ExclusiveGateway();
+        $node = $workflow->add(new $class, $id);
+        if (isset($nodeDef['next'])) {
+            new WorkflowConnection($node, $workflow->get($nodeDef['next']));
+        }
+
+        if (isset($nodeDef['when'])) {
             foreach ($nodeDef['when'] as $when) {
-                $node->when($when['condition'], $workflow->get($when['next']));
+                new WorkflowConnection($node, $workflow->get($when['next']), $when['condition']);
             }
         }
 
-        if ($node) {
-            return $workflow->add($node, $id);
+        if (isset($nodeDef['callback'])) {
+            $node->addCallback($nodeDef['callback']);
         }
 
-        throw new \RuntimeException(sprintf("Unable to create node instance for %s", $class));
+        return $node;
     }
 
     /**
@@ -217,7 +212,7 @@ class WorkflowBuilder
         }
 
         $errorNode = $errorNode ?? $this->errorEvent;
-        $this->add($id, ['class' => Task::class, 'handler' => null, 'next' => $nextNode, 'error' => $errorNode]);
+        $this->add($id, ['class' => Task::class, 'callback' => null, 'next' => $nextNode, 'error' => $errorNode]);
         return $this;
     }
 
@@ -245,13 +240,13 @@ class WorkflowBuilder
     }
 
     /**
-     * Add a handler to the last created task
+     * Add a callback to the last created task
      * @param callable $func
      * @return WorkflowBuilder
      */
-    public function process(callable $func): WorkflowBuilder
+    public function callback(callable $func): WorkflowBuilder
     {
-        $this->nodes[$this->lastNode]['handler'] = $func;
+        $this->nodes[$this->lastNode]['callback'] = $func;
         return $this;
     }
 }

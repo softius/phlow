@@ -2,7 +2,7 @@
 
 namespace Phlow\Model\Workflow;
 
-class WorkflowConnector
+class WorkflowConnection
 {
     private $source;
     private $target;
@@ -10,6 +10,9 @@ class WorkflowConnector
 
     public function __construct(WorkflowNode $source, WorkflowNode $target, $condition = true)
     {
+        $source->addOutgoingConnection($this);
+        $target->addIncomingConnection($this);
+
         $this->source = $source;
         $this->target = $target;
         $this->condition = $condition;
@@ -18,7 +21,7 @@ class WorkflowConnector
     /**
      * @return WorkflowNode
      */
-    public function getSource()
+    public function getSource(): WorkflowNode
     {
         return $this->source;
     }
@@ -26,23 +29,18 @@ class WorkflowConnector
     /**
      * @return WorkflowNode
      */
-    public function getTarget()
+    public function getTarget(): WorkflowNode
     {
         return $this->target;
     }
 
-    /**
-     * Evaluates the provided condition using the provided message
-     * @param $message
-     * @return WorkflowNode
-     */
-    public function evaluate($message)
+    public function getCondition()
     {
-        if (is_callable($this->condition)) {
-            $func = $this->condition;
-            return $func($message);
-        }
+        return $this->condition;
+    }
 
-        throw new \RuntimeException("Unable to evaluate the provided condition.");
+    public function isConditional()
+    {
+        return !empty($this->condition);
     }
 }

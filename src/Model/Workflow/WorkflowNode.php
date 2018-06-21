@@ -7,10 +7,11 @@ namespace Phlow\Model\Workflow;
  */
 interface WorkflowNode
 {
-    /**
-     * Returns the next workflow node
-     * @param $message
-     * @return WorkflowNode
-     */
-    public function next($message = null): WorkflowNode;
+    public function addOutgoingConnection(WorkflowConnection $connection): void;
+
+    public function addIncomingConnection(WorkflowConnection $connection): void;
+
+    public function getOutgoingConnections(): array;
+
+    public function getIncomingConnections(): array;
 }

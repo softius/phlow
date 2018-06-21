@@ -48,4 +48,13 @@ class Exchange
     {
         $this->outbound = $outbound;
     }
+
+    /**
+     * Returns true only and only if an outbound message has been defined
+     * @return bool
+     */
+    public function hasOut(): bool
+    {
+        return !empty($this->outbound);
+    }
 }

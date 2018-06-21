@@ -3,32 +3,26 @@
 namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
+use PHPUnit\Framework\TestCase;
 
-class TaskTest extends \PHPUnit\Framework\TestCase
+class TaskTest extends TestCase
 {
-    public function testSuccess()
+    public function testWithCallback()
     {
-        $nextTask = new Task(function ($d) {
+        $task = new Task();
+        $cb = function ($d) {
             return $d;
-        });
-        $task = new Task(function ($d) {
-            return $d;
-        }, $nextTask);
+        };
+        $task->addCallback($cb);
 
-        $task->execute(null);
-        $this->assertEquals($nextTask, $task->next());
+        $this->assertTrue($task->hasCallback());
+        $this->assertEquals($cb, $task->getCallback());
     }
 
-    public function testException()
+    public function testWithoutCallbacks()
     {
-        $exceptionTask = new Task(function ($d) {
-            return $d;
-        });
-        $task = new Task(function ($d) {
-            throw new \Exception();
-        }, null, $exceptionTask);
+        $task = new Task();
 
-        $task->execute(null);
-        $this->assertEquals($exceptionTask, $task->next());
+        $this->assertFalse($task->hasCallback());
     }
 }
