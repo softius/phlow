@@ -21,12 +21,10 @@ class ConditionalConnectionHandler implements Handler
 
         /** @var WorkflowConnection $connection */
         foreach ($workflowNode->getOutgoingConnections() as $connection) {
-            if ($connection->isConditional()) {
-                /** @var callable $condition */
-                $condition = $connection->getCondition();
-                if ($expressionEngine->evaluate($condition, (array) $exchange->getIn())) {
-                    return $connection->getTarget();
-                }
+            /** @var callable $condition */
+            $condition = $connection->getCondition();
+            if ($connection->isConditional() && $expressionEngine->evaluate($condition, (array) $exchange->getIn())) {
+                return $connection->getTarget();
             }
         }
 
