@@ -3,13 +3,12 @@
 namespace Phlow\Engine;
 
 use Phlow\Activity\Task;
-use Phlow\Engine\Handler\ConditionalConnectionHandler;
-use Phlow\Engine\Handler\SingleConnectionHandler;
-use Phlow\Engine\Handler\TaskHandler;
+use Phlow\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\SingleConnectionHandler;
+use Phlow\Handler\TaskHandler;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Model\Workflow\NotFoundException;
 use Phlow\Model\Workflow\Workflow;
 use Phlow\Model\Workflow\WorkflowNode;
 

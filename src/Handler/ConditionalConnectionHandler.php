@@ -1,12 +1,16 @@
 <?php
 
-namespace Phlow\Engine\Handler;
+namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Model\Workflow\WorkflowConnection;
 use Phlow\Model\Workflow\WorkflowNode;
 
+/**
+ * Class ConditionalConnectionHandler
+ * @package Phlow\Engine\Handler
+ */
 class ConditionalConnectionHandler implements Handler
 {
 
@@ -14,6 +18,7 @@ class ConditionalConnectionHandler implements Handler
      * @var ExpressionEngine
      */
     private $expressionEngine;
+
 
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
     {

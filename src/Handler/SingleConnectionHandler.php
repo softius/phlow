@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Engine\Handler;
+namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
 use Phlow\Model\Workflow\WorkflowConnection;

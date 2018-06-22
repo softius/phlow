@@ -5,7 +5,7 @@ namespace Phlow\Tests\Gateway;
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Engine\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\ConditionalConnectionHandler;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow\WorkflowConnection;
 

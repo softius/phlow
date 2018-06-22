@@ -4,7 +4,7 @@ namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Engine\Handler\TaskHandler;
+use Phlow\Handler\TaskHandler;
 use Phlow\Event\StartEvent;
 use Phlow\Model\Workflow\WorkflowConnection;
 use PHPUnit\Framework\TestCase;

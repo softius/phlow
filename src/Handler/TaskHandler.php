@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Engine\Handler;
+namespace Phlow\Handler;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
