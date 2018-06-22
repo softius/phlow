@@ -2,10 +2,13 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Engine\ExpressionEngine;
-use Phlow\Model\Workflow\WorkflowNode;
 use Phlow\Model\Workflow\WorkflowNodeTrait;
 
+/**
+ * Class ExclusiveGateway
+ * Represents alternative flows in a process. Only one of the alternative paths can be taken.
+ * @package Phlow\Gateway
+ */
 class ExclusiveGateway implements Gateway
 {
     use WorkflowNodeTrait;
