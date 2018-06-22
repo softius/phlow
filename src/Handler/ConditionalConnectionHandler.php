@@ -9,26 +9,35 @@ use Phlow\Model\Workflow\WorkflowNode;
 
 /**
  * Class ConditionalConnectionHandler
+ * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Handler
  */
 class ConditionalConnectionHandler implements Handler
 {
-
     /**
      * @var ExpressionEngine
      */
     private $expressionEngine;
 
 
+    /**
+     * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
+     * @param WorkflowNode $workflowNode
+     * @param Exchange $exchange
+     * @return WorkflowNode
+     */
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
     {
-        $expressionEngine = new ExpressionEngine();
-
         /** @var WorkflowConnection $connection */
         foreach ($workflowNode->getOutgoingConnections() as $connection) {
-            /** @var callable $condition */
-            $condition = $connection->getCondition();
-            if ($connection->isConditional() && $expressionEngine->evaluate($condition, (array) $exchange->getIn())) {
+            if (!$connection->isConditional()) {
+                continue;
+            }
+
+            $expression = $connection->getCondition();
+            $context = (array) $exchange->getIn();
+            $isTrue = $this->getExpressionEngine()->evaluate($expression, $context);
+            if ($isTrue) {
                 return $connection->getTarget();
             }
         }

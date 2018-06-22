@@ -13,6 +13,9 @@ use Phlow\Model\Workflow\WorkflowNode;
 interface Handler
 {
     /**
+     * It processes the provided Workflow Node by injecting the provided Exchange and
+     * and executing all the necessary actions supported by the Node.
+     * Then it calculates and returns the next Node
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
      * @return WorkflowNode

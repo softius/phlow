@@ -6,8 +6,20 @@ use Phlow\Engine\Exchange;
 use Phlow\Model\Workflow\WorkflowConnection;
 use Phlow\Model\Workflow\WorkflowNode;
 
+/**
+ * Class SingleConnectionHandler
+ * Suggests the next WorkflowNode by taking the first of the outgoing connections
+ * @package Phlow\Handler
+ */
 class SingleConnectionHandler implements Handler
 {
+    /**
+     * Suggests the next WorkflowNode by taking the first of the outgoing connections.
+     * If there are more than one outgoing connection, they will be ignored.
+     * @param WorkflowNode $workflowNode
+     * @param Exchange $exchange
+     * @return WorkflowNode
+     */
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
     {
         $connections = $workflowNode->getOutgoingConnections();

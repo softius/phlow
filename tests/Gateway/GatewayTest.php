@@ -8,6 +8,7 @@ use Phlow\Engine\ExpressionEngine;
 use Phlow\Handler\ConditionalConnectionHandler;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow\WorkflowConnection;
+use Phlow\Tests\Engine\DummyExpressionEngine;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,9 +37,15 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     public function testDefaultExpressionEngine()
     {
         $gateway = new ConditionalConnectionHandler();
+        $this->assertTrue($gateway->getExpressionEngine() instanceof ExpressionEngine);
+    }
 
-        $engine = new ExpressionEngine();
+    public function testCustomExpressionEngine()
+    {
+        $gateway = new ConditionalConnectionHandler();
+        $engine = new DummyExpressionEngine();
         $gateway->setExpressionEngine($engine);
         $this->assertEquals($engine, $gateway->getExpressionEngine());
+        $this->assertEquals('DUMMY', $gateway->getExpressionEngine()->evaluate('value', ['value' => '100']));
     }
 }
