@@ -35,7 +35,15 @@ class WorkflowInstance
      */
     private $currentNode;
 
-    private $handlers;
+    /**
+     * @var array Mapping between Workflow Nodes and Handlers
+     */
+    private $handlers = [
+        StartEvent::class => SingleConnectionHandler::class,
+        EndEvent::class => SingleConnectionHandler::class,
+        Task::class => TaskHandler::class,
+        ExclusiveGateway::class => ConditionalConnectionHandler::class
+    ];
 
     /**
      * WorkflowInstance constructor.
@@ -46,17 +54,6 @@ class WorkflowInstance
     {
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
-        $this->initHandlers();
-    }
-
-    private function initHandlers()
-    {
-        $this->handlers = [
-            StartEvent::class => SingleConnectionHandler::class,
-            EndEvent::class => SingleConnectionHandler::class,
-            Task::class => TaskHandler::class,
-            ExclusiveGateway::class => ConditionalConnectionHandler::class
-        ];
     }
 
     /**
@@ -115,11 +112,24 @@ class WorkflowInstance
     }
 
     /**
+     * Returns true only and only if the execution has been started and still in progress (not completed).
+     * @return bool
+     */
+    public function inProgress(): bool
+    {
+        return (!empty($this->currentNode) && !$this->isCompleted());
+    }
+
+    /**
      * Returns the last executed node.
-     * @return null|WorkflowNode
+     * @return WorkflowNode
      */
     public function current(): WorkflowNode
     {
-        return $this->currentNode;
+        if (!empty($this->currentNode)) {
+            return $this->currentNode;
+        }
+
+        throw new \RuntimeException("Execution has not been initiated for this Workflow.");
     }
 }
