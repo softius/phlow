@@ -22,7 +22,8 @@ class TaskTest extends TestCase
     public function testWithoutCallbacks()
     {
         $task = new Task();
-
         $this->assertFalse($task->hasCallback());
+        $this->expectException(\RuntimeException::class);
+        $task->getCallback();
     }
 }

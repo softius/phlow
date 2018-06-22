@@ -6,7 +6,8 @@ use Phlow\Model\Workflow\WorkflowNodeTrait;
 
 /**
  * Class Task
- * An atomic event within a workflow.
+ * A Task is an atomic action.
+ * It represents a single unit of work within the Workflow, which usually can not be broken down into further steps.
  * @package Phlow\Activity
  */
 class Task implements Activity
@@ -19,11 +20,18 @@ class Task implements Activity
     private $callback = null;
 
     /**
+     * Returns the callback associated with this Task
+     * If no callback was provided, an Exception is thrown
+     * @throws \RuntimeException
      * @return callable
      */
     public function getCallback(): callable
     {
-        return $this->callback;
+        if ($this->hasCallback()) {
+            return $this->callback;
+        }
+
+        throw new \RuntimeException("Callback was never provided for this task");
     }
 
     /**
