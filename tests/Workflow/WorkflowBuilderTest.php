@@ -6,7 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Event\StartEvent;
 use Phlow\Event\EndEvent;
 use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Model\Workflow\WorkflowBuilder;
+use Phlow\Model\WorkflowBuilder;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase

@@ -4,7 +4,7 @@ namespace Phlow\Handler;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Class TaskHandler

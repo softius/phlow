@@ -3,8 +3,8 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
-use Phlow\Model\Workflow\WorkflowConnection;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\WorkflowConnection;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Class SingleConnectionHandler

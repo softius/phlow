@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Model\Workflow;
+namespace Phlow\Model;
 
 /**
  * Class Workflow

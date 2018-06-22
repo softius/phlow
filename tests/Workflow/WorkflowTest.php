@@ -4,8 +4,8 @@ namespace Phlow\Tests\Workflow;
 
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
-use Phlow\Model\Workflow\NotFoundException;
-use Phlow\Model\Workflow\Workflow;
+use Phlow\Model\NotFoundException;
+use Phlow\Model\Workflow;
 
 class WorkflowTest extends \PHPUnit\Framework\TestCase
 {

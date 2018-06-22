@@ -7,7 +7,7 @@ use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Handler\ConditionalConnectionHandler;
 use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Model\Workflow\WorkflowConnection;
+use Phlow\Model\WorkflowConnection;
 use Phlow\Tests\Engine\DummyExpressionEngine;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase

@@ -6,7 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Handler\TaskHandler;
 use Phlow\Event\StartEvent;
-use Phlow\Model\Workflow\WorkflowConnection;
+use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
 class TaskHandlerTest extends TestCase

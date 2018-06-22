@@ -4,8 +4,8 @@ namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Model\Workflow\WorkflowConnection;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\WorkflowConnection;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Class ConditionalConnectionHandler

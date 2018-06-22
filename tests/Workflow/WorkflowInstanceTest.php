@@ -5,8 +5,8 @@ namespace Phlow\Tests\Workflow;
 use Phlow\Activity\Task;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
-use Phlow\Model\Workflow\Workflow;
-use Phlow\Model\Workflow\WorkflowBuilder;
+use Phlow\Model\Workflow;
+use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
 use PHPUnit\Framework\TestCase;
 

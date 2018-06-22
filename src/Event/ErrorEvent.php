@@ -2,7 +2,7 @@
 
 namespace Phlow\Event;
 
-use Phlow\Model\Workflow\WorkflowNodeTrait;
+use Phlow\Model\WorkflowNodeTrait;
 
 /**
  * Class ErrorEvent

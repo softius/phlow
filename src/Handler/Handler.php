@@ -3,7 +3,7 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Interface Handler

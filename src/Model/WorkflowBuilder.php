@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Model\Workflow;
+namespace Phlow\Model;
 
 use Phlow\Activity\Task;
 use Phlow\Event\EndEvent;

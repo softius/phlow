@@ -2,7 +2,7 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Model\Workflow\WorkflowNodeTrait;
+use Phlow\Model\WorkflowNodeTrait;
 
 /**
  * Class ExclusiveGateway
