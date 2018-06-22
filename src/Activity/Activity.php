@@ -2,12 +2,11 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Model\Workflow\WorkflowNode;
-use Phlow\Engine\ExecutableNode;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Interface Activity
- * Represents any action or task executed by end users or by the application
+ * An denotes something that must be done.
  * @package Phlow\Activity
  */
 interface Activity extends WorkflowNode

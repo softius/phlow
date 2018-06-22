@@ -4,17 +4,24 @@ namespace Phlow\Engine;
 
 /**
  * Class Exchange
+ * An Exchange is the message container holding the information during the processing of a Workflow Node
  * @package Phlow\Workflow
  */
 class Exchange
 {
+    /**
+     * @var null|object Inbound message
+     */
     private $inbound;
 
+    /**
+     * @var null|object Inbound message
+     */
     private $outbound;
 
     /**
      * Exchange constructor.
-     * @param object $inbound
+     * @param null $inbound
      */
     public function __construct($inbound = null)
     {

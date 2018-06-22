@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Model\Workflow;
+namespace Phlow\Model;
 
 /**
  * Class Workflow
@@ -9,52 +9,14 @@ namespace Phlow\Model\Workflow;
 class Workflow
 {
     /**
-     * @var string The name of this workflow
-     */
-    private $name;
-
-    /**
-     * @var string Short description or any other comments about this workflow
-     */
-    private $comments;
-
-    /**
      * @var array Unordered list of the nodes, that composite this workflow.
      */
-    private $nodes;
+    private $nodes = [];
 
     /**
      * @var array Mapping between IDs and the actual node
      */
-    private $id2Node;
-
-    /**
-     * Workflow constructor.
-     * @param string $name
-     * @param string $comments
-     */
-    public function __construct(string $name = null, string $comments = null)
-    {
-        $this->name = $name;
-        $this->comments = $comments;
-        $this->nodes = $this->id2Node = [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComments(): string
-    {
-        return $this->comments;
-    }
+    private $id2Node = [];
 
     /**
      * Adds the provided node in the list of nodes.

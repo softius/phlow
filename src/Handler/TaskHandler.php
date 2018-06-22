@@ -1,15 +1,21 @@
 <?php
 
-namespace Phlow\Engine\Handler;
+namespace Phlow\Handler;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\WorkflowNode;
 
+/**
+ * Class TaskHandler
+ * Executes the callback associated with the provided Workflow Node
+ * @package Phlow\Handler
+ */
 class TaskHandler implements Handler
 {
 
     /**
+     * Executes the callback associated with the provided Workflow Node
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
      * @return WorkflowNode

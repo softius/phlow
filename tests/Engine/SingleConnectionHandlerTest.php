@@ -4,9 +4,8 @@ namespace Phlow\Tests\Engine;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Engine\Handler\SingleConnectionHandler;
-use Phlow\Engine\Handler\TaskHandler;
-use Phlow\Model\Workflow\WorkflowConnection;
+use Phlow\Handler\SingleConnectionHandler;
+use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
 class SingleConnectionHandlerTest extends TestCase

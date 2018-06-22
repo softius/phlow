@@ -3,15 +3,14 @@
 namespace Phlow\Engine;
 
 use Phlow\Activity\Task;
-use Phlow\Engine\Handler\ConditionalConnectionHandler;
-use Phlow\Engine\Handler\SingleConnectionHandler;
-use Phlow\Engine\Handler\TaskHandler;
+use Phlow\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\SingleConnectionHandler;
+use Phlow\Handler\TaskHandler;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Model\Workflow\NotFoundException;
-use Phlow\Model\Workflow\Workflow;
-use Phlow\Model\Workflow\WorkflowNode;
+use Phlow\Model\Workflow;
+use Phlow\Model\WorkflowNode;
 
 /**
  * Class WorkflowInstance
@@ -35,7 +34,15 @@ class WorkflowInstance
      */
     private $currentNode;
 
-    private $handlers;
+    /**
+     * @var array Mapping between Workflow Nodes and Handlers
+     */
+    private $handlers = [
+        StartEvent::class => SingleConnectionHandler::class,
+        EndEvent::class => SingleConnectionHandler::class,
+        Task::class => TaskHandler::class,
+        ExclusiveGateway::class => ConditionalConnectionHandler::class
+    ];
 
     /**
      * WorkflowInstance constructor.
@@ -46,17 +53,6 @@ class WorkflowInstance
     {
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
-        $this->initHandlers();
-    }
-
-    private function initHandlers()
-    {
-        $this->handlers = [
-            StartEvent::class => SingleConnectionHandler::class,
-            EndEvent::class => SingleConnectionHandler::class,
-            Task::class => TaskHandler::class,
-            ExclusiveGateway::class => ConditionalConnectionHandler::class
-        ];
     }
 
     /**
@@ -115,11 +111,24 @@ class WorkflowInstance
     }
 
     /**
+     * Returns true only and only if the execution has been started and still in progress (not completed).
+     * @return bool
+     */
+    public function inProgress(): bool
+    {
+        return (!empty($this->currentNode) && !$this->isCompleted());
+    }
+
+    /**
      * Returns the last executed node.
-     * @return null|WorkflowNode
+     * @return WorkflowNode
      */
     public function current(): WorkflowNode
     {
-        return $this->currentNode;
+        if (!empty($this->currentNode)) {
+            return $this->currentNode;
+        }
+
+        throw new \RuntimeException("Execution has not been initiated for this Workflow.");
     }
 }

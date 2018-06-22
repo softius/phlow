@@ -3,7 +3,7 @@
 namespace Phlow\Tests\Event;
 
 use Phlow\Engine\Exchange;
-use Phlow\Engine\Handler\SingleConnectionHandler;
+use Phlow\Handler\SingleConnectionHandler;
 use Phlow\Event\EndEvent;
 use PHPUnit\Framework\TestCase;
 
