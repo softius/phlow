@@ -47,7 +47,7 @@ Phlow can be installed to your PHP project by executing the following composer c
 $ composer require softius/phlow:dev-master
 ```
 
-## Documents
+## Documentation
 * [Concepts][link-concepts]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
@@ -98,6 +98,6 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-author]: https://github.com/softius
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
-[link-concepts]: https://github.com/softius/Phlow/blob/docs/docs/concepts.md
-[link-sequence-flow]: https://github.com/softius/Phlow/blob/docs/docs/sequence-flow.md
-[link-conditional-flow]: https://github.com/softius/Phlow/blob/docs/docs/conditional-flow.md
+[link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
+[link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
+[link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
