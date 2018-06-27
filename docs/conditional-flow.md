@@ -21,5 +21,6 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
     ->getWorkflow();
 
 $instance = new \Phlow\Engine\WorkflowInstance($flow, ['number' => 99]);
-$instance->advance(2);
+$instance->advance(); // reach lessThan100 or otherwise
+$instance->advance(); // reach end
 ``` 

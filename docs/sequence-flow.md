@@ -26,5 +26,8 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
     ->getWorkflow();
 
 $instance = new \Phlow\Engine\WorkflowInstance($flow, []);
-$instance->advance(4);
+$instance->advance(); // reach random1
+$instance->advance(); // reach random2
+$instance->advance(); // reach sum
+$instance->advance(); // reach end
 ``` 
