@@ -25,7 +25,7 @@ $builder
   ->task('ReviewArticle')
   ->choice('IsApproved')
     ->when('approved == true', 'PublishArticle')
-    ->when('approved == false', 'UpdateArticle')
+    ->otherwise('UpdateArticle')
   ->task('UpdateArticle', 'ReviewArticle')
   ->task('PublishArticle', 'End')
   ->end('End');
