@@ -2,7 +2,9 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
-[![Total Downloads][ico-downloads]][link-downloads]
+![Code Climate][ico-maintenance]
+![Code Climate][ico-coverage]
+
 
 Phlow is a workflow modeller and engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], Phlow attempts to provide a library to design and implement business processes in PHP projects. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
 
@@ -91,7 +93,9 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [ico-version]: https://img.shields.io/packagist/v/softius/phlow.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/softius/Phlow/master.svg?style=flat-square
+[ico-maintenance]: https://img.shields.io/codeclimate/maintainability/softius/Phlow.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/softius/phlow.svg?style=flat-square
+[ico-coverage]: https://img.shields.io/codeclimate/coverage-letter/softius/Phlow.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/softius/phlow
 [link-travis]: https://travis-ci.org/softius/phlow
