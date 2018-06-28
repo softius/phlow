@@ -24,5 +24,6 @@
     </filter>
     <logging>
         <log type="coverage-html" target="coverage"/>
+        <log type="coverage-clover" target="coverage.xml"/>
     </logging>
 </phpunit>
