@@ -51,6 +51,7 @@ $ composer require softius/phlow:dev-master
 * [Concepts][link-concepts]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
+* [FAQs][link-faqs]
  
 ## Roadmap
 
