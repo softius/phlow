@@ -51,6 +51,7 @@ $ composer require softius/phlow:dev-master
 * [Concepts][link-concepts]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
+* [FAQs][link-faqs]
  
 ## Roadmap
 
@@ -99,5 +100,6 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
 [link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
+[link-faqs]: https://github.com/softius/Phlow/blob/master/docs/faqs.md
 [link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
 [link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
