@@ -54,7 +54,7 @@ class WorkflowBuilderTest extends TestCase
             ->start('start', 'nameIsProvided')
             ->choice('nameIsProvided')
             ->when('name == null', 'helloWorld')
-            ->when('true', 'hello')
+            ->otherwise('hello')
             ->script('helloWorld', 'end', 'end')
             ->callback($helloWorld)
             ->script('hello', 'end', 'end')

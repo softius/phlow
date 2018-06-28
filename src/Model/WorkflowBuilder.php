@@ -240,6 +240,18 @@ class WorkflowBuilder
     }
 
     /**
+     * Default action for conditional flows
+     * Alias for when()
+     * @param $nextNode
+     * @see when
+     * @return WorkflowBuilder
+     */
+    public function otherwise($nextNode): WorkflowBuilder
+    {
+        return $this->when('true', $nextNode);
+    }
+
+    /**
      * Add a callback to the last created task
      * @param callable $func
      * @return WorkflowBuilder
