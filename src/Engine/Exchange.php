@@ -20,6 +20,11 @@ class Exchange
     private $outbound;
 
     /**
+     * @var \Exception The Exception associated with this Exchange
+     */
+    private $exception;
+
+    /**
      * Exchange constructor.
      * @param null $inbound
      */
@@ -63,5 +68,32 @@ class Exchange
     public function hasOut(): bool
     {
         return !empty($this->outbound);
+    }
+
+    /**
+     * Returns the exception associated with this exchange
+     * @return \Exception
+     */
+    public function getException(): ?\Exception
+    {
+        return $this->exception;
+    }
+
+    /**
+     * Sets the exception associated with this exchange
+     * @param \Exception $exception
+     */
+    public function setException(\Exception $exception): void
+    {
+        $this->exception = $exception;
+    }
+
+    /**
+     * Returns true only and only if an Exception has been associated with this Exchange
+     * @return bool
+     */
+    public function hasException(): bool
+    {
+        return !empty($this->exception);
     }
 }
