@@ -22,7 +22,7 @@ class WorkflowBuilder
     /**
      * @var ErrorEvent Catch-all errors event
      */
-    private $errorEvent;
+    private $errorHandlers;
 
     /**
      * @var string The ID of the last created Node
@@ -35,6 +35,7 @@ class WorkflowBuilder
     public function __construct()
     {
         $this->nodes = [];
+        $this->errorHandlers = [];
         $this->lastNode = null;
     }
 
@@ -46,7 +47,6 @@ class WorkflowBuilder
     {
         $workflow = new Workflow();
         foreach ($this->nodes as $id => $definition) {
-            // Another option is to resolve the StartEvent and everything will be auto-magic-ally resolved
             $this->resolveNode($workflow, $id);
         }
 
@@ -152,14 +152,25 @@ class WorkflowBuilder
 
     /**
      * Workflow level error handling.
-     * Catches all errors raised by workflow nodes.
-     * @param callable $func
+     * @param mixed $exceptionClass Exception class to be matched
+     * @param callable $handler
      * @return WorkflowBuilder
      */
-    public function catch(callable $func): WorkflowBuilder
+    public function catch($exceptionClass, callable $handler): WorkflowBuilder
     {
-        // @todo
+        $this->errorHandlers[$exceptionClass] = $handler;
         return $this;
+    }
+
+    /**
+     * Workflow level error handling.
+     * Alias for catch(\Exception::class, handler)
+     * @param callable $handler
+     * @return WorkflowBuilder
+     */
+    public function catchAll(callable $handler): WorkflowBuilder
+    {
+        return $this->catch(\Exception::class, $handler);
     }
 
     /**
@@ -207,11 +218,11 @@ class WorkflowBuilder
      */
     public function script(string $id, $nextNode, $errorNode = null): WorkflowBuilder
     {
-        if (empty($errorNode) && empty($this->errorEvent)) {
+        if (empty($errorNode) && empty($this->errorHandler)) {
             throw new \RuntimeException(sprintf("Error node was not specified for the node %s", $id));
         }
 
-        $errorNode = $errorNode ?? $this->errorEvent;
+        $errorNode = $errorNode ?? $this->errorHandler;
         $this->add($id, ['class' => Task::class, 'callback' => null, 'next' => $nextNode, 'error' => $errorNode]);
         return $this;
     }
