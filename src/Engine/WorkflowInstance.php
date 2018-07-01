@@ -3,6 +3,7 @@
 namespace Phlow\Engine;
 
 use Phlow\Activity\Task;
+use Phlow\Event\ErrorEvent;
 use Phlow\Handler\ConditionalConnectionHandler;
 use Phlow\Handler\SingleConnectionHandler;
 use Phlow\Handler\TaskHandler;
@@ -40,6 +41,7 @@ class WorkflowInstance
     private $handlers = [
         StartEvent::class => SingleConnectionHandler::class,
         EndEvent::class => SingleConnectionHandler::class,
+        ErrorEvent::class => SingleConnectionHandler::class,
         Task::class => TaskHandler::class,
         ExclusiveGateway::class => ConditionalConnectionHandler::class
     ];
@@ -71,7 +73,11 @@ class WorkflowInstance
         $nodeClass = get_class($this->current());
         if (array_key_exists($nodeClass, $this->handlers)) {
             $handlerClass = $this->handlers[$nodeClass];
-            $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+            try {
+                $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+            } catch (\Exception $e) {
+
+            }
         }
 
         // Prepare an exchange for the next node

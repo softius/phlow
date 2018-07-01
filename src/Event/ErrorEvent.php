@@ -2,6 +2,7 @@
 
 namespace Phlow\Event;
 
+use Phlow\Model\CallbackNodeTrait;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -12,4 +13,5 @@ use Phlow\Model\WorkflowNodeTrait;
 class ErrorEvent implements Event
 {
     use WorkflowNodeTrait;
+    use CallbackNodeTrait;
 }

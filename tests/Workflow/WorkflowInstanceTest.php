@@ -90,7 +90,7 @@ class WorkflowInstanceTest extends TestCase
         };
 
         $builder = new WorkflowBuilder();
-        $builder->catch($error);
+        $builder->catchAll($error);
         $builder
             ->start('start', 'getInput')
             ->script('getInput', 'sum', 'error')
