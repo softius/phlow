@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase
 {
-    /*
     public function testTask()
     {
         $builder = new WorkflowBuilder();
@@ -22,8 +21,11 @@ class WorkflowBuilderTest extends TestCase
             });
 
         $workflow = $builder->getWorkflow();
-        $this->assertTrue($workflow->get('script') instanceof Task);
-        $this->assertTrue($workflow->get('script')->hasCallback());
+
+        /** @var Task $node */
+        $task = $workflow->getAllByClass(Task::class)[0];
+        $this->assertTrue($task instanceof Task);
+        $this->assertTrue($task->hasCallback());
     }
 
     public function testConditionalFlow()
@@ -39,19 +41,21 @@ class WorkflowBuilderTest extends TestCase
 
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'nameIsProvided')
-            ->choice('nameIsProvided')
-            ->when('name == null', 'helloWorld')
-            ->otherwise('hello')
-            ->script('helloWorld', 'end', 'end')
-            ->callback($helloWorld)
-            ->script('hello', 'end', 'end')
-            ->callback($helloName)
-            ->end('end');
+            ->start()
+            ->choice()
+            ->when('name == null')
+                ->script()
+                    ->callback($helloWorld)
+            ->otherwise()
+                ->script()
+                    ->callback($helloName)
+            ->end();
 
         $workflow = $builder->getWorkflow();
-        $this->assertTrue($workflow->get('nameIsProvided') instanceof ExclusiveGateway);
-        $this->assertEquals(2, count($workflow->get('nameIsProvided')->getOutgoingconnections()));
+
+        /** @var ExclusiveGateway $node */
+        $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
+        $this->assertTrue($node instanceof ExclusiveGateway);
+        $this->assertEquals(2, count($node->getOutgoingconnections()));
     }
-    */
 }
