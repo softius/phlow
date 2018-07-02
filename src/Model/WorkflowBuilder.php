@@ -22,7 +22,7 @@ class WorkflowBuilder
     /**
      * @var ErrorEvent Catch-all errors event
      */
-    private $errorEvent;
+    private $errorHandlers;
 
     /**
      * @var string The ID of the last created Node
@@ -35,6 +35,7 @@ class WorkflowBuilder
     public function __construct()
     {
         $this->nodes = [];
+        $this->errorHandlers = [];
         $this->lastNode = null;
     }
 
@@ -46,7 +47,6 @@ class WorkflowBuilder
     {
         $workflow = new Workflow();
         foreach ($this->nodes as $id => $definition) {
-            // Another option is to resolve the StartEvent and everything will be auto-magic-ally resolved
             $this->resolveNode($workflow, $id);
         }
 
@@ -97,6 +97,10 @@ class WorkflowBuilder
 
         if (isset($nodeDef['callback'])) {
             $node->addCallback($nodeDef['callback']);
+        }
+
+        if (isset($nodeDef['exceptionClass'])) {
+            $node->addExceptionClass($nodeDef['exceptionClass']);
         }
 
         return $node;
@@ -152,14 +156,29 @@ class WorkflowBuilder
 
     /**
      * Workflow level error handling.
-     * Catches all errors raised by workflow nodes.
-     * @param callable $func
+     * @param mixed $exceptionClass Exception class to be matched
+     * @param $nextNode
      * @return WorkflowBuilder
      */
-    public function catch(callable $func): WorkflowBuilder
+    public function catch(string $exceptionClass, $nextNode): WorkflowBuilder
     {
-        // @todo
+        $this->add('errorEvent', [
+            'class' => ErrorEvent::class,
+            'next' => $nextNode,
+            'exceptionClass' => $exceptionClass
+        ]);
         return $this;
+    }
+
+    /**
+     * Workflow level error handling.
+     * Alias for catch(\Exception::class)
+     * @param $nextNode
+     * @return WorkflowBuilder
+     */
+    public function catchAll($nextNode): WorkflowBuilder
+    {
+        return $this->catch(\Exception::class, $nextNode);
     }
 
     /**
@@ -186,19 +205,6 @@ class WorkflowBuilder
     }
 
     /**
-     * Node level error handling.
-     * Creates an Error event for this workflow.
-     * @param $id
-     * @param mixed $nextNode
-     * @return WorkflowBuilder
-     */
-    public function error($id, $nextNode): WorkflowBuilder
-    {
-        $this->add($id, ['class' => ErrorEvent::class, 'next' => $nextNode]);
-        return $this;
-    }
-
-    /**
      * Creates a Task for this workflow
      * @param string $id
      * @param mixed $nextNode
@@ -207,11 +213,11 @@ class WorkflowBuilder
      */
     public function script(string $id, $nextNode, $errorNode = null): WorkflowBuilder
     {
-        if (empty($errorNode) && empty($this->errorEvent)) {
+        if (empty($errorNode) && empty($this->errorHandler)) {
             throw new \RuntimeException(sprintf("Error node was not specified for the node %s", $id));
         }
 
-        $errorNode = $errorNode ?? $this->errorEvent;
+        $errorNode = $errorNode ?? $this->errorHandler;
         $this->add($id, ['class' => Task::class, 'callback' => null, 'next' => $nextNode, 'error' => $errorNode]);
         return $this;
     }
