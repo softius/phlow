@@ -26,6 +26,8 @@ trait ExecutableNodeTrait
     }
 
     /**
+     * Adds a new callback for this node.
+     * If a callback already exists, it will be replaced.
      * @param callable $callback
      */
     public function addCallback(callable $callback): void
@@ -34,6 +36,7 @@ trait ExecutableNodeTrait
     }
 
     /**
+     * Returns true only and only if an Exception class has been associated with this Node
      * @return bool
      */
     public function hasCallback(): bool
