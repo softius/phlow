@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-trait CallbackNodeTrait
+trait ExecutableNodeTrait
 {
 
     /**

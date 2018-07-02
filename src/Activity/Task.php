@@ -2,7 +2,8 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Model\CallbackNodeTrait;
+use Phlow\Model\ExecutableNode;
+use Phlow\Model\ExecutableNodeTrait;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -11,8 +12,8 @@ use Phlow\Model\WorkflowNodeTrait;
  * It represents a single unit of work within the Workflow, which usually can not be broken down into further steps.
  * @package Phlow\Activity
  */
-class Task implements Activity
+class Task implements Activity, ExecutableNode
 {
     use WorkflowNodeTrait;
-    use CallbackNodeTrait;
+    use ExecutableNodeTrait;
 }
