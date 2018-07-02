@@ -24,18 +24,18 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'script1')
-            ->script('script1', 'script2', 'end')
+            ->start()
+            ->script()
                 ->callback(function ($in) {
                     $in->num = 10;
                     return $in;
                 })
-            ->script('script2', 'end', 'end')
+            ->script()
                 ->callback(function ($in) {
                     $in->num = 20;
                     return $in;
                 })
-            ->end('end');
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), (object) ['num' => 0]);
         $d = $instance->advance(2);
         $this->assertEquals(10, $d->num);
@@ -53,8 +53,8 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'end')
-            ->end('end');
+            ->start()
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $this->expectException(\RuntimeException::class);
         $instance->advance(3);
@@ -75,21 +75,21 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->catchAll('errorTask')
-            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->catchAll()
+            ->script()
             ->callback(function ($d) {
                 $d['num']++;
                 return $d;
             })
-            ->end('errorEnd');
+            ->end();
 
         $builder
-            ->start('start', 'task')
-            ->script('task', 'end', 'end')
+            ->start()
+            ->script()
             ->callback(function () {
                 throw new \RuntimeException();
             })
-            ->end('end');
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
         $instance->advance(2);
@@ -100,12 +100,12 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'task')
-            ->script('task', 'end', 'end')
+            ->start()
+            ->script()
             ->callback(function () {
                 throw new \Exception();
             })
-            ->end('end');
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
         $this->expectException(\RuntimeException::class);
@@ -116,20 +116,20 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->catch(\OutOfBoundsException::class, 'errorTask')
-            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->catch(\OutOfBoundsException::class)
+            ->script()
             ->callback(function ($d) {
                 $d['num']++;
                 return $d;
             })
-            ->end('errorEnd');
+            ->end();
         $builder
-            ->start('start', 'task')
-            ->script('task', 'end', 'end')
+            ->start()
+            ->script()
             ->callback(function () {
                 throw new \BadFunctionCallException();
             })
-            ->end('end');
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
         $this->expectException(\RuntimeException::class);
@@ -140,12 +140,12 @@ class WorkflowInstanceTest extends TestCase
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'task')
-            ->script('task', 'end', 'end')
+            ->start()
+            ->script()
             ->callback(function ($d) {
                 return $d;
             })
-            ->end('end');
+            ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
         $instance->execute();
@@ -171,18 +171,18 @@ class WorkflowInstanceTest extends TestCase
 
         $builder = new WorkflowBuilder();
         $builder
-            ->catchAll('errorTask')
-            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->catchAll()
+            ->script()
             ->callback($error)
-            ->end('errorEnd');
+            ->end();
 
         $builder
-            ->start('start', 'getInput')
-            ->script('getInput', 'sum', 'end')
+            ->start()
+            ->script()
                 ->callback($getInput)
-            ->script('sum', 'end', 'end')
+            ->script()
                 ->callback($sum)
-            ->end('end');
+            ->end();
 
         $in = ['a' => null, 'b' => null, 'c' => null];
         return new WorkflowInstance($builder->getWorkflow(), $in);

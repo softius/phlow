@@ -14,28 +14,14 @@ class Workflow
     private $nodes = [];
 
     /**
-     * @var array Mapping between IDs and the actual node
-     */
-    private $id2Node = [];
-
-    /**
      * Adds the provided node in the list of nodes.
      * Maintains reference for all the nodes, that composite this workflow.
      * @param WorkflowNode $node
-     * @param string $id
      * @return WorkflowNode
      * @throws \RuntimeException
      */
-    public function add(WorkflowNode $node, string $id = null): WorkflowNode
+    public function add(WorkflowNode $node): WorkflowNode
     {
-        if (!empty($id)) {
-            if (array_key_exists($id, $this->id2Node)) {
-                throw new \RuntimeException(sprintf("Node %s already exists", $id));
-            }
-
-            $this->id2Node[$id] = $node;
-        }
-
         $this->nodes[] = $node;
         return $node;
     }
@@ -76,21 +62,6 @@ class Workflow
     public function getAll(callable $filter = null): iterable
     {
         return ($filter) ? array_values(array_filter($this->nodes, $filter)) : $this->nodes;
-    }
-
-    /**
-     * Retrieves and returns the node associated with the specified id
-     * @param string $id
-     * @return WorkflowNode
-     * @throws NotFoundException
-     */
-    public function get(string $id): WorkflowNode
-    {
-        if (array_key_exists($id, $this->id2Node)) {
-            return $this->id2Node[$id];
-        } else {
-            throw new NotFoundException(sprintf("Node %s was not found", $id));
-        }
     }
 
     /**
