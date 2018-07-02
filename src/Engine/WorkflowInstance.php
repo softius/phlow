@@ -59,6 +59,16 @@ class WorkflowInstance
     }
 
     /**
+     * Advances the Workflow to the next node until an End Event has been reached
+     */
+    public function execute(): void
+    {
+        while (!$this->isCompleted()) {
+            $this->advance();
+        }
+    }
+
+    /**
      * Proceeds to the next workflow node and executes it
      * @param int $howMany
      * @return object

@@ -38,7 +38,7 @@ Once the model bas been built, it can be executed by creating a new instance. At
 ``` php
 $workflow = $builder->getWorkflow();
 $instance = new WorkflowInstance($workflow, $data);
-$instance->advance();
+$instance->execute();
 ```
 
 ## Installation
