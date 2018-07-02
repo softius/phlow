@@ -96,6 +96,22 @@ class WorkflowInstanceTest extends TestCase
         $this->assertNotInstanceOf(EndEvent::class, $instance->current());
     }
 
+    public function testMissingErrorHandling()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->start('start', 'task')
+            ->script('task', 'end', 'end')
+            ->callback(function () {
+                throw new \Exception();
+            })
+            ->end('end');
+        $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
+
+        $this->expectException(\RuntimeException::class);
+        $instance->advance(2);
+    }
+
     private function getPipeline()
     {
         $getInput = function ($d) {
