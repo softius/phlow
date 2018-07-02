@@ -87,7 +87,7 @@ class WorkflowInstanceTest extends TestCase
             ->start('start', 'task')
             ->script('task', 'end', 'end')
             ->callback(function () {
-                throw new \Exception();
+                throw new \RuntimeException();
             })
             ->end('end');
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
@@ -104,6 +104,30 @@ class WorkflowInstanceTest extends TestCase
             ->script('task', 'end', 'end')
             ->callback(function () {
                 throw new \Exception();
+            })
+            ->end('end');
+        $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
+
+        $this->expectException(\RuntimeException::class);
+        $instance->advance(2);
+    }
+
+    public function testUnmatchedErrorHandling()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->catch(\OutOfBoundsException::class, 'errorTask')
+            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->callback(function ($d) {
+                $d['num']++;
+                return $d;
+            })
+            ->end('errorEnd');
+        $builder
+            ->start('start', 'task')
+            ->script('task', 'end', 'end')
+            ->callback(function () {
+                throw new \BadFunctionCallException();
             })
             ->end('end');
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
