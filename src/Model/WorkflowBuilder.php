@@ -99,6 +99,10 @@ class WorkflowBuilder
             $node->addCallback($nodeDef['callback']);
         }
 
+        if (isset($nodeDef['exceptionClass'])) {
+            $node->addExceptionClass($nodeDef['exceptionClass']);
+        }
+
         return $node;
     }
 
@@ -153,24 +157,28 @@ class WorkflowBuilder
     /**
      * Workflow level error handling.
      * @param mixed $exceptionClass Exception class to be matched
-     * @param callable $handler
+     * @param $nextNode
      * @return WorkflowBuilder
      */
-    public function catch($exceptionClass, callable $handler): WorkflowBuilder
+    public function catch(string $exceptionClass, $nextNode): WorkflowBuilder
     {
-        $this->errorHandlers[$exceptionClass] = $handler;
+        $this->add('errorEvent', [
+            'class' => ErrorEvent::class,
+            'next' => $nextNode,
+            'exceptionClass' => $exceptionClass
+        ]);
         return $this;
     }
 
     /**
      * Workflow level error handling.
-     * Alias for catch(\Exception::class, handler)
-     * @param callable $handler
+     * Alias for catch(\Exception::class)
+     * @param $nextNode
      * @return WorkflowBuilder
      */
-    public function catchAll(callable $handler): WorkflowBuilder
+    public function catchAll($nextNode): WorkflowBuilder
     {
-        return $this->catch(\Exception::class, $handler);
+        return $this->catch(\Exception::class, $nextNode);
     }
 
     /**
@@ -193,19 +201,6 @@ class WorkflowBuilder
     public function end(string $id): WorkflowBuilder
     {
         $this->add($id, ['class' => EndEvent::class]);
-        return $this;
-    }
-
-    /**
-     * Node level error handling.
-     * Creates an Error event for this workflow.
-     * @param $id
-     * @param mixed $nextNode
-     * @return WorkflowBuilder
-     */
-    public function error($id, $nextNode): WorkflowBuilder
-    {
-        $this->add($id, ['class' => ErrorEvent::class, 'next' => $nextNode]);
         return $this;
     }
 

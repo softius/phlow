@@ -4,7 +4,6 @@ namespace Phlow\Tests\Workflow;
 
 use Phlow\Activity\Task;
 use Phlow\Event\EndEvent;
-use Phlow\Event\StartEvent;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
@@ -72,6 +71,31 @@ class WorkflowInstanceTest extends TestCase
         $workflow->current();
     }
 
+    public function testErrorHandling()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->catchAll('errorTask')
+            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->callback(function ($d) {
+                $d['num']++;
+                return $d;
+            })
+            ->end('errorEnd');
+
+        $builder
+            ->start('start', 'task')
+            ->script('task', 'end', 'end')
+            ->callback(function () {
+                throw new \Exception();
+            })
+            ->end('end');
+        $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
+
+        $instance->advance(2);
+        $this->assertNotInstanceOf(EndEvent::class, $instance->current());
+    }
+
     private function getPipeline()
     {
         $getInput = function ($d) {
@@ -90,15 +114,19 @@ class WorkflowInstanceTest extends TestCase
         };
 
         $builder = new WorkflowBuilder();
-        $builder->catchAll($error);
+        $builder
+            ->catchAll('errorTask')
+            ->script('errorTask', 'errorEnd', 'errorEnd')
+            ->callback($error)
+            ->end('errorEnd');
+
         $builder
             ->start('start', 'getInput')
-            ->script('getInput', 'sum', 'error')
+            ->script('getInput', 'sum', 'end')
                 ->callback($getInput)
-            ->script('sum', 'end', 'error')
+            ->script('sum', 'end', 'end')
                 ->callback($sum)
-            ->end('end')
-            ->error('error', 'end');
+            ->end('end');
 
         $in = ['a' => null, 'b' => null, 'c' => null];
         return new WorkflowInstance($builder->getWorkflow(), $in);

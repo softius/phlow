@@ -5,6 +5,7 @@ namespace Phlow\Engine;
 use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\ExceptionHandler;
 use Phlow\Handler\SingleConnectionHandler;
 use Phlow\Handler\TaskHandler;
 use Phlow\Event\EndEvent;
@@ -47,6 +48,11 @@ class WorkflowInstance
     ];
 
     /**
+     * @var array Mapping between Exception classes and Error Events
+     */
+    private $errorEvents = [];
+
+    /**
      * WorkflowInstance constructor.
      * @param Workflow $workflow
      * @param $inbound
@@ -70,14 +76,10 @@ class WorkflowInstance
         }
 
         // Retrieve and execute the next node
-        $nodeClass = get_class($this->current());
-        if (array_key_exists($nodeClass, $this->handlers)) {
-            $handlerClass = $this->handlers[$nodeClass];
-            try {
-                $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
-            } catch (\Exception $e) {
-
-            }
+        try {
+            $this->handleCurrentNode();
+        } catch (\Exception $e) {
+            $this->handleException($e);
         }
 
         // Prepare an exchange for the next node
@@ -88,6 +90,43 @@ class WorkflowInstance
         }
 
         return $howMany === 1 ? $this->exchange->getIn() : $this->advance($howMany - 1);
+    }
+
+    /**
+     * Executes the current node and moves the node pointer to the next node
+     */
+    private function handleCurrentNode(): void
+    {
+        $nodeClass = get_class($this->current());
+        if (array_key_exists($nodeClass, $this->handlers)) {
+            $handlerClass = $this->handlers[$nodeClass];
+            $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+        }
+    }
+
+    /**
+     * Handles a raised exception by moving the flow to an error event
+     * If no error handling was configured, another Exception will be thrown halting the execution
+     * @param \Exception $exception
+     */
+    private function handleException(\Exception $exception): void
+    {
+        $this->initErrorEvents();
+
+        $exceptionClass = get_class($exception);
+        while (!empty($exceptionClass)) {
+            if (array_key_exists($exceptionClass, $this->errorEvents)) {
+                $this->currentNode = $this->errorEvents[$exceptionClass];
+                $this->handleCurrentNode();
+                return;
+            }
+
+            $exceptionClass = get_parent_class($exceptionClass);
+        }
+
+        throw new \RuntimeException(
+            sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
+        );
     }
 
     /**
@@ -105,6 +144,26 @@ class WorkflowInstance
         }
 
         $this->currentNode = $startEvents[0];
+    }
+
+    /**
+     * Prepares a mapping between Error Events and the corresponding Exception classes
+     */
+    private function initErrorEvents(): void
+    {
+        if (!empty($this->errorEvents)) {
+            return;
+        }
+
+        $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
+        if (empty($errorEvents)) {
+            throw new \RuntimeException('Error events are missing');
+        }
+
+        /** @var ErrorEvent $errorEvent */
+        foreach ($errorEvents as $errorEvent) {
+            $this->errorEvents[$errorEvent->getExceptionClass()] = $errorEvent;
+        }
     }
 
     /**

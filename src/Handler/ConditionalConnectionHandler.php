@@ -15,12 +15,6 @@ use Phlow\Model\WorkflowNode;
 class ConditionalConnectionHandler implements Handler
 {
     /**
-     * @var ExpressionEngine
-     */
-    private $expressionEngine;
-
-
-    /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
@@ -44,6 +38,12 @@ class ConditionalConnectionHandler implements Handler
 
         throw new \RuntimeException("No condition was matched. Unable to calculate the next node.");
     }
+
+
+    /**
+     * @var ExpressionEngine
+     */
+    private $expressionEngine;
 
     /**
      * @return ExpressionEngine

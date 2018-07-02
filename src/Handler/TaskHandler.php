@@ -4,6 +4,7 @@ namespace Phlow\Handler;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
+use Phlow\Exception\WorkflowException;
 use Phlow\Model\WorkflowNode;
 
 /**
@@ -29,21 +30,15 @@ class TaskHandler implements Handler
 
         /** @var Task $task */
         $task = $workflowNode;
-        try {
-            // Invoke callback
-            if ($task->hasCallback()) {
-                $callback = $task->getCallback();
-                $exchange->setOut(
-                    call_user_func($callback, $exchange->getIn())
-                );
-            }
-
-            // Return next node
-            return (new SingleConnectionHandler())->handle($workflowNode, $exchange);
-        } catch (\Exception $e) {
-            // @todo add error handling event
-            // Rethrow Exception in case no error handling was defined
-            throw $e;
+        // Invoke callback
+        if ($task->hasCallback()) {
+            $callback = $task->getCallback();
+            $exchange->setOut(
+                call_user_func($callback, $exchange->getIn())
+            );
         }
+
+        // Return next node
+        return (new SingleConnectionHandler())->handle($workflowNode, $exchange);
     }
 }
