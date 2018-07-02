@@ -48,11 +48,6 @@ class WorkflowInstance
     ];
 
     /**
-     * @var array Mapping between Exception classes and Error Events
-     */
-    private $errorEvents = [];
-
-    /**
      * WorkflowInstance constructor.
      * @param Workflow $workflow
      * @param $inbound
@@ -111,12 +106,12 @@ class WorkflowInstance
      */
     private function handleException(\Exception $exception): void
     {
-        $this->initErrorEvents();
+        $errorEvents = $this->getErrorEvents();
 
         $exceptionClass = get_class($exception);
         while (!empty($exceptionClass)) {
-            if (array_key_exists($exceptionClass, $this->errorEvents)) {
-                $this->currentNode = $this->errorEvents[$exceptionClass];
+            if (array_key_exists($exceptionClass, $errorEvents)) {
+                $this->currentNode = $errorEvents[$exceptionClass];
                 $this->handleCurrentNode();
                 return;
             }
@@ -147,23 +142,22 @@ class WorkflowInstance
     }
 
     /**
-     * Prepares a mapping between Error Events and the corresponding Exception classes
+     * Prepares and returns a mapping between Error Events and the corresponding Exception classes
      */
-    private function initErrorEvents(): void
+    private function getErrorEvents(): array
     {
-        if (!empty($this->errorEvents)) {
-            return;
-        }
-
         $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
         if (empty($errorEvents)) {
             throw new \RuntimeException('Error events are missing');
         }
 
+        $errorEventsMap = [];
         /** @var ErrorEvent $errorEvent */
         foreach ($errorEvents as $errorEvent) {
-            $this->errorEvents[$errorEvent->getExceptionClass()] = $errorEvent;
+            $errorEventsMap[$errorEvent->getExceptionClass()] = $errorEvent;
         }
+
+        return $errorEventsMap;
     }
 
     /**
