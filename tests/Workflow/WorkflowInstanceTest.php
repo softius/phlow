@@ -136,6 +136,22 @@ class WorkflowInstanceTest extends TestCase
         $instance->advance(2);
     }
 
+    public function testExecution()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->start('start', 'task')
+            ->script('task', 'end', 'end')
+            ->callback(function ($d) {
+                return $d;
+            })
+            ->end('end');
+        $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
+
+        $instance->execute();
+        $this->assertTrue($instance->isCompleted());
+    }
+
     private function getPipeline()
     {
         $getInput = function ($d) {
