@@ -4,7 +4,7 @@ namespace Phlow\Util;
 
 /**
  * Class Stack
- * A Stack is a “last in, first out” or “LIFO” collection that only allows access to the value at the top of the structure and iterates in that order, destructively.
+ * A Stack is a “LIFO” collection that only allows access to the value at the top of the structure.
  * @package Phlow\Util
  */
 class Stack

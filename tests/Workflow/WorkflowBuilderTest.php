@@ -3,8 +3,6 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Activity\Task;
-use Phlow\Event\StartEvent;
-use Phlow\Event\EndEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowBuilder;
 use PHPUnit\Framework\TestCase;
@@ -49,6 +47,33 @@ class WorkflowBuilderTest extends TestCase
             ->otherwise()
                 ->script()
                     ->callback($helloName)
+            ->end();
+
+        $workflow = $builder->getWorkflow();
+
+        /** @var ExclusiveGateway $node */
+        $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
+        $this->assertTrue($node instanceof ExclusiveGateway);
+        $this->assertEquals(2, count($node->getOutgoingconnections()));
+    }
+
+    public function testNestedConditionalFlows()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->start()
+            ->choice()
+            ->when('name == null')
+                ->choice()
+                    ->when('isDay')
+                        ->script()
+                    ->when('isNight')
+                        ->script()
+                    ->otherwise()
+                        ->script()
+                ->endChoice()
+            ->otherwise()
+                ->script()
             ->end();
 
         $workflow = $builder->getWorkflow();

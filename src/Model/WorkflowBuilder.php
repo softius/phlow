@@ -130,6 +130,19 @@ class WorkflowBuilder
     }
 
     /**
+     * @return WorkflowBuilder
+     */
+    public function endChoice(): WorkflowBuilder
+    {
+        while (!($this->nodeStack->peek() instanceof ExclusiveGateway)) {
+            $this->nodeStack->pop();
+        }
+
+        $this->nodeStack->pop();
+        return $this->add(new ExclusiveGateway());
+    }
+
+    /**
      * Add conditional flows on the last created gateway
      * @param $condition
      * @return WorkflowBuilder
