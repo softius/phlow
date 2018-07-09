@@ -7,6 +7,7 @@ use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Util\Stack;
 
 /**
  * Class WorkflowBuilder
@@ -15,14 +16,14 @@ use Phlow\Gateway\ExclusiveGateway;
 class WorkflowBuilder
 {
     /**
-     * @var WorkflowNode The last created Node
-     */
-    private $lastNode;
-
-    /**
      * @var string The last expression mentioned
      */
     private $lastExpression;
+
+    /**
+     * @var Stack
+     */
+    private $nodeStack;
 
     /**
      * @var Workflow
@@ -34,8 +35,8 @@ class WorkflowBuilder
      */
     public function __construct()
     {
-        $this->lastNode = null;
         $this->lastExpression = null;
+        $this->nodeStack = new Stack();
         $this->workflow = new Workflow();
     }
 
@@ -54,11 +55,12 @@ class WorkflowBuilder
      */
     private function add(WorkflowNode $node): WorkflowBuilder
     {
-        if (!empty($this->lastNode)) {
-            new WorkflowConnection($this->lastNode, $node, $this->lastExpression);
+        if (!$this->nodeStack->isEmpty()) {
+            new WorkflowConnection($this->nodeStack->peek(), $node, $this->lastExpression);
         }
 
-        $this->lastNode = $this->workflow->add($node);
+        $this->workflow->add($node);
+        $this->nodeStack->push($node);
         $this->lastExpression = null;
         return $this;
     }
@@ -134,6 +136,10 @@ class WorkflowBuilder
      */
     public function when($condition): WorkflowBuilder
     {
+        while (!($this->nodeStack->peek() instanceof ExclusiveGateway)) {
+            $this->nodeStack->pop();
+        }
+
         $this->lastExpression = $condition;
         return $this;
     }
@@ -146,6 +152,10 @@ class WorkflowBuilder
      */
     public function otherwise(): WorkflowBuilder
     {
+        while (!($this->nodeStack->peek() instanceof ExclusiveGateway)) {
+            $this->nodeStack->pop();
+        }
+
         return $this->when('true');
     }
 
@@ -156,7 +166,7 @@ class WorkflowBuilder
      */
     public function callback(callable $callback): WorkflowBuilder
     {
-        $this->lastNode->addCallback($callback);
+        $this->nodeStack->peek()->addCallback($callback);
         return $this;
     }
 }
