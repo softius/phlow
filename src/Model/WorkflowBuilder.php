@@ -134,11 +134,29 @@ class WorkflowBuilder
      */
     public function end(): WorkflowBuilder
     {
-        if ($this->unlinkedNodes->isEmpty()) {
-            $this->add(new EndEvent());
-        } else {
+        if (!$this->unlinkedNodes->isEmpty()) {
             $this->processChoiceBranch();
-            $this->linkNodesFor = $this->nodes->pop();
+            $this->linkNodesFor = !$this->nodes->isEmpty() ? $this->nodes->pop() : null;
+        }
+
+        // A new EndEvent must be created in the following cases
+        // * There are no more unlinked nodes i.e. no Gateway was used in this Workflow
+        // * There is only one Gateway pending which must be linked with an EndEvent
+        if (1 >= $this->unlinkedNodes->count()) {
+            $this->add(new EndEvent());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Closes all the opened Gateways and it creates a new EndEvent
+     * @see WorkflowBuilder::end()
+     */
+    public function endAll(): WorkflowBuilder
+    {
+        while (!($this->nodes->peek() instanceof EndEvent)) {
+            $this->end();
         }
 
         return $this;
