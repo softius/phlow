@@ -70,8 +70,7 @@ class WorkflowBuilder
     private function add(WorkflowNode $node): WorkflowBuilder
     {
         if ($this->linkNodesFor instanceof WorkflowNode) {
-            $this->linkUnlinedNodes($this->linkNodesFor, $node);
-            $this->linkNodesFor = null;
+            $this->linkChoiceBranchesTo($node);
         } elseif (!$this->nodes->isEmpty()) {
             new WorkflowConnection($this->nodes->peek(), $node, $this->lastExpression);
         }
@@ -83,15 +82,18 @@ class WorkflowBuilder
     }
 
     /**
-     * Establish a Connection between the unlinked nodes of the provided Gateway and the provided target Node
-     * @param WorkflowNode $gateway
+     * Helper method.
+     * Establish a Connection between the unlinked nodes of the Gateway and the provided target Node
      * @param WorkflowNode $target
      */
-    private function linkUnlinedNodes(WorkflowNode $gateway, WorkflowNode $target)
+    private function linkChoiceBranchesTo(WorkflowNode $target)
     {
-        foreach ($this->unlinkedNodes->get($gateway) as $source) {
+        foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
             new WorkflowConnection($source, $target);
         }
+
+        $this->unlinkedNodes->remove($this->linkNodesFor);
+        $this->linkNodesFor = null;
     }
 
     /**
@@ -126,12 +128,20 @@ class WorkflowBuilder
     }
 
     /**
-     * Creates an End event for this workflow.
+     * If more than one Gateways are still open, it will close the newly created
+     * Otherwise, it creates an End event for this workflow.
      * @return WorkflowBuilder
      */
     public function end(): WorkflowBuilder
     {
-        return $this->add(new EndEvent());
+        if ($this->unlinkedNodes->isEmpty()) {
+            $this->add(new EndEvent());
+        } else {
+            $this->processChoiceBranch();
+            $this->linkNodesFor = $this->nodes->pop();
+        }
+
+        return $this;
     }
 
     /**
@@ -155,19 +165,7 @@ class WorkflowBuilder
      */
     public function choice(): WorkflowBuilder
     {
-        $gateway = new ExclusiveGateway();
-        $this->unlinkedNodes->put($gateway, []);
-        return $this->add($gateway);
-    }
-
-    /**
-     * @return WorkflowBuilder
-     */
-    public function endChoice(): WorkflowBuilder
-    {
-        $this->processChoiceBranch();
-        $this->linkNodesFor = $this->nodes->pop();
-        return $this;
+        return $this->add(new ExclusiveGateway());
     }
 
     /**
@@ -198,19 +196,18 @@ class WorkflowBuilder
      * Maintains the unlinked Nodes for each branch so that they can be linked later on.
      * @see WorkflowBuilder::when()
      * @see WorkflowBuilder::otherwise()
-     * @see WorkflowBuilder::endChoice()
      */
     private function processChoiceBranch(): void
     {
         $node = $this->nodes->peek();
-        while (!($this->nodes->peek() instanceof Gateway)) {
+        while (!$this->nodes->isEmpty() && !($this->nodes->peek() instanceof Gateway)) {
             $this->nodes->pop();
         }
 
-        if (!($node instanceof Gateway)) {
+        if (!($node instanceof Gateway) && !$this->nodes->isEmpty()) {
             $gateway = $this->nodes->peek();
 
-            $nodes = $this->unlinkedNodes->get($gateway);
+            $nodes = $this->unlinkedNodes->exists($gateway) ? $this->unlinkedNodes->get($gateway) : [];
             $nodes[] = $node;
             $this->unlinkedNodes->put($gateway, $nodes);
         }

@@ -17,7 +17,7 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
         ->callback(function () {
             print("Number provided was EQUAL OR GREATER than 100\n");
         })
-    ->endChoice()
+    ->end()
     ->end()
     ->getWorkflow();
 
