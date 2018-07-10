@@ -5,22 +5,22 @@ The following example demonstrates how to apply conditions and branching in your
 require __DIR__.'/../vendor/autoload.php';
 
 $flow = (new \Phlow\Model\WorkflowBuilder())
-    ->start('start', 'choice')
-    ->choice('choice')
-        ->when('number < 100', 'lessThan100')
-        ->otherwise('otherwise')
-    ->script('lessThan100', 'end', 'end')
+    ->start()
+    ->choice()
+    ->when('number < 100')
+        ->script()
         ->callback(function () {
             print("Number provided was LESS than 100\n");
         })
-    ->script('otherwise', 'end', 'end')
+    ->otherwise()
+        ->script()
         ->callback(function () {
             print("Number provided was EQUAL OR GREATER than 100\n");
         })
-    ->end('end')
+    ->endChoice()
+    ->end()
     ->getWorkflow();
 
 $instance = new \Phlow\Engine\WorkflowInstance($flow, ['number' => 99]);
-$instance->advance(); // reach lessThan100 or otherwise
-$instance->advance(); // reach end
+$instance->execute();
 ``` 

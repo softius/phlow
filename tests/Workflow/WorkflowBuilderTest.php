@@ -74,13 +74,14 @@ class WorkflowBuilderTest extends TestCase
                 ->endChoice()
             ->otherwise()
                 ->script()
+            ->endChoice()
             ->end();
 
         $workflow = $builder->getWorkflow();
 
         /** @var ExclusiveGateway $node */
-        $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
+        $node = $workflow->getAllByClass(ExclusiveGateway::class)[1];
         $this->assertTrue($node instanceof ExclusiveGateway);
-        $this->assertEquals(2, count($node->getOutgoingconnections()));
+        $this->assertEquals(3, count($node->getOutgoingconnections()));
     }
 }

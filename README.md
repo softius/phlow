@@ -22,15 +22,16 @@ Also, the following code illustrates the model for the same process.
 ``` php
 $builder = new WorkflowBuilder();
 $builder
-  ->start('Start', 'ComposeArticle')
-  ->task('ComposeArticle', 'ReviewArticle')
-  ->task('ReviewArticle')
-  ->choice('IsApproved')
-    ->when('approved == true', 'PublishArticle')
-    ->otherwise('UpdateArticle')
-  ->task('UpdateArticle', 'ReviewArticle')
-  ->task('PublishArticle', 'End')
-  ->end('End');
+  ->start()
+  ->task()          // Compose article
+  ->task()          // Review article
+  ->choice()        // Approved?
+    ->when('approved == true')
+        ->task()    // Publish article
+    ->otherwise()
+        ->task()    // Update Article
+  ->endChoice()
+  ->end()
 ```
 
 Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that would be made available throughout the process. The data can be any object which could be also updated as part of the process.
