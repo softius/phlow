@@ -47,7 +47,7 @@ class WorkflowInstanceTest extends TestCase
     {
         $flow = new Workflow();
         $instance = new WorkflowInstance($flow, []);
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance();
     }
 
@@ -69,7 +69,7 @@ class WorkflowInstanceTest extends TestCase
     public function testCurrentBeforeExecution()
     {
         $workflow = $this->getPipeline();
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $workflow->current();
     }
 
@@ -110,11 +110,11 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance(2);
     }
 
-    public function testUnmatchedErrorHandling()
+    public function testUndefinedErrorHandling()
     {
         $builder = new WorkflowBuilder();
         $builder

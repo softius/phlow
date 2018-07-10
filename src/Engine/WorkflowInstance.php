@@ -145,7 +145,7 @@ class WorkflowInstance
 
         $startEvents = $this->workflow->getAllByClass(StartEvent::class);
         if (empty($startEvents)) {
-            throw new \RuntimeException('Start event is missing');
+            throw new InvalidStateException('Start event is missing.');
         }
 
         $this->currentNode = $startEvents[0];
@@ -158,7 +158,7 @@ class WorkflowInstance
     {
         $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
         if (empty($errorEvents)) {
-            throw new \RuntimeException('Error events are missing');
+            throw new InvalidStateException('Error events are missing');
         }
 
         $errorEventsMap = [];
@@ -198,6 +198,6 @@ class WorkflowInstance
             return $this->currentNode;
         }
 
-        throw new \RuntimeException("Execution has not been initiated for this Workflow.");
+        throw new InvalidStateException('Execution has not been initiated for this Workflow.');
     }
 }
