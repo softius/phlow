@@ -13,6 +13,7 @@ use Phlow\Util\Stack;
 
 /**
  * Class WorkflowBuilder
+ * Provides a fluent-API to build a new Workflow
  * @package Phlow\Workflow
  */
 class WorkflowBuilder
@@ -23,7 +24,7 @@ class WorkflowBuilder
     private $lastExpression;
 
     /**
-     * @var Stack Stack of Gateways created
+     * @var Stack
      */
     private $nodes;
 
@@ -55,6 +56,7 @@ class WorkflowBuilder
     }
 
     /**
+     * Returns the workflow created using this WorkflowBuilder
      * @return Workflow
      */
     public function getWorkflow(): Workflow
@@ -63,14 +65,15 @@ class WorkflowBuilder
     }
 
     /**
-     * Adds the specified node information in the list to be used when building the final workflow
+     * Adds the specified Node to the Workflow.
+     * Creates a connection between the previous Node with the new Node
      * @param WorkflowNode $node
      * @return WorkflowBuilder
      */
     private function add(WorkflowNode $node): WorkflowBuilder
     {
         if ($this->linkNodesFor instanceof WorkflowNode) {
-            $this->linkChoiceBranchesTo($node);
+            $this->connectGatewayPaths($node);
         } elseif (!$this->nodes->isEmpty()) {
             new WorkflowConnection($this->nodes->peek(), $node, $this->lastExpression);
         }
@@ -83,10 +86,10 @@ class WorkflowBuilder
 
     /**
      * Helper method.
-     * Establish a Connection between the unlinked nodes of the Gateway and the provided target Node
+     * Establish a Connection between the Gateway's unlinked nodes and the provided target Node
      * @param WorkflowNode $target
      */
-    private function linkChoiceBranchesTo(WorkflowNode $target)
+    private function connectGatewayPaths(WorkflowNode $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
             new WorkflowConnection($source, $target);
@@ -97,125 +100,13 @@ class WorkflowBuilder
     }
 
     /**
-     * Workflow level error handling.
-     * @param mixed $exceptionClass Exception class to be matched
-     * @return WorkflowBuilder
-     */
-    public function catch(string $exceptionClass): WorkflowBuilder
-    {
-        $errorEvent = new ErrorEvent();
-        $errorEvent->addExceptionClass($exceptionClass);
-        return $this->add($errorEvent);
-    }
-
-    /**
-     * Workflow level error handling.
-     * Alias for catch(\Exception::class)
-     * @return WorkflowBuilder
-     */
-    public function catchAll(): WorkflowBuilder
-    {
-        return $this->catch(\Exception::class);
-    }
-
-    /**
-     * Creates a Start event for this workflow
-     * @return WorkflowBuilder
-     */
-    public function start(): WorkflowBuilder
-    {
-        return $this->add(new StartEvent());
-    }
-
-    /**
-     * If more than one Gateways are still open, it will close the newly created
-     * Otherwise, it creates an End event for this workflow.
-     * @return WorkflowBuilder
-     */
-    public function end(): WorkflowBuilder
-    {
-        if (!$this->unlinkedNodes->isEmpty()) {
-            $this->processChoiceBranch();
-            $this->linkNodesFor = !$this->nodes->isEmpty() ? $this->nodes->pop() : null;
-        }
-
-        // A new EndEvent must be created in the following cases
-        // * There are no more unlinked nodes i.e. no Gateway was used in this Workflow
-        // * There is only one Gateway pending which must be linked with an EndEvent
-        if (1 >= $this->unlinkedNodes->count()) {
-            $this->add(new EndEvent());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Closes all the opened Gateways and it creates a new EndEvent
-     * @see WorkflowBuilder::end()
-     */
-    public function endAll(): WorkflowBuilder
-    {
-        while (!($this->nodes->peek() instanceof EndEvent)) {
-            $this->end();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Creates a Task for this workflow
-     * @param callable|null $callback
-     * @return WorkflowBuilder
-     */
-    public function script(callable $callback = null): WorkflowBuilder
-    {
-        $taskNode = new Task();
-        if (!empty($callback)) {
-            $taskNode->addCallback($callback);
-        }
-
-        return $this->add($taskNode);
-    }
-
-    /**
-     * Creates an Exclusive Gateway for this workflow
-     * @return WorkflowBuilder
-     */
-    public function choice(): WorkflowBuilder
-    {
-        return $this->add(new ExclusiveGateway());
-    }
-
-    /**
-     * Add conditional flows on the last created gateway
-     * @param $condition
-     * @return WorkflowBuilder
-     */
-    public function when($condition): WorkflowBuilder
-    {
-        $this->processChoiceBranch();
-        $this->lastExpression = $condition;
-        return $this;
-    }
-
-    /**
-     * Default action for conditional flows
-     * Alias for when(true)
-     * @see WorkflowBuilder::when()
-     * @return WorkflowBuilder
-     */
-    public function otherwise(): WorkflowBuilder
-    {
-        return $this->when('true');
-    }
-
-    /**
-     * Extra processing for Choice branches like when, otherwise and endChoice.
-     * Maintains the unlinked Nodes for each branch so that they can be linked later on.
+     * Extra processing for Gateways methods like when, otherwise and end.
+     * Maintains the unlinked Nodes for each path so that they can be linked later on.
      * @see WorkflowBuilder::when()
      * @see WorkflowBuilder::otherwise()
+     * @see WorkflowBuilder::connectGatewayPaths()
      */
-    private function processChoiceBranch(): void
+    private function processGatewayPath(): void
     {
         $node = $this->nodes->peek();
         while (!$this->nodes->isEmpty() && !($this->nodes->peek() instanceof Gateway)) {
@@ -232,6 +123,89 @@ class WorkflowBuilder
     }
 
     /**
+     * Workflow level error handling.
+     * Creates an ErrorEvent instance.
+     * @param mixed $exceptionClass Exception class to be matched
+     * @return WorkflowBuilder
+     */
+    public function catch(string $exceptionClass): WorkflowBuilder
+    {
+        $errorEvent = new ErrorEvent();
+        $errorEvent->addExceptionClass($exceptionClass);
+        return $this->add($errorEvent);
+    }
+
+    /**
+     * Workflow level error handling.
+     * Alias for catch(\Exception::class)
+     * @see WorkflowBuilder::catch()
+     * @return WorkflowBuilder
+     */
+    public function catchAll(): WorkflowBuilder
+    {
+        return $this->catch(\Exception::class);
+    }
+
+    /**
+     * Creates a StartEvent instance for this workflow
+     * @return WorkflowBuilder
+     */
+    public function start(): WorkflowBuilder
+    {
+        return $this->add(new StartEvent());
+    }
+
+    /**
+     * It closes the most recent created Gateway which is still 'opened'.
+     * Otherwise, it creates an EndEvent instance for this workflow.
+     * @return WorkflowBuilder
+     */
+    public function end(): WorkflowBuilder
+    {
+        if (!$this->unlinkedNodes->isEmpty()) {
+            $this->processGatewayPath();
+            $this->linkNodesFor = !$this->nodes->isEmpty() ? $this->nodes->pop() : null;
+        }
+
+        // A new EndEvent must be created in the following cases
+        // * There are no more unlinked nodes i.e. no Gateway was used in this Workflow
+        // * There is only one Gateway pending which must be linked with an EndEvent
+        if (1 >= $this->unlinkedNodes->count()) {
+            $this->add(new EndEvent());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Closes all the 'opened' Gateway instances and then it creates a new EndEvent instance for this Workflow.
+     * @see WorkflowBuilder::end()
+     */
+    public function endAll(): WorkflowBuilder
+    {
+        while (!($this->nodes->peek() instanceof EndEvent)) {
+            $this->end();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Creates a Task instance for this workflow
+     * @param callable|null $callback
+     * @return WorkflowBuilder
+     */
+    public function script(callable $callback = null): WorkflowBuilder
+    {
+        $taskNode = new Task();
+        if (!empty($callback)) {
+            $taskNode->addCallback($callback);
+        }
+
+        return $this->add($taskNode);
+    }
+
+    /**
      * Add a callback to the last created task
      * @param callable $callback
      * @return WorkflowBuilder
@@ -240,5 +214,41 @@ class WorkflowBuilder
     {
         $this->nodes->peek()->addCallback($callback);
         return $this;
+    }
+
+    /**
+     * Creates an ExclusiveGateway instance for this Workflow
+     * The result can be chained with when() and otherwise() to implement two or more paths.
+     * @see WorkflowBuilder::when()
+     * @see WorkflowBuilder::otherwise()
+     * @see WorkflowBuilder::end()
+     * @return WorkflowBuilder
+     */
+    public function choice(): WorkflowBuilder
+    {
+        return $this->add(new ExclusiveGateway());
+    }
+
+    /**
+     * Add conditional path to the last created Gateway instance
+     * @param $condition
+     * @return WorkflowBuilder
+     */
+    public function when($condition): WorkflowBuilder
+    {
+        $this->processGatewayPath();
+        $this->lastExpression = $condition;
+        return $this;
+    }
+
+    /**
+     * Default path for the last created Gateway instance
+     * Alias for when(true)
+     * @see WorkflowBuilder::when()
+     * @return WorkflowBuilder
+     */
+    public function otherwise(): WorkflowBuilder
+    {
+        return $this->when('true');
     }
 }

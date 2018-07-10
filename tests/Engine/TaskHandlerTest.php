@@ -4,7 +4,7 @@ namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Handler\TaskHandler;
+use Phlow\Handler\ExecutableHandler;
 use Phlow\Event\StartEvent;
 use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ class TaskHandlerTest extends TestCase
         $nextTask = new Task();
         new WorkflowConnection($task, $nextTask);
 
-        $handler = new TaskHandler();
+        $handler = new ExecutableHandler();
         $actualNextTask = $handler->handle($task, new Exchange());
         $this->assertEquals($nextTask, $actualNextTask);
     }
@@ -33,7 +33,7 @@ class TaskHandlerTest extends TestCase
             return $in;
         });
 
-        $handler = new TaskHandler();
+        $handler = new ExecutableHandler();
         $exchange = new Exchange(['num' => 1]);
         $actualNextTask = $handler->handle($task, $exchange);
         $this->assertEquals($nextTask, $actualNextTask);
@@ -46,7 +46,7 @@ class TaskHandlerTest extends TestCase
         $nextTask = new Task();
         new WorkflowConnection($task, $nextTask);
 
-        $handler = new TaskHandler();
+        $handler = new ExecutableHandler();
         $actualNextTask = $handler->handle($task, new Exchange());
         $this->assertEquals($nextTask, $actualNextTask);
     }
@@ -58,7 +58,7 @@ class TaskHandlerTest extends TestCase
             throw new \Exception("testErrorHandling");
         });
 
-        $handler = new TaskHandler();
+        $handler = new ExecutableHandler();
         $this->expectExceptionMessage("testErrorHandling");
         $handler->handle($task, new Exchange());
     }
@@ -66,6 +66,6 @@ class TaskHandlerTest extends TestCase
     public function testInvalidArguments()
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new TaskHandler())->handle(new StartEvent(), new Exchange());
+        (new ExecutableHandler())->handle(new StartEvent(), new Exchange());
     }
 }
