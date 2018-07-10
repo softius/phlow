@@ -3,6 +3,7 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Activity\Task;
+use Phlow\Engine\UndefinedHandlerException;
 use Phlow\Event\EndEvent;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
@@ -133,7 +134,7 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UndefinedHandlerException::class);
         $instance->advance(2);
     }
 

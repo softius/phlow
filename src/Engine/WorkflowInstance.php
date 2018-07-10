@@ -112,6 +112,7 @@ class WorkflowInstance
      * Handles a raised exception by moving the flow to an error event
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
+     * @throws UndefinedHandlerException
      */
     private function handleException(\Exception $exception): void
     {
@@ -128,7 +129,7 @@ class WorkflowInstance
             $exceptionClass = get_parent_class($exceptionClass);
         }
 
-        throw new \RuntimeException(
+        throw new UndefinedHandlerException(
             sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
         );
     }
