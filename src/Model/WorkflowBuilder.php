@@ -130,10 +130,9 @@ class WorkflowBuilder
     /**
      * If more than one Gateways are still open, it will close the newly created
      * Otherwise, it creates an End event for this workflow.
-     * @param int $howMany
      * @return WorkflowBuilder
      */
-    public function end(int $howMany = 1): WorkflowBuilder
+    public function end(): WorkflowBuilder
     {
         if (!$this->unlinkedNodes->isEmpty()) {
             $this->processChoiceBranch();
@@ -147,7 +146,20 @@ class WorkflowBuilder
             $this->add(new EndEvent());
         }
 
-        return ($howMany > 1) ? $this->end($howMany - 1) : $this;
+        return $this;
+    }
+
+    /**
+     * Closes all the opened Gateways and it creates a new EndEvent
+     * @see WorkflowBuilder::end()
+     */
+    public function endAll(): WorkflowBuilder
+    {
+        while (!($this->nodes->peek() instanceof EndEvent)) {
+            $this->end();
+        }
+
+        return $this;
     }
 
     /**
