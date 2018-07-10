@@ -52,6 +52,7 @@ $ composer require softius/phlow:dev-master
 
 ## Documentation
 * [Concepts][link-concepts]
+* [Workflow Builder][link-workflow-builder]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
 * [FAQs][link-faqs]
@@ -63,7 +64,7 @@ $ composer require softius/phlow:dev-master
 - [x] Connections
 - [x] Workflow API
 - [x] Expressions
-- [x] Worfklow Engine
+- [x] Workflow Engine
 - [ ] PSR-3 Logging
 
 ### v1.x
@@ -106,5 +107,6 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-bpmn2]: http://www.bpmn.org/
 [link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
 [link-faqs]: https://github.com/softius/Phlow/blob/master/docs/faqs.md
+[link-workflow-builder]: https://github.com/softius/Phlow/blob/master/docs/workflow-builder.md
 [link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
 [link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
