@@ -7,6 +7,7 @@ use Phlow\Event\EndEvent;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
+use Phlow\Engine\InvalidStateException;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowInstanceTest extends TestCase
@@ -56,7 +57,7 @@ class WorkflowInstanceTest extends TestCase
             ->start()
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance(3);
 
         $this->assertTrue($instance->isCompleted());

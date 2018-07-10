@@ -76,7 +76,7 @@ class WorkflowInstance
     {
         $this->initNodes();
         if ($this->isCompleted()) {
-            throw new \RuntimeException("Workflow has been already completed.");
+            throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
         }
 
         // Retrieve and execute the next node
