@@ -5,7 +5,6 @@ namespace Phlow\Engine;
 use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Handler\ConditionalConnectionHandler;
-use Phlow\Handler\ExceptionHandler;
 use Phlow\Handler\SingleConnectionHandler;
 use Phlow\Handler\TaskHandler;
 use Phlow\Event\EndEvent;

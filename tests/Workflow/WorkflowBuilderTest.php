@@ -3,39 +3,27 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Activity\Task;
-use Phlow\Event\StartEvent;
-use Phlow\Event\EndEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowBuilder;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase
 {
-    public function testStartEnd()
-    {
-        $builder = new WorkflowBuilder();
-        $builder
-            ->start("start", "end")
-            ->end("end");
-
-        $workflow = $builder->getWorkflow();
-        $this->assertTrue($workflow->get('start') instanceof StartEvent);
-        $this->assertTrue($workflow->get('end') instanceof EndEvent);
-    }
-
     public function testTask()
     {
         $builder = new WorkflowBuilder();
         $builder
-            ->end("end")
-            ->script("script", "end", "end")
-            ->callback(function ($d) {
+            ->end()
+            ->script(function ($d) {
                 return $d;
             });
 
         $workflow = $builder->getWorkflow();
-        $this->assertTrue($workflow->get('script') instanceof Task);
-        $this->assertTrue($workflow->get('script')->hasCallback());
+
+        /** @var Task $node */
+        $task = $workflow->getAllByClass(Task::class)[0];
+        $this->assertTrue($task instanceof Task);
+        $this->assertTrue($task->hasCallback());
     }
 
     public function testConditionalFlow()
@@ -51,18 +39,49 @@ class WorkflowBuilderTest extends TestCase
 
         $builder = new WorkflowBuilder();
         $builder
-            ->start('start', 'nameIsProvided')
-            ->choice('nameIsProvided')
-            ->when('name == null', 'helloWorld')
-            ->otherwise('hello')
-            ->script('helloWorld', 'end', 'end')
-            ->callback($helloWorld)
-            ->script('hello', 'end', 'end')
-            ->callback($helloName)
-            ->end('end');
+            ->start()
+            ->choice()
+            ->when('name == null')
+                ->script()
+                    ->callback($helloWorld)
+            ->otherwise()
+                ->script()
+                    ->callback($helloName)
+            ->end();
 
         $workflow = $builder->getWorkflow();
-        $this->assertTrue($workflow->get('nameIsProvided') instanceof ExclusiveGateway);
-        $this->assertEquals(2, count($workflow->get('nameIsProvided')->getOutgoingconnections()));
+
+        /** @var ExclusiveGateway $node */
+        $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
+        $this->assertTrue($node instanceof ExclusiveGateway);
+        $this->assertEquals(2, count($node->getOutgoingconnections()));
+    }
+
+    public function testNestedConditionalFlows()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->start()
+            ->choice()
+            ->when('name == null')
+                ->choice()
+                    ->when('isDay')
+                        ->script()
+                    ->when('isNight')
+                        ->script()
+                    ->otherwise()
+                        ->script()
+                ->endChoice()
+            ->otherwise()
+                ->script()
+            ->endChoice()
+            ->end();
+
+        $workflow = $builder->getWorkflow();
+
+        /** @var ExclusiveGateway $node */
+        $node = $workflow->getAllByClass(ExclusiveGateway::class)[1];
+        $this->assertTrue($node instanceof ExclusiveGateway);
+        $this->assertEquals(3, count($node->getOutgoingconnections()));
     }
 }
