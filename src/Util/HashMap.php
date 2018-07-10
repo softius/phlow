@@ -7,7 +7,7 @@ class HashMap
     /**
      * @var array
      */
-    private $map;
+    private $map = [];
 
     /**
      * Calculate a unique identifier for the contained objects
@@ -73,5 +73,14 @@ class HashMap
         }
 
         return $this->map[$this->getHash($key)];
+    }
+
+    /**
+     * Count elements of this HashMap
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->map);
     }
 }

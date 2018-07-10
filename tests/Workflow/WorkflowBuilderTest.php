@@ -74,8 +74,7 @@ class WorkflowBuilderTest extends TestCase
                 ->end()
             ->otherwise()
                 ->script()
-            ->end()
-            ->end();
+            ->end(2);
 
         $workflow = $builder->getWorkflow();
 
