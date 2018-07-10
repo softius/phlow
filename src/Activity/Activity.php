@@ -6,7 +6,7 @@ use Phlow\Model\WorkflowNode;
 
 /**
  * Interface Activity
- * An denotes something that must be done.
+ * Activity denotes something that must be done.
  * @package Phlow\Activity
  */
 interface Activity extends WorkflowNode
