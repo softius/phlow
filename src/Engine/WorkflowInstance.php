@@ -6,7 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Handler\ConditionalConnectionHandler;
 use Phlow\Handler\SingleConnectionHandler;
-use Phlow\Handler\TaskHandler;
+use Phlow\Handler\ExecutableHandler;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
@@ -42,7 +42,7 @@ class WorkflowInstance
         StartEvent::class => SingleConnectionHandler::class,
         EndEvent::class => SingleConnectionHandler::class,
         ErrorEvent::class => SingleConnectionHandler::class,
-        Task::class => TaskHandler::class,
+        Task::class => ExecutableHandler::class,
         ExclusiveGateway::class => ConditionalConnectionHandler::class
     ];
 
