@@ -72,6 +72,6 @@ class HashMap
             throw new \UnderflowException();
         }
 
-        return isset($this->map[$this->getHash($key)]) ? $this->map[$this->getHash($key)]: null;
+        return $this->map[$this->getHash($key)];
     }
 }
