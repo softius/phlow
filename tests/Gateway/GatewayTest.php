@@ -6,6 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\UnmatchedConditionException;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Tests\Engine\DummyExpressionEngine;
@@ -27,7 +28,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 50]);
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UnmatchedConditionException::class);
         $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 500]);

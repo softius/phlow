@@ -36,7 +36,7 @@ class ConditionalConnectionHandler implements Handler
             }
         }
 
-        throw new \RuntimeException("No condition was matched. Unable to calculate the next node.");
+        throw new UnmatchedConditionException('No condition was matched');
     }
 
 

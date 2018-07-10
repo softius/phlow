@@ -5,6 +5,7 @@ namespace Phlow\Tests\Engine;
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Handler\SingleConnectionHandler;
+use Phlow\Handler\UnmatchedConditionException;
 use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +27,7 @@ class SingleConnectionHandlerTest extends TestCase
     public function testNoConnection()
     {
         $handler = new SingleConnectionHandler();
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UnmatchedConditionException::class);
         $handler->handle(new Task(), new Exchange());
     }
 }

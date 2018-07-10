@@ -24,7 +24,7 @@ class SingleConnectionHandler implements Handler
     {
         $connections = $workflowNode->getOutgoingConnections();
         if (empty($connections)) {
-            throw new \RuntimeException("No connections found.");
+            throw new UnmatchedConditionException('No condition was matched');
         }
 
         /** @var WorkflowConnection $connection */
