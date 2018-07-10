@@ -12,7 +12,7 @@ use Phlow\Model\WorkflowNode;
  * Executes the callback associated with the provided Workflow Node
  * @package Phlow\Handler
  */
-class TaskHandler implements Handler
+class ExecutableHandler implements Handler
 {
 
     /**
