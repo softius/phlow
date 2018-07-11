@@ -5,6 +5,7 @@ namespace Phlow\Tests\Workflow;
 use Phlow\Activity\Task;
 use Phlow\Engine\UndefinedHandlerException;
 use Phlow\Event\EndEvent;
+use Phlow\Event\StartEvent;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
@@ -18,7 +19,8 @@ class WorkflowInstanceTest extends TestCase
     {
         $workflow = $this->getPipeline();
         $workflow->advance(1);
-        $this->assertTrue($workflow->current() instanceof Task);
+        $this->assertTrue($workflow->current() instanceof StartEvent);
+        $this->assertTrue($workflow->next() instanceof Task);
         $this->assertTrue($workflow->inProgress());
         $this->assertFalse($workflow->isCompleted());
     }
@@ -157,8 +159,16 @@ class WorkflowInstanceTest extends TestCase
         // 1. Workflow execution initiated
         // 2/4/6 StartEvent/Task/Task reached
         // 3/5/7. StartEvent/Task/Task executed
-        // 8. Workflow execution completed
-        $this->assertEquals(8, count($logger->getAllRecords()));
+        // 8. Workflow execution reached Phlow\Event\EndEvent
+        // 9. Workflow execution completed
+        $this->assertEquals(9, count($logger->getAllRecords()));
+    }
+
+    public function testExecutionPath()
+    {
+        $instance = $this->getPipeline();
+        $instance->execute();
+        $this->assertEquals(4, count($instance->getExecutionPath()));
     }
 
     private function getPipeline()

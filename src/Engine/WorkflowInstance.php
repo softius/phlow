@@ -41,11 +41,20 @@ class WorkflowInstance implements LoggerAwareInterface
     private $currentNode;
 
     /**
+     * @var WorkflowNode Next node to be executed
+     */
+    private $nextNode;
+
+    /**
+     * @var array
+     */
+    private $executionPath;
+
+    /**
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
         StartEvent::class => SingleConnectionHandler::class,
-        EndEvent::class => SingleConnectionHandler::class,
         ErrorEvent::class => SingleConnectionHandler::class,
         Task::class => ExecutableHandler::class,
         ExclusiveGateway::class => ConditionalConnectionHandler::class
@@ -87,12 +96,13 @@ class WorkflowInstance implements LoggerAwareInterface
             $this->logger->info("Workflow execution initiated.");
         }
 
-        $this->initNodes();
+        // Check that we haven't reach an EndEvent
         if ($this->isCompleted()) {
             throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
         }
 
         // Retrieve and execute the next node
+        $this->initNodes();
         try {
             $this->handleCurrentNode();
         } catch (\Exception $e) {
@@ -127,11 +137,13 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     private function handleCurrentNode(): void
     {
+        $this->addToExecutionPath($this->current());
+
         $nodeClass = get_class($this->current());
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
         if (array_key_exists($nodeClass, $this->handlers)) {
             $handlerClass = $this->handlers[$nodeClass];
-            $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+            $this->nextNode = (new $handlerClass())->handle($this->current(), $this->exchange);
             $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
         }
     }
@@ -172,7 +184,9 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     private function initNodes(): void
     {
-        if (!empty($this->currentNode)) {
+        if (!empty($this->nextNode)) {
+            $this->currentNode = $this->nextNode;
+            $this->nextNode = null;
             return;
         }
 
@@ -182,6 +196,7 @@ class WorkflowInstance implements LoggerAwareInterface
         }
 
         $this->currentNode = $startEvents[0];
+        $this->nextNode = null;
     }
 
     /**
@@ -232,5 +247,23 @@ class WorkflowInstance implements LoggerAwareInterface
         }
 
         throw new InvalidStateException('Execution has not been initiated for this Workflow.');
+    }
+
+    public function next(): WorkflowNode
+    {
+        return $this->nextNode;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExecutionPath(): array
+    {
+        return $this->executionPath;
+    }
+
+    private function addToExecutionPath($item)
+    {
+        $this->executionPath[] = $item;
     }
 }
