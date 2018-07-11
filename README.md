@@ -39,8 +39,7 @@ $builder
         ->task()    // Publish article
     ->otherwise()
         ->task()    // Update Article
-  ->endChoice()
-  ->end()
+  ->endAll()
 ```
 
 Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that would be made available throughout the process. The data can be any object which could be also updated as part of the process.
