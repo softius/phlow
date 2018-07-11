@@ -65,6 +65,7 @@ class WorkflowInstance implements LoggerAwareInterface
 
     /**
      * Advances the Workflow to the next node until an End Event has been reached
+     * @throws UndefinedHandlerException
      */
     public function execute(): void
     {
@@ -77,10 +78,12 @@ class WorkflowInstance implements LoggerAwareInterface
      * Proceeds to the next workflow node and executes it
      * @param int $howMany
      * @return object
+     * @throws UndefinedHandlerException
      */
     public function advance($howMany = 1)
     {
-        if (!$this->inProgress()) {
+        // Log initiation message
+        if (!$this->inProgress() && !$this->isCompleted()) {
             $this->logger->info("Workflow execution initiated.");
         }
 
@@ -97,17 +100,26 @@ class WorkflowInstance implements LoggerAwareInterface
         }
 
         // Prepare an exchange for the next node
-        if ($this->exchange->hasOut()) {
-            $this->exchange = new Exchange($this->exchange->getOut());
-        } else {
-            $this->exchange = new Exchange($this->exchange->getIn());
-        }
+        $this->prepareExchange();
 
+        // Log completion message
         if ($this->isCompleted()) {
             $this->logger->info("Workflow execution completed.");
         }
 
         return $howMany === 1 ? $this->exchange->getIn() : $this->advance($howMany - 1);
+    }
+
+    /**
+     * Prepares the next Exchange message
+     */
+    private function prepareExchange()
+    {
+        if ($this->exchange->hasOut()) {
+            $this->exchange = new Exchange($this->exchange->getOut());
+        } else {
+            $this->exchange = new Exchange($this->exchange->getIn());
+        }
     }
 
     /**
