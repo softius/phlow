@@ -56,7 +56,7 @@ $instance->execute();
 Phlow can be installed to your PHP project by executing the following composer command. Please note that currently there is no stable version available yet.
 
 ``` bash
-$ composer require softius/phlow:dev-master
+$ composer require softius/phlow 0.1.0
 ```
 
 ## Documentation
