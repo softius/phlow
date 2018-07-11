@@ -6,7 +6,7 @@
 ![Code Climate][ico-coverage]
 
 
-Phlow is a workflow modeller and engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2], Phlow attempts to provide a library to design and implement business processes in PHP projects. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
+Phlow is a workflow modeller and engine for PHP. Heavily inspired by [BPMN 2.0][link-bpmn2] and [Apache Camel][link-apache-camel], Phlow attempts to provide a library to design and implement business processes in PHP projects. It utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion.
 
 Phlow process models can be created using PHP. No third party tools are required to model and/or execute your process.  
 
@@ -98,6 +98,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-author]: https://github.com/softius
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
+[link-apache-camel]: http://camel.apache.org
 [link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
 [link-roadmap]: https://github.com/softius/Phlow/blob/master/docs/roadmap.md
 [link-faqs]: https://github.com/softius/Phlow/blob/master/docs/faqs.md
