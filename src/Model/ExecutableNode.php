@@ -12,7 +12,7 @@ interface ExecutableNode
     /**
      * Returns the callback associated with this Task
      * If no callback was provided, an Exception is thrown
-     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      * @return callable
      */
     public function getCallback(): callable;

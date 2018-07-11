@@ -23,7 +23,7 @@ class TaskTest extends TestCase
     {
         $task = new Task();
         $this->assertFalse($task->hasCallback());
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\UnexpectedValueException::class);
         $task->getCallback();
     }
 }

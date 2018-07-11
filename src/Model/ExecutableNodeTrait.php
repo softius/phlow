@@ -13,7 +13,7 @@ trait ExecutableNodeTrait
     /**
      * Returns the callback associated with this Task
      * If no callback was provided, an Exception is thrown
-     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      * @return callable
      */
     public function getCallback(): callable
@@ -22,7 +22,7 @@ trait ExecutableNodeTrait
             return $this->callback;
         }
 
-        throw new \RuntimeException("Callback was never provided for this task");
+        throw new \UnexpectedValueException("No callback was provided for this Node");
     }
 
     /**

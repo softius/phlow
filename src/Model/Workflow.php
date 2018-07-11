@@ -18,7 +18,6 @@ class Workflow
      * Maintains reference for all the nodes, that composite this workflow.
      * @param WorkflowNode $node
      * @return WorkflowNode
-     * @throws \RuntimeException
      */
     public function add(WorkflowNode $node): WorkflowNode
     {

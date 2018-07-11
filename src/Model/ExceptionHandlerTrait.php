@@ -29,7 +29,7 @@ trait ExceptionHandlerTrait
             return $this->exceptionClass;
         }
 
-        throw new \RuntimeException("No Exception class was never provided for this task.");
+        throw new \UnexpectedValueException("No Exception class was provided for this Node");
     }
 
     /**
