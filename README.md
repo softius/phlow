@@ -57,21 +57,14 @@ $ composer require softius/phlow:dev-master
 * [Conditional Flow - Example][link-conditional-flow]
 * [FAQs][link-faqs]
  
-## Roadmap
+## Features
+:white_check_mark: Sequence flow\
+:white_check_mark: Conditional flow\
+:white_check_mark: Exception handling\
+:white_check_mark: Callable tasks\
+:white_check_mark: Boolean expressions for Conditions\
 
-### v1.0
-- [x] Exclusive Gateway
-- [x] Connections
-- [x] Workflow API
-- [x] Expressions
-- [x] Workflow Engine
-- [ ] PSR-3 Logging
-
-### v1.x
-- [ ] Persistent Workflow
-- [ ] HTML Workflow Visualiation
-- [ ] SVG Workflow Visualiation
-- [ ] Metrics
+See the [Roadmap] for more information about the upcoming releases.
  
 ## Testing
 
