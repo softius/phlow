@@ -76,7 +76,7 @@ class WorkflowInstance
     {
         $this->initNodes();
         if ($this->isCompleted()) {
-            throw new \RuntimeException("Workflow has been already completed.");
+            throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
         }
 
         // Retrieve and execute the next node
@@ -112,6 +112,7 @@ class WorkflowInstance
      * Handles a raised exception by moving the flow to an error event
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
+     * @throws UndefinedHandlerException
      */
     private function handleException(\Exception $exception): void
     {
@@ -128,7 +129,7 @@ class WorkflowInstance
             $exceptionClass = get_parent_class($exceptionClass);
         }
 
-        throw new \RuntimeException(
+        throw new UndefinedHandlerException(
             sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
         );
     }
@@ -144,7 +145,7 @@ class WorkflowInstance
 
         $startEvents = $this->workflow->getAllByClass(StartEvent::class);
         if (empty($startEvents)) {
-            throw new \RuntimeException('Start event is missing');
+            throw new InvalidStateException('Start event is missing.');
         }
 
         $this->currentNode = $startEvents[0];
@@ -157,7 +158,7 @@ class WorkflowInstance
     {
         $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
         if (empty($errorEvents)) {
-            throw new \RuntimeException('Error events are missing');
+            throw new InvalidStateException('Error events are missing');
         }
 
         $errorEventsMap = [];
@@ -197,6 +198,6 @@ class WorkflowInstance
             return $this->currentNode;
         }
 
-        throw new \RuntimeException("Execution has not been initiated for this Workflow.");
+        throw new InvalidStateException('Execution has not been initiated for this Workflow.');
     }
 }

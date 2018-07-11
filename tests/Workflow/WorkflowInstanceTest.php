@@ -3,10 +3,12 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Activity\Task;
+use Phlow\Engine\UndefinedHandlerException;
 use Phlow\Event\EndEvent;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
+use Phlow\Engine\InvalidStateException;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowInstanceTest extends TestCase
@@ -45,7 +47,7 @@ class WorkflowInstanceTest extends TestCase
     {
         $flow = new Workflow();
         $instance = new WorkflowInstance($flow, []);
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance();
     }
 
@@ -56,7 +58,7 @@ class WorkflowInstanceTest extends TestCase
             ->start()
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance(3);
 
         $this->assertTrue($instance->isCompleted());
@@ -67,7 +69,7 @@ class WorkflowInstanceTest extends TestCase
     public function testCurrentBeforeExecution()
     {
         $workflow = $this->getPipeline();
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $workflow->current();
     }
 
@@ -108,11 +110,11 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidStateException::class);
         $instance->advance(2);
     }
 
-    public function testUnmatchedErrorHandling()
+    public function testUndefinedErrorHandling()
     {
         $builder = new WorkflowBuilder();
         $builder
@@ -132,7 +134,7 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UndefinedHandlerException::class);
         $instance->advance(2);
     }
 
