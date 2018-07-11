@@ -195,7 +195,7 @@ class WorkflowBuilder
      * @param callable|null $callback
      * @return WorkflowBuilder
      */
-    public function script(callable $callback = null): WorkflowBuilder
+    public function callback(callable $callback = null): WorkflowBuilder
     {
         $taskNode = new Task();
         if (!empty($callback)) {
@@ -203,17 +203,6 @@ class WorkflowBuilder
         }
 
         return $this->add($taskNode);
-    }
-
-    /**
-     * Add a callback to the last created task
-     * @param callable $callback
-     * @return WorkflowBuilder
-     */
-    public function callback(callable $callback): WorkflowBuilder
-    {
-        $this->nodes->peek()->addCallback($callback);
-        return $this;
     }
 
     /**

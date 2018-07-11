@@ -8,12 +8,10 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
     ->start()
     ->choice()
     ->when('number < 100')
-        ->script()
         ->callback(function () {
             print("Number provided was LESS than 100\n");
         })
     ->otherwise()
-        ->script()
         ->callback(function () {
             print("Number provided was EQUAL OR GREATER than 100\n");
         })

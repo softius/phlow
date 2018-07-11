@@ -14,7 +14,7 @@ class WorkflowBuilderTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->end()
-            ->script(function ($d) {
+            ->callback(function ($d) {
                 return $d;
             });
 
@@ -42,11 +42,9 @@ class WorkflowBuilderTest extends TestCase
             ->start()
             ->choice()
             ->when('name == null')
-                ->script()
-                    ->callback($helloWorld)
+                ->callback($helloWorld)
             ->otherwise()
-                ->script()
-                    ->callback($helloName)
+                ->callback($helloName)
             ->end();
 
         $workflow = $builder->getWorkflow();
@@ -66,14 +64,14 @@ class WorkflowBuilderTest extends TestCase
             ->when('name == null')
                 ->choice()
                     ->when('isDay')
-                        ->script()
+                        ->callback()
                     ->when('isNight')
-                        ->script()
+                        ->callback()
                     ->otherwise()
-                        ->script()
+                        ->callback()
                 ->end()
             ->otherwise()
-                ->script()
+                ->callback()
             ->endAll();
 
         $workflow = $builder->getWorkflow();

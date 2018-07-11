@@ -6,22 +6,19 @@ require __DIR__.'/../vendor/autoload.php';
 
 $flow = (new \Phlow\Model\WorkflowBuilder())
     ->start()
-    ->script()
-        ->callback(function ($data) {
-            $data['a'] = rand(1, 100);
-            return $data;
-        })
-    ->script()
-        ->callback(function ($data) {
-            $data['b'] = rand(1, 100);
-            return $data;
-        })
-    ->script()
-        ->callback(function ($data) {
-            $data['sum'] = $data['a'] + $data['b'];
-            vprintf("%d + %d = %d\n", $data);
-            return $data;
-        })
+    ->callback(function ($data) {
+        $data['a'] = rand(1, 100);
+        return $data;
+    })
+    ->callback(function ($data) {
+        $data['b'] = rand(1, 100);
+        return $data;
+    })
+    ->callback(function ($data) {
+        $data['sum'] = $data['a'] + $data['b'];
+        vprintf("%d + %d = %d\n", $data);
+        return $data;
+    })
     ->end()
     ->getWorkflow();
 
