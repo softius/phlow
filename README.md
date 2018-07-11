@@ -22,7 +22,7 @@ Phlow is a framework agnostic solution.
 See the [Roadmap][link-roadmap] for more information about the upcoming releases.
 
 ## Getting Started
-The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. As the result of the review, the reviewer can request further updates or publish the article.
+The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. Based on the result of the review, the reviewer can request further updates or publish the article.
 
 <img src="https://raw.githubusercontent.com/softius/Phlow/master/docs/article-approval.svg?sanitize=true">
 
