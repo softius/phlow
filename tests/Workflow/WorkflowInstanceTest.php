@@ -28,16 +28,14 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->start()
-            ->script()
-                ->callback(function ($in) {
-                    $in->num = 10;
-                    return $in;
-                })
-            ->script()
-                ->callback(function ($in) {
-                    $in->num = 20;
-                    return $in;
-                })
+            ->callback(function ($in) {
+                $in->num = 10;
+                return $in;
+            })
+            ->callback(function ($in) {
+                $in->num = 20;
+                return $in;
+            })
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), (object) ['num' => 0]);
         $d = $instance->advance(2);
@@ -79,7 +77,6 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->catchAll()
-            ->script()
             ->callback(function ($d) {
                 $d['num']++;
                 return $d;
@@ -88,7 +85,6 @@ class WorkflowInstanceTest extends TestCase
 
         $builder
             ->start()
-            ->script()
             ->callback(function () {
                 throw new \RuntimeException();
             })
@@ -104,7 +100,6 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->start()
-            ->script()
             ->callback(function () {
                 throw new \Exception();
             })
@@ -120,7 +115,6 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->catch(\OutOfBoundsException::class)
-            ->script()
             ->callback(function ($d) {
                 $d['num']++;
                 return $d;
@@ -128,7 +122,6 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $builder
             ->start()
-            ->script()
             ->callback(function () {
                 throw new \BadFunctionCallException();
             })
@@ -144,7 +137,6 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->start()
-            ->script()
             ->callback(function ($d) {
                 return $d;
             })
@@ -189,16 +181,13 @@ class WorkflowInstanceTest extends TestCase
         $builder = new WorkflowBuilder();
         $builder
             ->catchAll()
-            ->script()
             ->callback($error)
             ->end();
 
         $builder
             ->start()
-            ->script()
-                ->callback($getInput)
-            ->script()
-                ->callback($sum)
+            ->callback($getInput)
+            ->callback($sum)
             ->end();
 
         $in = ['a' => null, 'b' => null, 'c' => null];

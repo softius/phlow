@@ -32,13 +32,13 @@ Also, the following code illustrates the model for the same process.
 $builder = new WorkflowBuilder();
 $builder
   ->start()
-  ->task()          // Compose article
-  ->task()          // Review article
+  ->callback()          // Compose article
+  ->callback()          // Review article
   ->choice()        // Approved?
-    ->when('approved == true')
-        ->task()    // Publish article
-    ->otherwise()
-        ->task()    // Update Article
+  ->when('approved == true')
+    ->callback()    // Publish article
+  ->otherwise()
+    ->callback()    // Update Article
   ->endAll()
 ```
 
