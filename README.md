@@ -12,6 +12,15 @@ Phlow process models can be created using PHP. No third party tools are required
 
 Phlow is a framework agnostic solution.
 
+## Features
+:white_check_mark: Sequence flow\
+:white_check_mark: Conditional flow\
+:white_check_mark: Exception handling\
+:white_check_mark: Callable tasks\
+:white_check_mark: Boolean expressions for Conditions\
+
+See the [Roadmap][link-roadmap] for more information about the upcoming releases.
+
 ## Getting Started
 The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. As the result of the review, the reviewer can request further updates or publish the article.
 
@@ -57,15 +66,6 @@ $ composer require softius/phlow:dev-master
 * [Conditional Flow - Example][link-conditional-flow]
 * [FAQs][link-faqs]
  
-## Features
-:white_check_mark: Sequence flow\
-:white_check_mark: Conditional flow\
-:white_check_mark: Exception handling\
-:white_check_mark: Callable tasks\
-:white_check_mark: Boolean expressions for Conditions\
-
-See the [Roadmap] for more information about the upcoming releases.
- 
 ## Testing
 
 ``` bash
@@ -99,6 +99,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
 [link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
+[link-roadmap]: https://github.com/softius/Phlow/blob/master/docs/roadmap.md
 [link-faqs]: https://github.com/softius/Phlow/blob/master/docs/faqs.md
 [link-workflow-builder]: https://github.com/softius/Phlow/blob/master/docs/workflow-builder.md
 [link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
