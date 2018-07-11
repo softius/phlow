@@ -12,14 +12,19 @@ use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowNode;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * Class WorkflowInstance
  * Represents an instance of the provided workflow.
  * @package Phlow\Workflow
  */
-class WorkflowInstance
+class WorkflowInstance implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var Workflow
      */
@@ -55,6 +60,7 @@ class WorkflowInstance
     {
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
+        $this->setLogger(new NullLogger());
     }
 
     /**
@@ -74,6 +80,10 @@ class WorkflowInstance
      */
     public function advance($howMany = 1)
     {
+        if (!$this->inProgress()) {
+            $this->logger->info("Workflow execution initiated.");
+        }
+
         $this->initNodes();
         if ($this->isCompleted()) {
             throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
@@ -93,6 +103,10 @@ class WorkflowInstance
             $this->exchange = new Exchange($this->exchange->getIn());
         }
 
+        if ($this->isCompleted()) {
+            $this->logger->info("Workflow execution completed.");
+        }
+
         return $howMany === 1 ? $this->exchange->getIn() : $this->advance($howMany - 1);
     }
 
@@ -102,9 +116,11 @@ class WorkflowInstance
     private function handleCurrentNode(): void
     {
         $nodeClass = get_class($this->current());
+        $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
         if (array_key_exists($nodeClass, $this->handlers)) {
             $handlerClass = $this->handlers[$nodeClass];
             $this->currentNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+            $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
         }
     }
 
@@ -116,8 +132,10 @@ class WorkflowInstance
      */
     private function handleException(\Exception $exception): void
     {
+        $this->logger->warning(
+            sprintf('Exception %s occurred while executing %s', get_class($exception), get_class($this->current()))
+        );
         $errorEvents = $this->getErrorEvents();
-
         $exceptionClass = get_class($exception);
         while (!empty($exceptionClass)) {
             if (array_key_exists($exceptionClass, $errorEvents)) {
@@ -129,6 +147,9 @@ class WorkflowInstance
             $exceptionClass = get_parent_class($exceptionClass);
         }
 
+        $this->logger->warning(
+            sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
+        );
         throw new UndefinedHandlerException(
             sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
         );
