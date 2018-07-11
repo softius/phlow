@@ -9,6 +9,7 @@ use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
 use Phlow\Engine\InvalidStateException;
+use Phlow\Tests\Engine\TestLogger;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowInstanceTest extends TestCase
@@ -152,6 +153,20 @@ class WorkflowInstanceTest extends TestCase
 
         $instance->execute();
         $this->assertTrue($instance->isCompleted());
+    }
+
+    public function testLogger()
+    {
+        $logger = new TestLogger();
+        $instance = $this->getPipeline();
+        $instance->setLogger($logger);
+        $instance->execute();
+
+        // 1. Workflow execution initiated
+        // 2/4/6 StartEvent/Task/Task reached
+        // 3/5/7. StartEvent/Task/Task executed
+        // 8. Workflow execution completed
+        $this->assertEquals(8, count($logger->getAllRecords()));
     }
 
     private function getPipeline()
