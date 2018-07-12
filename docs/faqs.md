@@ -7,4 +7,4 @@ No. It is heavily inspired by BPMN 2.0 and Apache Camel, but it is not compliant
 Releases under v1.x won't be BPMN 2.0 compliant.
 
 ## What tools can I use to design by workflow?
-You can use the fluent Workflow Builder API to design your process model. Have a look at the examples for further information.
+You can use the fluent Workflow Builder API to design your process model. Take a look at the examples for further information.
