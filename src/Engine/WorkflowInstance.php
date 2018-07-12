@@ -273,4 +273,12 @@ class WorkflowInstance implements LoggerAwareInterface
     {
         return $this->executionPath;
     }
+
+    /**
+     * @return Workflow
+     */
+    public function getWorkflow(): Workflow
+    {
+        return $this->workflow;
+    }
 }
