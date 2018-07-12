@@ -181,6 +181,16 @@ class WorkflowInstanceTest extends TestCase
         $this->assertInstanceOf(EndEvent::class, $path[2]);
     }
 
+    public function testGetWorkflow()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->start()
+            ->end();
+        $instance = new WorkflowInstance($builder->getWorkflow(), []);
+        $this->assertEquals($builder->getWorkflow(), $instance->getWorkflow());
+    }
+
     private function getPipeline()
     {
         $getInput = function ($d) {
