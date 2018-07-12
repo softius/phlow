@@ -46,7 +46,7 @@ class WorkflowInstance implements LoggerAwareInterface
     private $nextNode;
 
     /**
-     * @var array
+     * @var ExecutionPath
      */
     private $executionPath;
 
@@ -70,6 +70,7 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
         $this->setLogger(new NullLogger());
+        $this->executionPath = new ExecutionPath();
     }
 
     /**
@@ -137,7 +138,7 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     private function handleCurrentNode(): void
     {
-        $this->addToExecutionPath($this->current());
+        $this->executionPath->add($this->current());
 
         $nodeClass = get_class($this->current());
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
@@ -255,15 +256,10 @@ class WorkflowInstance implements LoggerAwareInterface
     }
 
     /**
-     * @return array
+     * @return ExecutionPath
      */
-    public function getExecutionPath(): array
+    public function getExecutionPath(): ExecutionPath
     {
         return $this->executionPath;
-    }
-
-    private function addToExecutionPath($item)
-    {
-        $this->executionPath[] = $item;
     }
 }
