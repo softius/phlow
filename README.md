@@ -24,7 +24,7 @@ Phlow is a framework agnostic solution.
 See the [Roadmap][link-roadmap] for more information about the upcoming releases.
 
 ## Getting Started
-The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. As the result of the review, the reviewer can request further updates or publish the article.
+The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. Based on the result of the review, the reviewer can request further updates or publish the article.
 
 <img src="https://raw.githubusercontent.com/softius/Phlow/master/docs/article-approval.svg?sanitize=true">
 
@@ -44,7 +44,7 @@ $builder
   ->endAll()
 ```
 
-Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that would be made available throughout the process. The data can be any object which could be also updated as part of the process.
+Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that could be made available throughout the process. The data can be any object which could be also updated as part of the process.
 
 ``` php
 $workflow = $builder->getWorkflow();
@@ -54,7 +54,7 @@ $instance->execute();
 
 ## Installation
 
-Phlow can be installed to your PHP project by executing the following composer command. Please note that currently there is no stable version available yet.
+Phlow can be installed to your PHP project by executing the following composer command. Please note that currently there is no stable version yet available.
 
 ``` bash
 $ composer require softius/phlow 0.2.0
