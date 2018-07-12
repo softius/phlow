@@ -23,7 +23,7 @@ $builder->callback(function($data) {
 
 ```
 
-Please note that the callback is left optional on purpose, so the same builder can be using for modeling only. The callback is required only when executing the workflow
+Please note that the callback is left optional on purpose, so the same builder can be used for modeling only. The callback is required only when executing the workflow
 
 ``` php
 $builder->task();
@@ -62,7 +62,7 @@ $builder->endAll();
 
 The `catch` method creates a new instance of ErrorEvent.
 
-When executing the Workflow, the ErrorEvent will be triggered once an Exception matching the class provided.
+When executing the Workflow, the ErrorEvent will be triggered once an Exception matching the class is provided.
 
 ``` php
 $builder
