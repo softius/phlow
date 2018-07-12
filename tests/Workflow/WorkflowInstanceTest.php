@@ -174,8 +174,8 @@ class WorkflowInstanceTest extends TestCase
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $instance->execute();
 
+        $this->assertEquals(3, count($instance->getExecutionPath()));
         $path = iterator_to_array($instance->getExecutionPath());
-        $this->assertEquals(3, count($path));
         $this->assertInstanceOf(StartEvent::class, $path[0]);
         $this->assertInstanceOf(WorkflowConnection::class, $path[1]);
         $this->assertInstanceOf(EndEvent::class, $path[2]);
