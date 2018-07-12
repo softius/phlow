@@ -168,7 +168,7 @@ class WorkflowInstanceTest extends TestCase
     {
         $instance = $this->getPipeline();
         $instance->execute();
-        $this->assertEquals(4, count($instance->getExecutionPath()));
+        $this->assertEquals(7, count($instance->getExecutionPath()));
     }
 
     private function getPipeline()

@@ -4,8 +4,6 @@ namespace Phlow\Engine;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Phlow\Model\WorkflowConnection;
-use Phlow\Model\WorkflowNode;
 use Phlow\Model\WorkflowObject;
 use Traversable;
 

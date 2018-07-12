@@ -3,6 +3,8 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
+use Phlow\Engine\ExecutionPathAwareInterface;
+use Phlow\Engine\ExecutionPathAwareTrait;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
@@ -12,15 +14,17 @@ use Phlow\Model\WorkflowNode;
  * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Handler
  */
-class ConditionalConnectionHandler implements Handler
+class ConditionalConnectionHandler implements Handler, ExecutionPathAwareInterface
 {
+    use ExecutionPathAwareTrait;
+
     /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowNode
+     * @return WorkflowConnection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
         /** @var WorkflowConnection $connection */
         foreach ($workflowNode->getOutgoingConnections() as $connection) {
@@ -32,7 +36,7 @@ class ConditionalConnectionHandler implements Handler
             $context = (array) $exchange->getIn();
             $isTrue = $this->getExpressionEngine()->evaluate($expression, $context);
             if ($isTrue) {
-                return $connection->getTarget();
+                return $connection;
             }
         }
 

@@ -16,12 +16,12 @@ class SingleConnectionHandlerTest extends TestCase
         $task = new Task();
         $nextTask = new Task();
         $anotherTask = new Task();
-        new WorkflowConnection($task, $nextTask);
-        new WorkflowConnection($task, $anotherTask);
+        $connection1 = new WorkflowConnection($task, $nextTask);
+        $connection2 = new WorkflowConnection($task, $anotherTask);
 
         $handler = new SingleConnectionHandler();
-        $actualNextTask = $handler->handle($task, new Exchange());
-        $this->assertEquals($nextTask, $actualNextTask);
+        $actualConnection = $handler->handle($task, new Exchange());
+        $this->assertEquals($connection1, $actualConnection);
     }
 
     public function testNoConnection()

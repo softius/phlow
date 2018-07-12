@@ -3,6 +3,7 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
+use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
 
 /**
@@ -18,7 +19,7 @@ interface Handler
      * Then it calculates and returns the next Node
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowNode
+     * @return WorkflowConnection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode;
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection;
 }

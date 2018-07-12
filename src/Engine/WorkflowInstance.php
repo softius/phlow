@@ -5,6 +5,7 @@ namespace Phlow\Engine;
 use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Handler\ConditionalConnectionHandler;
+use Phlow\Handler\Handler;
 use Phlow\Handler\SingleConnectionHandler;
 use Phlow\Handler\ExecutableHandler;
 use Phlow\Event\EndEvent;
@@ -144,7 +145,17 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
         if (array_key_exists($nodeClass, $this->handlers)) {
             $handlerClass = $this->handlers[$nodeClass];
-            $this->nextNode = (new $handlerClass())->handle($this->current(), $this->exchange);
+
+            /** @var Handler $handler */
+            $handler = new $handlerClass;
+            if ($handler instanceof ExecutionPathAwareInterface) {
+                $handler->setExecutionPath($this->executionPath);
+            }
+
+            $connection = $handler->handle($this->current(), $this->exchange);
+            $this->executionPath->add($connection);
+            $this->nextNode = $connection->getTarget();
+
             $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
         }
     }

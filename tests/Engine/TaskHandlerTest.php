@@ -15,18 +15,18 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        new WorkflowConnection($task, $nextTask);
+        $connection = new WorkflowConnection($task, $nextTask);
 
         $handler = new ExecutableHandler();
-        $actualNextTask = $handler->handle($task, new Exchange());
-        $this->assertEquals($nextTask, $actualNextTask);
+        $actualConnection = $handler->handle($task, new Exchange());
+        $this->assertEquals($connection, $actualConnection);
     }
 
     public function testWithCallback()
     {
         $task = new Task();
         $nextTask = new Task();
-        new WorkflowConnection($task, $nextTask);
+        $connection = new WorkflowConnection($task, $nextTask);
 
         $task->addCallback(function ($in) {
             $in['num']++;
@@ -35,8 +35,8 @@ class TaskHandlerTest extends TestCase
 
         $handler = new ExecutableHandler();
         $exchange = new Exchange(['num' => 1]);
-        $actualNextTask = $handler->handle($task, $exchange);
-        $this->assertEquals($nextTask, $actualNextTask);
+        $actualConnection = $handler->handle($task, $exchange);
+        $this->assertEquals($connection, $actualConnection);
         $this->assertEquals(2, $exchange->getOut()['num']);
     }
 
@@ -44,11 +44,11 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        new WorkflowConnection($task, $nextTask);
+        $connection = new WorkflowConnection($task, $nextTask);
 
         $handler = new ExecutableHandler();
-        $actualNextTask = $handler->handle($task, new Exchange());
-        $this->assertEquals($nextTask, $actualNextTask);
+        $actualConnection = $handler->handle($task, new Exchange());
+        $this->assertEquals($connection, $actualConnection);
     }
 
     public function testErrorHandling()
