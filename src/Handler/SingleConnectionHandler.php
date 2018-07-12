@@ -3,8 +3,6 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
-use Phlow\Engine\ExecutionPathAwareInterface;
-use Phlow\Engine\ExecutionPathAwareTrait;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
 
@@ -13,9 +11,8 @@ use Phlow\Model\WorkflowNode;
  * Suggests the next WorkflowNode by taking the first of the outgoing connections
  * @package Phlow\Handler
  */
-class SingleConnectionHandler implements Handler, ExecutionPathAwareInterface
+class SingleConnectionHandler implements Handler
 {
-    use ExecutionPathAwareTrait;
 
     /**
      * Suggests the next WorkflowNode by taking the first of the outgoing connections.
