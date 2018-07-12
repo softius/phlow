@@ -36,7 +36,7 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
     {
         $workflow = new Workflow();
         $end = new EndEvent();
-        $start = new StartEvent($end);
+        $start = new StartEvent();
 
         $workflow->addAll($start, $end);
 

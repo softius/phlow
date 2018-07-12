@@ -13,14 +13,15 @@ use Phlow\Model\WorkflowNode;
  */
 class SingleConnectionHandler implements Handler
 {
+
     /**
      * Suggests the next WorkflowNode by taking the first of the outgoing connections.
      * If there are more than one outgoing connection, they will be ignored.
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowNode
+     * @return WorkflowConnection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
         $connections = $workflowNode->getOutgoingConnections();
         if (empty($connections)) {
@@ -28,7 +29,6 @@ class SingleConnectionHandler implements Handler
         }
 
         /** @var WorkflowConnection $connection */
-        $connection = $connections[0];
-        return $connection->getTarget();
+        return $connections[0];
     }
 }

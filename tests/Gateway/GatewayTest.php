@@ -19,20 +19,20 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $nextTask2 = new Task();
 
         $gateway = new ExclusiveGateway();
-        new WorkflowConnection($gateway, $nextTask, 'num < 10');
-        new WorkflowConnection($gateway, $nextTask2, 'num > 100');
+        $connection1 = new WorkflowConnection($gateway, $nextTask, 'num < 10');
+        $connection2 = new WorkflowConnection($gateway, $nextTask2, 'num > 100');
 
         $handler = new ConditionalConnectionHandler();
 
         $exchange = new Exchange((object) ['num' => 5]);
-        $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection1, $handler->handle($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 50]);
         $this->expectException(UnmatchedConditionException::class);
-        $this->assertEquals($nextTask, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection1, $handler->handle($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 500]);
-        $this->assertEquals($nextTask2, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection2, $handler->handle($gateway, $exchange));
     }
 
     public function testDefaultExpressionEngine()

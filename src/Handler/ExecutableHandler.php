@@ -4,8 +4,8 @@ namespace Phlow\Handler;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Exception\WorkflowException;
 use Phlow\Model\WorkflowNode;
+use Phlow\Model\WorkflowConnection;
 
 /**
  * Class TaskHandler
@@ -19,10 +19,10 @@ class ExecutableHandler implements Handler
      * Executes the callback associated with the provided Workflow Node
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowNode
+     * @return WorkflowConnection
      * @throws \Exception
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowNode
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
         if (!($workflowNode instanceof Task)) {
             throw new \InvalidArgumentException("A workflow node of type Task was expected.");
