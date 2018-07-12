@@ -24,4 +24,9 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
 
 $instance = new \Phlow\Engine\WorkflowInstance($flow, []);
 $instance->execute();
+
+// Print the execution path
+foreach ($instance->getExecutionPath() as $obj) {
+    print get_class($obj) . PHP_EOL;
+}
 ``` 
