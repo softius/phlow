@@ -5,7 +5,7 @@ namespace Phlow\Model;
  * Interface WorkflowNode
  * @package Phlow\Workflow
  */
-interface WorkflowNode
+interface WorkflowNode extends WorkflowObject
 {
     public function addOutgoingConnection(WorkflowConnection $connection): void;
 

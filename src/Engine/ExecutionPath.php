@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
+use Phlow\Model\WorkflowObject;
 use Traversable;
 
 class ExecutionPath implements \IteratorAggregate, \Countable
@@ -25,21 +26,11 @@ class ExecutionPath implements \IteratorAggregate, \Countable
 
     /**
      * Adds a Workflow Node or Connection at the end of the execution path
-     * @param $element
+     * @param WorkflowObject $element
      * @throws \InvalidArgumentException
      */
-    public function add($element)
+    public function add(WorkflowObject $element)
     {
-        if (!($element instanceof WorkflowNode) && !($element instanceof WorkflowConnection)) {
-            throw  new \InvalidArgumentException(
-                sprintf(
-                    'Argument 1 passed to ExecutionPath::add() must be of the type %s, %s given',
-                    'WorkflowNode / WorkflowConnection',
-                    get_class($element)
-                )
-            );
-        }
-
         $this->sequence->add($element);
     }
 

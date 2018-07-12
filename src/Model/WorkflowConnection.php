@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-class WorkflowConnection
+class WorkflowConnection implements WorkflowObject
 {
     private $source;
     private $target;
