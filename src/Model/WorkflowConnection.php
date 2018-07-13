@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-class WorkflowConnection implements WorkflowObject
+class WorkflowConnection implements WorkflowObjectDeprecated
 {
     private $source;
     private $target;

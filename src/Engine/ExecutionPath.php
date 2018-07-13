@@ -4,7 +4,7 @@ namespace Phlow\Engine;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Phlow\Model\WorkflowObject;
+use Phlow\Model\WorkflowObjectDeprecated;
 use Traversable;
 
 class ExecutionPath implements \IteratorAggregate, \Countable
@@ -24,10 +24,10 @@ class ExecutionPath implements \IteratorAggregate, \Countable
 
     /**
      * Adds a Workflow Node or Connection at the end of the execution path
-     * @param WorkflowObject $element
+     * @param WorkflowObjectDeprecated $element
      * @throws \InvalidArgumentException
      */
-    public function add(WorkflowObject $element)
+    public function add(WorkflowObjectDeprecated $element)
     {
         $this->sequence->add($element);
     }
