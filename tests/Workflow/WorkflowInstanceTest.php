@@ -159,11 +159,10 @@ class WorkflowInstanceTest extends TestCase
         $instance->execute();
 
         // 1. Workflow execution initiated
-        // 2/4/6 StartEvent/Task/Task reached
-        // 3/5/7. StartEvent/Task/Task executed
-        // 8. Workflow execution reached Phlow\Event\EndEvent
-        // 9. Workflow execution completed
-        $this->assertEquals(9, count($logger->getAllRecords()));
+        // 2/4/6/8 StartEvent/Task/Task/EndEvent reached
+        // 3/5/7/9 StartEvent/Task/Task/EndEvent executed
+        // 10. Workflow execution completed
+        $this->assertEquals(10, count($logger->getAllRecords()));
     }
 
     public function testExecutionPath()
@@ -175,11 +174,10 @@ class WorkflowInstanceTest extends TestCase
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $instance->execute();
 
-        $this->assertEquals(3, count($instance->getExecutionPath()));
+        $this->assertEquals(2, count($instance->getExecutionPath()));
         $path = iterator_to_array($instance->getExecutionPath());
         $this->assertInstanceOf(StartEvent::class, $path[0]);
-        $this->assertInstanceOf(WorkflowConnection::class, $path[1]);
-        $this->assertInstanceOf(EndEvent::class, $path[2]);
+        $this->assertInstanceOf(EndEvent::class, $path[1]);
     }
 
     public function testGetWorkflow()
