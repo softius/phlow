@@ -12,4 +12,9 @@ use Phlow\Model\WorkflowNodeTrait;
 class ExclusiveGateway implements Gateway
 {
     use WorkflowNodeTrait;
+
+    public function isComposite(): bool
+    {
+        return true;
+    }
 }

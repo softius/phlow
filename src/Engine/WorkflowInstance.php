@@ -55,8 +55,6 @@ class WorkflowInstance implements LoggerAwareInterface
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
-        StartEvent::class => SingleConnectionHandler::class,
-        ErrorEvent::class => SingleConnectionHandler::class,
         Task::class => ExecutableHandler::class,
         ExclusiveGateway::class => ConditionalConnectionHandler::class
     ];
@@ -148,16 +146,14 @@ class WorkflowInstance implements LoggerAwareInterface
 
             /** @var Handler $handler */
             $handler = new $handlerClass;
-            if ($handler instanceof ExecutionPathAwareInterface) {
-                $handler->setExecutionPath($this->executionPath);
-            }
-
-            $connection = $handler->handle($this->current(), $this->exchange);
-            $this->executionPath->add($connection);
-            $this->nextNode = $connection->getTarget();
-
-            $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
+            $handler->handle($this->current(), $this->exchange);
         }
+
+        if ($this->current()->hasNextStep()) {
+            $this->nextNode = $this->current()->getNextStep();
+        }
+
+        $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
     }
 
     /**

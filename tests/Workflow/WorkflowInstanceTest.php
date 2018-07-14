@@ -6,6 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\UndefinedHandlerException;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
+use Phlow\Model\NotFoundException;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
@@ -20,8 +21,8 @@ class WorkflowInstanceTest extends TestCase
     {
         $workflow = $this->getPipeline();
         $workflow->advance(1);
-        $this->assertTrue($workflow->current() instanceof StartEvent);
-        $this->assertTrue($workflow->next() instanceof Task);
+        $this->assertInstanceOf(StartEvent::class, $workflow->current());
+        $this->assertInstanceOf(Task::class, $workflow->next());
         $this->assertTrue($workflow->inProgress());
         $this->assertFalse($workflow->isCompleted());
     }
@@ -158,11 +159,10 @@ class WorkflowInstanceTest extends TestCase
         $instance->execute();
 
         // 1. Workflow execution initiated
-        // 2/4/6 StartEvent/Task/Task reached
-        // 3/5/7. StartEvent/Task/Task executed
-        // 8. Workflow execution reached Phlow\Event\EndEvent
-        // 9. Workflow execution completed
-        $this->assertEquals(9, count($logger->getAllRecords()));
+        // 2/4/6/8 StartEvent/Task/Task/EndEvent reached
+        // 3/5/7/9 StartEvent/Task/Task/EndEvent executed
+        // 10. Workflow execution completed
+        $this->assertEquals(10, count($logger->getAllRecords()));
     }
 
     public function testExecutionPath()
@@ -174,11 +174,10 @@ class WorkflowInstanceTest extends TestCase
         $instance = new WorkflowInstance($builder->getWorkflow(), []);
         $instance->execute();
 
-        $this->assertEquals(3, count($instance->getExecutionPath()));
+        $this->assertEquals(2, count($instance->getExecutionPath()));
         $path = iterator_to_array($instance->getExecutionPath());
         $this->assertInstanceOf(StartEvent::class, $path[0]);
-        $this->assertInstanceOf(WorkflowConnection::class, $path[1]);
-        $this->assertInstanceOf(EndEvent::class, $path[2]);
+        $this->assertInstanceOf(EndEvent::class, $path[1]);
     }
 
     public function testGetWorkflow()

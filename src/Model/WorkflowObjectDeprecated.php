@@ -2,6 +2,6 @@
 
 namespace Phlow\Model;
 
-interface WorkflowObject
+interface WorkflowObjectDeprecated
 {
 }

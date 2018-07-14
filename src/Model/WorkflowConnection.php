@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-class WorkflowConnection implements WorkflowObject
+class WorkflowConnection implements WorkflowObjectDeprecated
 {
     private $source;
     private $target;
@@ -12,6 +12,8 @@ class WorkflowConnection implements WorkflowObject
     {
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
+
+        $source->setNextStep($target);
 
         $this->source = $source;
         $this->target = $target;
