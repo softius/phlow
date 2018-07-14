@@ -148,13 +148,8 @@ class WorkflowInstance implements LoggerAwareInterface
 
             /** @var Handler $handler */
             $handler = new $handlerClass;
-            if ($handler instanceof ExecutionPathAwareInterface) {
-                $handler->setExecutionPath($this->executionPath);
-            }
-
             $connection = $handler->handle($this->current(), $this->exchange);
             $this->executionPath->add($connection);
-
 
             $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
         }
