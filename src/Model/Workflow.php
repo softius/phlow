@@ -6,72 +6,12 @@ namespace Phlow\Model;
  * Class Workflow
  * @package Phlow\Workflow
  */
-class Workflow
+class Workflow /* implements WorkflowStep */
 {
-    /**
-     * @var array Unordered list of the nodes, that composite this workflow.
-     */
-    private $nodes = [];
+    use WorkflowStepTrait;
 
-    /**
-     * Adds the provided node in the list of nodes.
-     * Maintains reference for all the nodes, that composite this workflow.
-     * @param WorkflowNode $node
-     * @return WorkflowNode
-     */
-    public function add(WorkflowNode $node): WorkflowNode
+    public function isComposite(): bool
     {
-        $this->nodes[] = $node;
-        return $node;
-    }
-
-    /**
-     * Adds the provided the nodes in this workflow
-     * @param WorkflowNode ...$nodes
-     * @return void
-     */
-    public function addAll(WorkflowNode ...$nodes): void
-    {
-        foreach ($nodes as $node) {
-            $this->add($node);
-        }
-    }
-
-    /**
-     * Removes the provided node from the list.
-     * @param WorkflowNode $node
-     * @return void
-     * @throws NotFoundException
-     */
-    public function remove(WorkflowNode $node): void
-    {
-        $key = array_search($node, $this->nodes, true);
-        if ($key === false) {
-            throw new NotFoundException("Node was not found");
-        }
-
-        array_splice($this->nodes, $key, 1);
-    }
-
-    /**
-     * Returns all the nodes currently associated with this workflow, in no particular order
-     * @param callable|null $filter
-     * @return iterable
-     */
-    public function getAll(callable $filter = null): iterable
-    {
-        return ($filter) ? array_values(array_filter($this->nodes, $filter)) : $this->nodes;
-    }
-
-    /**
-     * Returns all nodes that are instances of the specified class
-     * @param $class
-     * @return iterable
-     */
-    public function getAllByClass($class): iterable
-    {
-        return $this->getAll(function ($node) use ($class) {
-            return $node instanceof $class;
-        });
+        return true;
     }
 }

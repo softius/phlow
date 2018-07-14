@@ -4,6 +4,8 @@ namespace Phlow\Model;
 
 trait WorkflowNodeTrait
 {
+    use WorkflowStepTrait;
+
     private $incomingConnections = [];
 
     private $outgoingConnections = [];
