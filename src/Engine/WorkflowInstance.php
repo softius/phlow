@@ -154,9 +154,13 @@ class WorkflowInstance implements LoggerAwareInterface
 
             $connection = $handler->handle($this->current(), $this->exchange);
             $this->executionPath->add($connection);
-            $this->nextNode = $connection->getTarget();
+
 
             $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
+        }
+
+        if ($this->current()->hasNextStep()) {
+            $this->nextNode = $this->current()->getNextStep();
         }
     }
 

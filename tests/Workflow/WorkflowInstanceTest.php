@@ -6,6 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\UndefinedHandlerException;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
+use Phlow\Model\NotFoundException;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
@@ -20,8 +21,8 @@ class WorkflowInstanceTest extends TestCase
     {
         $workflow = $this->getPipeline();
         $workflow->advance(1);
-        $this->assertTrue($workflow->current() instanceof StartEvent);
-        $this->assertTrue($workflow->next() instanceof Task);
+        $this->assertInstanceOf(StartEvent::class, $workflow->current());
+        $this->assertInstanceOf(Task::class, $workflow->next());
         $this->assertTrue($workflow->inProgress());
         $this->assertFalse($workflow->isCompleted());
     }

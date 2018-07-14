@@ -13,6 +13,8 @@ class WorkflowConnection implements WorkflowObjectDeprecated
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
 
+        $source->setNextStep($target);
+
         $this->source = $source;
         $this->target = $target;
         $this->condition = $condition;

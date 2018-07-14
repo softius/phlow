@@ -10,6 +10,11 @@ trait WorkflowStepTrait
     private $steps = [];
 
     /**
+     * @var WorkflowStep
+     */
+    private $nextStep;
+
+    /**
      * Adds the provided step at the end of the collection.
      * @param WorkflowStep $step
      * @throws \BadMethodCallException
@@ -52,7 +57,7 @@ trait WorkflowStepTrait
         if ($key === false) {
             throw new NotFoundException("Step was not found");
         }
-        
+
         array_splice($this->steps, $key, 1);
     }
 
@@ -85,5 +90,59 @@ trait WorkflowStepTrait
         return $this->getAll(function ($step) use ($class) {
             return $step instanceof $class;
         });
+    }
+
+    /**
+     * Returns the first step
+     * @return WorkflowStep
+     * @throws NotFoundException
+     */
+    public function first(): WorkflowStep
+    {
+        if ($this->isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        return $this->steps[0];
+    }
+
+    /**
+     * Returns the last step
+     * @return WorkflowStep
+     * @throws NotFoundException
+     */
+    public function last(): WorkflowStep
+    {
+        if ($this->isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        $last = end($this->steps);
+        reset($array);
+        return $last;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getNextStep(): WorkflowStep
+    {
+        return $this->nextStep;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNextStep(): bool
+    {
+        return !empty($this->nextStep);
+    }
+
+    /**
+     * @param WorkflowStep $nextStep
+     */
+    public function setNextStep(WorkflowStep $nextStep): void
+    {
+        $this->nextStep = $nextStep;
     }
 }
