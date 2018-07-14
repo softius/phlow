@@ -55,7 +55,6 @@ class WorkflowInstance implements LoggerAwareInterface
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
-        ErrorEvent::class => SingleConnectionHandler::class,
         Task::class => ExecutableHandler::class,
         ExclusiveGateway::class => ConditionalConnectionHandler::class
     ];
