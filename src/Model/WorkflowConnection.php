@@ -7,8 +7,13 @@ class WorkflowConnection implements WorkflowObject
     private $source;
     private $target;
     private $condition;
+    private $type;
 
-    public function __construct(WorkflowNode $source, WorkflowNode $target, $condition = true)
+    public const LABEL_OPEN = 1;
+    public const LABEL_CLOSED = 2;
+    public const LABEL_NEXT = 3;
+
+    public function __construct(WorkflowNode $source, WorkflowNode $target, int $label, $condition = true)
     {
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
@@ -42,5 +47,15 @@ class WorkflowConnection implements WorkflowObject
     public function isConditional()
     {
         return !empty($this->condition);
+    }
+
+    public function __toString()
+    {
+        return 'WorkflowConnection';
+    }
+
+    public function hasLabel(int $label): bool
+    {
+        return $this->label === $label;
     }
 }

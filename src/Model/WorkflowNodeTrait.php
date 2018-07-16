@@ -18,13 +18,24 @@ trait WorkflowNodeTrait
         $this->incomingConnections[] = $connection;
     }
 
-    public function getOutgoingConnections(): array
+    public function getOutgoingConnections(int $label = null): array
     {
-        return $this->outgoingConnections;
+        return $this->filterConnections($this->outgoingConnections, $label);
     }
 
-    public function getIncomingConnections(): array
+    public function getIncomingConnections(int $label = null): array
     {
-        return $this->incomingConnections;
+        return $this->filterConnections($this->incomingConnections, $label);
+    }
+
+    private function filterConnections($connections, int $label = null): array
+    {
+        if (empty($type)) {
+            return $connections;
+        } else {
+            return array_filter($connections, function ($connection) use ($label) {
+                return $connection->hasLabel($label);
+            });
+        }
     }
 }

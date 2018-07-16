@@ -15,7 +15,8 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        $connection = new WorkflowConnection($task, $nextTask);
+
+        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
 
         $handler = new ExecutableHandler();
         $actualConnection = $handler->handle($task, new Exchange());
@@ -26,7 +27,11 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
+<<<<<<< HEAD
         $connection = new WorkflowConnection($task, $nextTask);
+=======
+        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+>>>>>>> 5a998c504e4115416f99956169cb139e2af36a46
 
         $task->addCallback(function ($in) {
             $in['num']++;
@@ -35,7 +40,11 @@ class TaskHandlerTest extends TestCase
 
         $handler = new ExecutableHandler();
         $exchange = new Exchange(['num' => 1]);
+<<<<<<< HEAD
         $actualConnection = $handler->handle($task, $exchange);
+=======
+        $actualConnection = $handler->handle($task, $exchange, WorkflowConnection::LABEL_NEXT);
+>>>>>>> 5a998c504e4115416f99956169cb139e2af36a46
         $this->assertEquals($connection, $actualConnection);
         $this->assertEquals(2, $exchange->getOut()['num']);
     }
@@ -44,7 +53,11 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
+<<<<<<< HEAD
         $connection = new WorkflowConnection($task, $nextTask);
+=======
+        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+>>>>>>> 5a998c504e4115416f99956169cb139e2af36a46
 
         $handler = new ExecutableHandler();
         $actualConnection = $handler->handle($task, new Exchange());

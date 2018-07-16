@@ -15,4 +15,9 @@ class ErrorEvent implements Event, ExceptionHandlerNode
 {
     use WorkflowNodeTrait;
     use ExceptionHandlerTrait;
+
+    public function __toString()
+    {
+        return 'ErrorEvent';
+    }
 }
