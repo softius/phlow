@@ -12,4 +12,9 @@ use Phlow\Model\WorkflowNodeTrait;
 class EndEvent implements Event
 {
     use WorkflowNodeTrait;
+
+    public function __toString()
+    {
+        return 'EndEvent';
+    }
 }

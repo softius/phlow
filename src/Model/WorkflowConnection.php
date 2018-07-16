@@ -43,4 +43,9 @@ class WorkflowConnection implements WorkflowObject
     {
         return !empty($this->condition);
     }
+
+    public function __toString()
+    {
+        return 'WorkflowConnection';
+    }
 }
