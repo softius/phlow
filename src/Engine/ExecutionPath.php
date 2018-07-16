@@ -4,6 +4,7 @@ namespace Phlow\Engine;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Phlow\Model\WorkflowNode;
 use Phlow\Model\WorkflowObject;
 use Traversable;
 
@@ -56,5 +57,15 @@ class ExecutionPath implements \IteratorAggregate, \Countable
     public function count()
     {
         return $this->sequence->count();
+    }
+
+    /**
+     * Returns true only and only if the provided Workflow Object is contained in the collection.
+     * @param WorkflowObject $workflowObject
+     * @return bool
+     */
+    public function contains(WorkflowObject $workflowObject)
+    {
+        return $this->sequence->contains($workflowObject);
     }
 }
