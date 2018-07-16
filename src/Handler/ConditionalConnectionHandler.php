@@ -27,7 +27,7 @@ class ConditionalConnectionHandler implements Handler, ExecutionPathAwareInterfa
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
         /** @var WorkflowConnection $connection */
-        foreach ($workflowNode->getOutgoingConnections() as $connection) {
+        foreach ($workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_OPEN) as $connection) {
             if (!$connection->isConditional()) {
                 continue;
             }

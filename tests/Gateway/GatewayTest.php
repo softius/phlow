@@ -19,8 +19,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $nextTask2 = new Task();
 
         $gateway = new ExclusiveGateway();
-        $connection1 = new WorkflowConnection($gateway, $nextTask, WorkflowConnection::LABEL_NEXT, 'num < 10');
-        $connection2 = new WorkflowConnection($gateway, $nextTask2, WorkflowConnection::LABEL_NEXT, 'num > 100');
+        $connection1 = new WorkflowConnection($gateway, $nextTask, WorkflowConnection::LABEL_OPEN, 'num < 10');
+        $connection2 = new WorkflowConnection($gateway, $nextTask2, WorkflowConnection::LABEL_OPEN, 'num > 100');
 
         $handler = new ConditionalConnectionHandler();
 
