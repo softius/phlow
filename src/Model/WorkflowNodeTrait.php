@@ -33,9 +33,14 @@ trait WorkflowNodeTrait
         if (empty($label)) {
             return $connections;
         } else {
-            return array_filter($connections, function (WorkflowConnection $connection) use ($label) {
-                return $connection->hasLabel($label);
-            });
+            return array_values(
+                array_filter(
+                    $connections,
+                    function (WorkflowConnection $connection) use ($label) {
+                        return $connection->hasLabel($label);
+                    }
+                )
+            );
         }
     }
 }
