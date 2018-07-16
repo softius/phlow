@@ -16,4 +16,9 @@ class Task implements Activity, ExecutableNode
 {
     use WorkflowNodeTrait;
     use ExecutableNodeTrait;
+
+    public function __toString()
+    {
+        return 'Task';
+    }
 }
