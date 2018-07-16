@@ -30,10 +30,10 @@ trait WorkflowNodeTrait
 
     private function filterConnections($connections, int $label = null): array
     {
-        if (empty($type)) {
+        if (empty($label)) {
             return $connections;
         } else {
-            return array_filter($connections, function ($connection) use ($label) {
+            return array_filter($connections, function (WorkflowConnection $connection) use ($label) {
                 return $connection->hasLabel($label);
             });
         }

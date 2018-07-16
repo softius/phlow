@@ -74,6 +74,8 @@ class WorkflowBuilder
     {
         if ($this->linkNodesFor instanceof WorkflowNode) {
             $this->connectGatewayPaths($node);
+        } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Gateway) {
+            new WorkflowConnection($this->nodes->peek(), $node, WorkflowConnection::LABEL_OPEN, $this->lastExpression);
         } elseif (!$this->nodes->isEmpty()) {
             new WorkflowConnection($this->nodes->peek(), $node, WorkflowConnection::LABEL_NEXT, $this->lastExpression);
         }
@@ -86,14 +88,16 @@ class WorkflowBuilder
 
     /**
      * Helper method.
-     * Establish a Connection between the Gateway's unlinked nodes and the provided target Node
+     * Establish a Connection between the Gateway's unlinked nodes and the parent Gateway
      * @param WorkflowNode $target
      */
     private function connectGatewayPaths(WorkflowNode $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
-            new WorkflowConnection($source, $target, WorkflowConnection::LABEL_NEXT);
+            new WorkflowConnection($source, $this->linkNodesFor, WorkflowConnection::LABEL_CLOSED);
         }
+
+        new WorkflowConnection($this->linkNodesFor, $target, WorkflowConnection::LABEL_NEXT);
 
         $this->unlinkedNodes->remove($this->linkNodesFor);
         $this->linkNodesFor = null;

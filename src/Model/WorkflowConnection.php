@@ -7,7 +7,7 @@ class WorkflowConnection implements WorkflowObject
     private $source;
     private $target;
     private $condition;
-    private $type;
+    private $label;
 
     public const LABEL_OPEN = 1;
     public const LABEL_CLOSED = 2;
@@ -20,6 +20,7 @@ class WorkflowConnection implements WorkflowObject
 
         $this->source = $source;
         $this->target = $target;
+        $this->label = $label;
         $this->condition = $condition;
     }
 
@@ -33,6 +34,7 @@ class WorkflowConnection implements WorkflowObject
 
     /**
      * @return WorkflowNode
+     *
      */
     public function getTarget(): WorkflowNode
     {
