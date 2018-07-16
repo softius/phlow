@@ -16,8 +16,8 @@ class SingleConnectionHandlerTest extends TestCase
         $task = new Task();
         $nextTask = new Task();
         $anotherTask = new Task();
-        $connection1 = new WorkflowConnection($task, $nextTask);
-        $connection2 = new WorkflowConnection($task, $anotherTask);
+        $connection1 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+        $connection2 = new WorkflowConnection($task, $anotherTask, WorkflowConnection::LABEL_NEXT);
 
         $handler = new SingleConnectionHandler();
         $actualConnection = $handler->handle($task, new Exchange());

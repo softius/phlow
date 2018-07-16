@@ -75,7 +75,7 @@ class WorkflowBuilder
         if ($this->linkNodesFor instanceof WorkflowNode) {
             $this->connectGatewayPaths($node);
         } elseif (!$this->nodes->isEmpty()) {
-            new WorkflowConnection($this->nodes->peek(), $node, $this->lastExpression);
+            new WorkflowConnection($this->nodes->peek(), $node, WorkflowConnection::LABEL_NEXT, $this->lastExpression);
         }
 
         $this->workflow->add($node);
@@ -92,7 +92,7 @@ class WorkflowBuilder
     private function connectGatewayPaths(WorkflowNode $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
-            new WorkflowConnection($source, $target);
+            new WorkflowConnection($source, $target, WorkflowConnection::LABEL_NEXT);
         }
 
         $this->unlinkedNodes->remove($this->linkNodesFor);
