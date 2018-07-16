@@ -3,6 +3,8 @@
 namespace Phlow\Handler;
 
 use Phlow\Engine\Exchange;
+use Phlow\Engine\ExecutionPathAwareInterface;
+use Phlow\Engine\ExecutionPathAwareTrait;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
@@ -12,8 +14,9 @@ use Phlow\Model\WorkflowNode;
  * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Handler
  */
-class ConditionalConnectionHandler implements Handler
+class ConditionalConnectionHandler implements Handler, ExecutionPathAwareInterface
 {
+    use ExecutionPathAwareTrait;
 
     /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
@@ -39,7 +42,6 @@ class ConditionalConnectionHandler implements Handler
 
         throw new UnmatchedConditionException('No condition was matched');
     }
-
 
     /**
      * @var ExpressionEngine

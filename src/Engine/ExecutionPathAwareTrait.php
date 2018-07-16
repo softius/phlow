@@ -2,7 +2,7 @@
 
 namespace Phlow\Engine;
 
-trait ExecutionPathAware
+trait ExecutionPathAwareTrait
 {
     /**
      * @var ExecutionPath
