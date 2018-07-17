@@ -2,7 +2,7 @@
 
 namespace Phlow\Tests\Gateway;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
@@ -15,8 +15,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 {
     public function testFlows()
     {
-        $nextTask = new Task();
-        $nextTask2 = new Task();
+        $nextTask = new Callback();
+        $nextTask2 = new Callback();
 
         $gateway = new ExclusiveGateway();
         $connection1 = new Connection($gateway, $nextTask, Connection::LABEL_CHILD, 'num < 10');

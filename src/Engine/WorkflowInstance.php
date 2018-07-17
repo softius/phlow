@@ -2,7 +2,7 @@
 
 namespace Phlow\Engine;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Event\ErrorEvent;
 use Phlow\Processor\ExclusiveGatewayProcessor;
 use Phlow\Processor\Processor;
@@ -57,7 +57,7 @@ class WorkflowInstance implements LoggerAwareInterface
     private $handlers = [
         StartEvent::class => SingleConnectionProcessor::class,
         ErrorEvent::class => SingleConnectionProcessor::class,
-        Task::class => CallbackProcessor::class,
+        Callback::class => CallbackProcessor::class,
         ExclusiveGateway::class => ExclusiveGatewayProcessor::class
     ];
 

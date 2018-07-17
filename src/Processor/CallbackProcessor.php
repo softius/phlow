@@ -2,7 +2,7 @@
 
 namespace Phlow\Processor;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Engine\Exchange;
 use Phlow\Node\Node;
 use Phlow\Connection\Connection;
@@ -24,11 +24,11 @@ class CallbackProcessor implements Processor
      */
     public function process(Node $workflowNode, Exchange $exchange): Connection
     {
-        if (!($workflowNode instanceof Task)) {
-            throw new \InvalidArgumentException("A workflow node of type Task was expected.");
+        if (!($workflowNode instanceof Callback)) {
+            throw new \InvalidArgumentException("A workflow node of type Callback was expected.");
         }
 
-        /** @var Task $task */
+        /** @var Callback $task */
         $task = $workflowNode;
         // Invoke callback
         if ($task->hasCallback()) {

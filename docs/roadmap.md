@@ -1,7 +1,7 @@
 # Roadmap
 
 ## v0.2.0
-* Minise verbosity for Task Activity
+* Minise verbosity for Task Node
 * Integrate with PSR/3 Logger
 * Record execution path
 

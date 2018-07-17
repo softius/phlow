@@ -20,9 +20,9 @@ class PlainTextRendererTest extends TestCase
 
         $expectedOutput = implode(PHP_EOL, [
             '|-StartEvent',
-            '|-Task',
-            '|-Task',
-            '|-Task',
+            '|-Callback',
+            '|-Callback',
+            '|-Callback',
             '\-EndEvent',
         ]) . PHP_EOL;
         $actualOutput = $workflow->render(new PlainTextRenderer());
@@ -45,9 +45,9 @@ class PlainTextRendererTest extends TestCase
             '|-StartEvent',
             '|-ExclusiveGateway',
             '| |-Connection (isEven)',
-            '| | \-Task',
+            '| | \-Callback',
             '| \-Connection (true)',
-            '|   \-Task',
+            '|   \-Callback',
             '\-EndEvent',
         ]) . PHP_EOL;
         $actualOutput = $workflow->render(new PlainTextRenderer());

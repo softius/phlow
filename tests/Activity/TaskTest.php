@@ -2,14 +2,14 @@
 
 namespace Phlow\Tests\Activity;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
     public function testWithCallback()
     {
-        $task = new Task();
+        $task = new Callback();
         $cb = function ($d) {
             return $d;
         };
@@ -21,7 +21,7 @@ class TaskTest extends TestCase
 
     public function testWithoutCallbacks()
     {
-        $task = new Task();
+        $task = new Callback();
         $this->assertFalse($task->hasCallback());
         $this->expectException(\UnexpectedValueException::class);
         $task->getCallback();

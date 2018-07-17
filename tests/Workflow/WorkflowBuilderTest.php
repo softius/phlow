@@ -2,7 +2,7 @@
 
 namespace Phlow\Tests\Workflow;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Connection\Connection;
@@ -21,9 +21,9 @@ class WorkflowBuilderTest extends TestCase
 
         $workflow = $builder->getWorkflow();
 
-        /** @var Task $node */
-        $task = $workflow->getAllByClass(Task::class)[0];
-        $this->assertTrue($task instanceof Task);
+        /** @var Callback $node */
+        $task = $workflow->getAllByClass(Callback::class)[0];
+        $this->assertTrue($task instanceof Callback);
         $this->assertTrue($task->hasCallback());
     }
 

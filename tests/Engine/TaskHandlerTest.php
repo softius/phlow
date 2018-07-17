@@ -2,7 +2,7 @@
 
 namespace Phlow\Tests\Activity;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\CallbackProcessor;
@@ -13,8 +13,8 @@ class TaskHandlerTest extends TestCase
 {
     public function testWithoutCallback()
     {
-        $task = new Task();
-        $nextTask = new Task();
+        $task = new Callback();
+        $nextTask = new Callback();
         $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
@@ -24,8 +24,8 @@ class TaskHandlerTest extends TestCase
 
     public function testWithCallback()
     {
-        $task = new Task();
-        $nextTask = new Task();
+        $task = new Callback();
+        $nextTask = new Callback();
         $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $task->addCallback(function ($in) {
@@ -42,8 +42,8 @@ class TaskHandlerTest extends TestCase
 
     public function testSuccess()
     {
-        $task = new Task();
-        $nextTask = new Task();
+        $task = new Callback();
+        $nextTask = new Callback();
         $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
@@ -53,7 +53,7 @@ class TaskHandlerTest extends TestCase
 
     public function testErrorHandling()
     {
-        $task = new Task();
+        $task = new Callback();
         $task->addCallback(function ($in) {
             throw new \Exception("testErrorHandling");
         });

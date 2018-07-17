@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
@@ -197,13 +197,13 @@ class WorkflowBuilder
     }
 
     /**
-     * Creates a Task instance for this workflow
+     * Creates a Callback instance for this workflow
      * @param callable|null $callback
      * @return WorkflowBuilder
      */
     public function callback(callable $callback = null): WorkflowBuilder
     {
-        $taskNode = new Task();
+        $taskNode = new Callback();
         if (!empty($callback)) {
             $taskNode->addCallback($callback);
         }

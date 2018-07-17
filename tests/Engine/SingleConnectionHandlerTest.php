@@ -2,7 +2,7 @@
 
 namespace Phlow\Tests\Engine;
 
-use Phlow\Activity\Task;
+use Phlow\Node\Callback;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\UnmatchedConditionException;
@@ -13,9 +13,9 @@ class SingleConnectionHandlerTest extends TestCase
 {
     public function testNextConnection()
     {
-        $task = new Task();
-        $nextTask = new Task();
-        $anotherTask = new Task();
+        $task = new Callback();
+        $nextTask = new Callback();
+        $anotherTask = new Callback();
         $connection1 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
         $connection2 = new Connection($task, $anotherTask, Connection::LABEL_NEXT);
 
@@ -26,10 +26,10 @@ class SingleConnectionHandlerTest extends TestCase
 
     public function testParentConnection()
     {
-        $task = new Task();
-        $parentTask = new Task();
-        $nextTask = new Task();
-        $parentNextTask = new Task();
+        $task = new Callback();
+        $parentTask = new Callback();
+        $nextTask = new Callback();
+        $parentNextTask = new Callback();
         $connection1 = new Connection($task, $parentTask, Connection::LABEL_PARENT);
         $connection2 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
         $connection3 = new Connection($parentTask, $parentNextTask, Connection::LABEL_NEXT);
@@ -43,6 +43,6 @@ class SingleConnectionHandlerTest extends TestCase
     {
         $handler = new SingleConnectionProcessor();
         $this->expectException(UnmatchedConditionException::class);
-        $handler->process(new Task(), new Exchange());
+        $handler->process(new Callback(), new Exchange());
     }
 }

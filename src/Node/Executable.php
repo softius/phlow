@@ -10,7 +10,7 @@ namespace Phlow\Node;
 interface Executable
 {
     /**
-     * Returns the callback associated with this Task
+     * Returns the callback associated with this Callback
      * If no callback was provided, an Exception is thrown
      * @throws \UnexpectedValueException
      * @return callable

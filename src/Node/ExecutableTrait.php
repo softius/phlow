@@ -6,12 +6,12 @@ trait ExecutableTrait
 {
 
     /**
-     * @var array Callback to be invoked when processing this Task
+     * @var array Callback to be invoked when processing this Callback
      */
     private $callback = null;
 
     /**
-     * Returns the callback associated with this Task
+     * Returns the callback associated with this Callback
      * If no callback was provided, an Exception is thrown
      * @throws \UnexpectedValueException
      * @return callable
