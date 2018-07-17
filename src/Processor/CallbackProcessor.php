@@ -10,9 +10,9 @@ use Phlow\Model\WorkflowConnection;
 /**
  * Class CallbackProcessor
  * Executes the callback associated with the provided Workflow Node
- * @package Phlow\Handler
+ * @package Phlow\Processor
  */
-class CallbackProcessor implements Handler
+class CallbackProcessor implements Processor
 {
 
     /**

@@ -7,11 +7,11 @@ use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
 
 /**
- * Interface Handler
- * A Handler is being used to execute (or abort) a Workflow Node
- * @package Phlow\Engine\Handler
+ * Interface Processor
+ * A Processor is being used to execute (or abort) a Workflow Node
+ * @package Phlow\Engine\Processor
  */
-interface Handler
+interface Processor
 {
     /**
      * It processes the provided Workflow Node by injecting the provided Exchange and

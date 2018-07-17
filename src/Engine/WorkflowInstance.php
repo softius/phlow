@@ -5,7 +5,7 @@ namespace Phlow\Engine;
 use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
 use Phlow\Processor\ExclusiveGatewayProcessor;
-use Phlow\Processor\Handler;
+use Phlow\Processor\Processor;
 use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\CallbackProcessor;
 use Phlow\Event\EndEvent;
@@ -146,7 +146,7 @@ class WorkflowInstance implements LoggerAwareInterface
         if (array_key_exists($nodeClass, $this->handlers)) {
             $handlerClass = $this->handlers[$nodeClass];
 
-            /** @var Handler $handler */
+            /** @var Processor $handler */
             $handler = new $handlerClass;
 
             $connection = $handler->handle($this->current(), $this->exchange);

@@ -10,9 +10,9 @@ use Phlow\Model\WorkflowNode;
 /**
  * Class ExclusiveGatewayProcessor
  * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
- * @package Phlow\Engine\Handler
+ * @package Phlow\Engine\Processor
  */
-class ExclusiveGatewayProcessor implements Handler
+class ExclusiveGatewayProcessor implements Processor
 {
     /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections

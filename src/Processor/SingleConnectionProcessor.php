@@ -9,9 +9,9 @@ use Phlow\Model\WorkflowNode;
 /**
  * Class SingleConnectionProcessor
  * Suggests the next WorkflowNode by taking the first of the outgoing connections
- * @package Phlow\Handler
+ * @package Phlow\Processor
  */
-class SingleConnectionProcessor implements Handler
+class SingleConnectionProcessor implements Processor
 {
 
     /**
