@@ -2,10 +2,10 @@
 
 namespace Phlow\Event;
 
-use Phlow\Model\ExceptionHandlerTrait;
 use Phlow\Model\RenderableObject;
 use Phlow\Node\AbstractNode;
 use Phlow\Node\ExceptionHandler;
+use Phlow\Node\ExceptionHandlerTrait;
 
 /**
  * Class ErrorEvent
