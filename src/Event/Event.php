@@ -2,13 +2,13 @@
 
 namespace Phlow\Event;
 
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 /**
  * Interface Event
  * An Event denotes something that happens.
  * @package Phlow\Event
  */
-interface Event extends WorkflowNode
+interface Event extends Node
 {
 }

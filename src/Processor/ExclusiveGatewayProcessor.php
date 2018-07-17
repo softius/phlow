@@ -5,22 +5,22 @@ namespace Phlow\Processor;
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 /**
  * Class ExclusiveGatewayProcessor
- * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
+ * Suggests the next Node by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Processor
  */
 class ExclusiveGatewayProcessor implements Processor
 {
     /**
-     * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
-     * @param WorkflowNode $workflowNode
+     * Returns the next Node by evaluating all the conditions assigned on the outgoing connections
+     * @param Node $workflowNode
      * @param Exchange $exchange
      * @return Connection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): Connection
+    public function handle(Node $workflowNode, Exchange $exchange): Connection
     {
         /** @var Connection $connection */
         foreach ($workflowNode->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {

@@ -2,14 +2,14 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 /**
  * Interface Gateway
  * A gateway denotes forking and merging of workflow paths.
  * @package Phlow\Gateway
  */
-interface Gateway extends WorkflowNode
+interface Gateway extends Node
 {
 
 }

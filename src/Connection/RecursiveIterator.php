@@ -3,11 +3,11 @@
 namespace Phlow\Connection;
 
 use Phlow\Model\RecursiveNodeIterator;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
-    public function __construct(WorkflowNode $workflowObject)
+    public function __construct(Node $workflowObject)
     {
         $items = [];
 

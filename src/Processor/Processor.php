@@ -4,7 +4,7 @@ namespace Phlow\Processor;
 
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 /**
  * Interface Processor
@@ -17,9 +17,9 @@ interface Processor
      * It processes the provided Workflow Node by injecting the provided Exchange and
      * and executing all the necessary actions supported by the Node.
      * Then it calculates and returns the next Node
-     * @param WorkflowNode $workflowNode
+     * @param Node $workflowNode
      * @param Exchange $exchange
      * @return Connection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): Connection;
+    public function handle(Node $workflowNode, Exchange $exchange): Connection;
 }

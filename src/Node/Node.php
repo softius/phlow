@@ -5,10 +5,10 @@ use Phlow\Connection\Connection;
 use Phlow\Model\WorkflowObject;
 
 /**
- * Interface WorkflowNode
+ * Interface Node
  * @package Phlow\Workflow
  */
-interface WorkflowNode extends WorkflowObject
+interface Node extends WorkflowObject
 {
     public function addOutgoingConnection(Connection $connection): void;
 

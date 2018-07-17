@@ -4,7 +4,7 @@ namespace Phlow\Connection;
 
 use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowObject;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 class Connection implements WorkflowObject
 {
@@ -21,7 +21,7 @@ class Connection implements WorkflowObject
     public const LABEL_PARENT = 2;
     public const LABEL_NEXT = 3;
 
-    public function __construct(WorkflowNode $source, WorkflowNode $target, int $label, $condition = true)
+    public function __construct(Node $source, Node $target, int $label, $condition = true)
     {
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
@@ -33,18 +33,18 @@ class Connection implements WorkflowObject
     }
 
     /**
-     * @return WorkflowNode
+     * @return Node
      */
-    public function getSource(): WorkflowNode
+    public function getSource(): Node
     {
         return $this->source;
     }
 
     /**
-     * @return WorkflowNode
+     * @return Node
      *
      */
-    public function getTarget(): WorkflowNode
+    public function getTarget(): Node
     {
         return $this->target;
     }

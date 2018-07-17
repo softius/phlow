@@ -2,13 +2,13 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 
 /**
  * Interface Activity
  * Activity denotes something that must be done.
  * @package Phlow\Activity
  */
-interface Activity extends WorkflowNode
+interface Activity extends Node
 {
 }

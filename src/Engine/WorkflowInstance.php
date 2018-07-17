@@ -12,7 +12,7 @@ use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -37,12 +37,12 @@ class WorkflowInstance implements LoggerAwareInterface
     private $exchange;
 
     /**
-     * @var WorkflowNode Last executed node
+     * @var Node Last executed node
      */
     private $currentNode;
 
     /**
-     * @var WorkflowNode Next node to be executed
+     * @var Node Next node to be executed
      */
     private $nextNode;
 
@@ -247,9 +247,9 @@ class WorkflowInstance implements LoggerAwareInterface
 
     /**
      * Returns the last executed node.
-     * @return WorkflowNode
+     * @return Node
      */
-    public function current(): WorkflowNode
+    public function current(): Node
     {
         if (!empty($this->currentNode)) {
             return $this->currentNode;
@@ -258,7 +258,7 @@ class WorkflowInstance implements LoggerAwareInterface
         throw new InvalidStateException('Execution has not been initiated for this Workflow.');
     }
 
-    public function next(): WorkflowNode
+    public function next(): Node
     {
         return $this->nextNode;
     }

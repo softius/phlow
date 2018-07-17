@@ -9,7 +9,7 @@ use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Gateway\Gateway;
-use Phlow\Node\WorkflowNode;
+use Phlow\Node\Node;
 use Phlow\Util\HashMap;
 use Phlow\Util\Stack;
 
@@ -36,7 +36,7 @@ class WorkflowBuilder
     private $unlinkedNodes;
 
     /*
-     * @var WorkflowNode
+     * @var Node
      */
     private $linkNodesFor;
 
@@ -69,12 +69,12 @@ class WorkflowBuilder
     /**
      * Adds the specified Node to the Workflow.
      * Creates a connection between the previous Node with the new Node
-     * @param WorkflowNode $node
+     * @param Node $node
      * @return WorkflowBuilder
      */
-    private function add(WorkflowNode $node): WorkflowBuilder
+    private function add(Node $node): WorkflowBuilder
     {
-        if ($this->linkNodesFor instanceof WorkflowNode) {
+        if ($this->linkNodesFor instanceof Node) {
             $this->connectGatewayPaths($node);
         } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Gateway) {
             new Connection($this->nodes->peek(), $node, Connection::LABEL_CHILD, $this->lastExpression);
@@ -91,9 +91,9 @@ class WorkflowBuilder
     /**
      * Helper method.
      * Establish a Connection between the Gateway's unlinked nodes and the parent Gateway
-     * @param WorkflowNode $target
+     * @param Node $target
      */
-    private function connectGatewayPaths(WorkflowNode $target)
+    private function connectGatewayPaths(Node $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
             new Connection($source, $this->linkNodesFor, Connection::LABEL_PARENT);
