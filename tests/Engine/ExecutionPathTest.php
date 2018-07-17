@@ -8,8 +8,8 @@
 
 namespace Phlow\Engine;
 
-use Phlow\Event\EndEvent;
-use Phlow\Event\StartEvent;
+use Phlow\Node\End;
+use Phlow\Node\Start;
 use PHPUnit\Framework\TestCase;
 
 class ExecutionPathTest extends TestCase
@@ -17,7 +17,7 @@ class ExecutionPathTest extends TestCase
 
     public function testGetIterator()
     {
-        $nodes = [new StartEvent(), new EndEvent()];
+        $nodes = [new Start(), new End()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);
@@ -26,7 +26,7 @@ class ExecutionPathTest extends TestCase
 
     public function testContains()
     {
-        $nodes = [new StartEvent(), new EndEvent(), new EndEvent()];
+        $nodes = [new Start(), new End(), new End()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);
@@ -36,7 +36,7 @@ class ExecutionPathTest extends TestCase
 
     public function testAddCount()
     {
-        $nodes = [new StartEvent(), new EndEvent()];
+        $nodes = [new Start(), new End()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);

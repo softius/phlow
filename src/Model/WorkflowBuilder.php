@@ -4,9 +4,9 @@ namespace Phlow\Model;
 
 use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
-use Phlow\Event\EndEvent;
-use Phlow\Event\ErrorEvent;
-use Phlow\Event\StartEvent;
+use Phlow\Node\End;
+use Phlow\Node\Error;
+use Phlow\Node\Start;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Gateway\Gateway;
 use Phlow\Node\Node;
@@ -130,13 +130,13 @@ class WorkflowBuilder
 
     /**
      * Workflow level error handling.
-     * Creates an ErrorEvent instance.
+     * Creates an Error instance.
      * @param mixed $exceptionClass Exception class to be matched
      * @return WorkflowBuilder
      */
     public function catch(string $exceptionClass): WorkflowBuilder
     {
-        $errorEvent = new ErrorEvent();
+        $errorEvent = new Error();
         $errorEvent->addExceptionClass($exceptionClass);
         return $this->add($errorEvent);
     }
@@ -153,17 +153,17 @@ class WorkflowBuilder
     }
 
     /**
-     * Creates a StartEvent instance for this workflow
+     * Creates a Start instance for this workflow
      * @return WorkflowBuilder
      */
     public function start(): WorkflowBuilder
     {
-        return $this->add(new StartEvent());
+        return $this->add(new Start());
     }
 
     /**
      * It closes the most recent created Gateway which is still 'opened'.
-     * Otherwise, it creates an EndEvent instance for this workflow.
+     * Otherwise, it creates an End instance for this workflow.
      * @return WorkflowBuilder
      */
     public function end(): WorkflowBuilder
@@ -173,23 +173,23 @@ class WorkflowBuilder
             $this->linkNodesFor = !$this->nodes->isEmpty() ? $this->nodes->pop() : null;
         }
 
-        // A new EndEvent must be created in the following cases
+        // A new End must be created in the following cases
         // * There are no more unlinked nodes i.e. no Gateway was used in this Workflow
-        // * There is only one Gateway pending which must be linked with an EndEvent
+        // * There is only one Gateway pending which must be linked with an End
         if (1 >= $this->unlinkedNodes->count()) {
-            $this->add(new EndEvent());
+            $this->add(new End());
         }
 
         return $this;
     }
 
     /**
-     * Closes all the 'opened' Gateway instances and then it creates a new EndEvent instance for this Workflow.
+     * Closes all the 'opened' Gateway instances and then it creates a new End instance for this Workflow.
      * @see WorkflowBuilder::end()
      */
     public function endAll(): WorkflowBuilder
     {
-        while (!($this->nodes->peek() instanceof EndEvent)) {
+        while (!($this->nodes->peek() instanceof End)) {
             $this->end();
         }
 

@@ -4,8 +4,8 @@ namespace Phlow\Tests\Workflow;
 
 use Phlow\Node\Callback;
 use Phlow\Engine\UndefinedHandlerException;
-use Phlow\Event\EndEvent;
-use Phlow\Event\StartEvent;
+use Phlow\Node\End;
+use Phlow\Node\Start;
 use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
@@ -20,7 +20,7 @@ class WorkflowInstanceTest extends TestCase
     {
         $workflow = $this->getPipeline();
         $workflow->advance(1);
-        $this->assertTrue($workflow->current() instanceof StartEvent);
+        $this->assertTrue($workflow->current() instanceof Start);
         $this->assertTrue($workflow->next() instanceof Callback);
         $this->assertTrue($workflow->inProgress());
         $this->assertFalse($workflow->isCompleted());
@@ -65,7 +65,7 @@ class WorkflowInstanceTest extends TestCase
 
         $this->assertTrue($instance->isCompleted());
         $this->assertFalse($instance->inProgress());
-        $this->assertTrue($instance->current() instanceof EndEvent);
+        $this->assertTrue($instance->current() instanceof End);
     }
 
     public function testCurrentBeforeExecution()
@@ -95,7 +95,7 @@ class WorkflowInstanceTest extends TestCase
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
         $instance->advance(2);
-        $this->assertNotInstanceOf(EndEvent::class, $instance->current());
+        $this->assertNotInstanceOf(End::class, $instance->current());
     }
 
     public function testMissingErrorHandling()
@@ -158,9 +158,9 @@ class WorkflowInstanceTest extends TestCase
         $instance->execute();
 
         // 1. Workflow execution initiated
-        // 2/4/6 StartEvent/Callback/Callback reached
-        // 3/5/7. StartEvent/Callback/Callback executed
-        // 8. Workflow execution reached Phlow\Event\EndEvent
+        // 2/4/6 Start/Callback/Callback reached
+        // 3/5/7. Start/Callback/Callback executed
+        // 8. Workflow execution reached Phlow\Node\End
         // 9. Workflow execution completed
         $this->assertEquals(9, count($logger->getAllRecords()));
     }
@@ -176,9 +176,9 @@ class WorkflowInstanceTest extends TestCase
 
         $this->assertEquals(3, count($instance->getExecutionPath()));
         $path = iterator_to_array($instance->getExecutionPath());
-        $this->assertInstanceOf(StartEvent::class, $path[0]);
+        $this->assertInstanceOf(Start::class, $path[0]);
         $this->assertInstanceOf(Connection::class, $path[1]);
-        $this->assertInstanceOf(EndEvent::class, $path[2]);
+        $this->assertInstanceOf(End::class, $path[2]);
     }
 
     public function testGetWorkflow()

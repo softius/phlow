@@ -1,16 +1,16 @@
 <?php
 
-namespace Phlow\Event;
+namespace Phlow\Node;
 
 use Phlow\Model\RenderableObject;
 use Phlow\Node\AbstractNode;
 
 /**
- * Class EndEvent
+ * Class End
  * Represents the result of the process and indicates that the workflow has reached the completion phase.
- * @package Phlow\Event
+ * @package Phlow\Node
  */
-class EndEvent extends AbstractNode implements Event
+class End extends AbstractNode implements Event
 {
     use RenderableObject;
 }

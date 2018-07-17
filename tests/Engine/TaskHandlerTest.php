@@ -6,7 +6,7 @@ use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\CallbackProcessor;
-use Phlow\Event\StartEvent;
+use Phlow\Node\Start;
 use PHPUnit\Framework\TestCase;
 
 class TaskHandlerTest extends TestCase
@@ -66,6 +66,6 @@ class TaskHandlerTest extends TestCase
     public function testInvalidArguments()
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new CallbackProcessor())->process(new StartEvent(), new Exchange());
+        (new CallbackProcessor())->process(new Start(), new Exchange());
     }
 }

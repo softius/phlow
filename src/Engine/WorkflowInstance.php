@@ -3,13 +3,13 @@
 namespace Phlow\Engine;
 
 use Phlow\Node\Callback;
-use Phlow\Event\ErrorEvent;
+use Phlow\Node\Error;
 use Phlow\Processor\ExclusiveGatewayProcessor;
 use Phlow\Processor\Processor;
 use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\CallbackProcessor;
-use Phlow\Event\EndEvent;
-use Phlow\Event\StartEvent;
+use Phlow\Node\End;
+use Phlow\Node\Start;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
@@ -55,8 +55,8 @@ class WorkflowInstance implements LoggerAwareInterface
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
-        StartEvent::class => SingleConnectionProcessor::class,
-        ErrorEvent::class => SingleConnectionProcessor::class,
+        Start::class => SingleConnectionProcessor::class,
+        Error::class => SingleConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
         ExclusiveGateway::class => ExclusiveGatewayProcessor::class
     ];
@@ -75,7 +75,7 @@ class WorkflowInstance implements LoggerAwareInterface
     }
 
     /**
-     * Advances the Workflow to the next node until an End Event has been reached
+     * Advances the Workflow to the next node until an End Node has been reached
      * @throws UndefinedHandlerException
      */
     public function execute(): void
@@ -98,7 +98,7 @@ class WorkflowInstance implements LoggerAwareInterface
             $this->logger->info("Workflow execution initiated.");
         }
 
-        // Check that we haven't reach an EndEvent
+        // Check that we haven't reach an End
         if ($this->isCompleted()) {
             throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
         }
@@ -184,7 +184,7 @@ class WorkflowInstance implements LoggerAwareInterface
             sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
         );
         throw new UndefinedHandlerException(
-            sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
+            sprintf("The exception %s was thrown but no Error Node was found", get_class($exception))
         );
     }
 
@@ -199,7 +199,7 @@ class WorkflowInstance implements LoggerAwareInterface
             return;
         }
 
-        $startEvents = $this->workflow->getAllByClass(StartEvent::class);
+        $startEvents = $this->workflow->getAllByClass(Start::class);
         if (empty($startEvents)) {
             throw new InvalidStateException('Start event is missing.');
         }
@@ -213,13 +213,13 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     private function getErrorEvents(): array
     {
-        $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
+        $errorEvents = $this->workflow->getAllByClass(Error::class);
         if (empty($errorEvents)) {
             throw new InvalidStateException('Error events are missing');
         }
 
         $errorEventsMap = [];
-        /** @var ErrorEvent $errorEvent */
+        /** @var Error $errorEvent */
         foreach ($errorEvents as $errorEvent) {
             $errorEventsMap[$errorEvent->getExceptionClass()] = $errorEvent;
         }
@@ -233,7 +233,7 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     public function isCompleted(): bool
     {
-        return $this->currentNode instanceof EndEvent;
+        return $this->currentNode instanceof End;
     }
 
     /**
