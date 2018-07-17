@@ -3,10 +3,10 @@
 namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
+use Phlow\Connection\WorkflowConnection;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\CallbackProcessor;
 use Phlow\Event\StartEvent;
-use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
 class TaskHandlerTest extends TestCase

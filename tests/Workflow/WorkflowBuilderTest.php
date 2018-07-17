@@ -5,7 +5,7 @@ namespace Phlow\Tests\Workflow;
 use Phlow\Activity\Task;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowBuilder;
-use Phlow\Model\WorkflowConnection;
+use Phlow\Connection\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase

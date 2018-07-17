@@ -3,12 +3,12 @@
 namespace Phlow\Tests\Gateway;
 
 use Phlow\Activity\Task;
+use Phlow\Connection\WorkflowConnection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Processor\ExclusiveGatewayProcessor;
 use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Model\WorkflowConnection;
 use Phlow\Tests\Engine\DummyExpressionEngine;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase

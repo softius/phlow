@@ -1,6 +1,10 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Connection;
+
+use Phlow\Model\RenderableObject;
+use Phlow\Model\WorkflowObject;
+use Phlow\Model\WorkflowNode;
 
 class WorkflowConnection implements WorkflowObject
 {

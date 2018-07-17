@@ -6,7 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\UnmatchedConditionException;
-use Phlow\Model\WorkflowConnection;
+use Phlow\Connection\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
 class SingleConnectionHandlerTest extends TestCase

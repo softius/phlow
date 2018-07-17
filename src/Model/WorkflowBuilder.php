@@ -3,6 +3,7 @@
 namespace Phlow\Model;
 
 use Phlow\Activity\Task;
+use Phlow\Connection\WorkflowConnection;
 use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;

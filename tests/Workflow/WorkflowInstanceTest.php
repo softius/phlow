@@ -10,7 +10,7 @@ use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
 use Phlow\Engine\InvalidStateException;
-use Phlow\Model\WorkflowConnection;
+use Phlow\Connection\WorkflowConnection;
 use Phlow\Tests\Engine\TestLogger;
 use PHPUnit\Framework\TestCase;
 

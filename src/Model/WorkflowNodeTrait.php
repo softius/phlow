@@ -2,6 +2,8 @@
 
 namespace Phlow\Model;
 
+use Phlow\Connection\WorkflowConnection;
+
 trait WorkflowNodeTrait
 {
     private $incomingConnections = [];

@@ -2,6 +2,8 @@
 
 namespace Phlow\Model;
 
+use Phlow\Connection\WorkflowConnection;
+
 class RecursiveConnectionIterator extends \ArrayIterator implements \RecursiveIterator
 {
     public function __construct(WorkflowNode $workflowObject)

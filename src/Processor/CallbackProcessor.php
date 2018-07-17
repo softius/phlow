@@ -5,7 +5,7 @@ namespace Phlow\Processor;
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Model\WorkflowNode;
-use Phlow\Model\WorkflowConnection;
+use Phlow\Connection\WorkflowConnection;
 
 /**
  * Class CallbackProcessor
