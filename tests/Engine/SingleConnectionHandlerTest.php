@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class SingleConnectionHandlerTest extends TestCase
 {
-    public function testConnection()
+    public function testNextConnection()
     {
         $task = new Task();
         $nextTask = new Task();
@@ -22,6 +22,21 @@ class SingleConnectionHandlerTest extends TestCase
         $handler = new SingleConnectionHandler();
         $actualConnection = $handler->handle($task, new Exchange());
         $this->assertEquals($connection1, $actualConnection);
+    }
+
+    public function testParentConnection()
+    {
+        $task = new Task();
+        $parentTask = new Task();
+        $nextTask = new Task();
+        $parentNextTask = new Task();
+        $connection1 = new WorkflowConnection($task, $parentTask, WorkflowConnection::LABEL_PARENT);
+        $connection2 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+        $connection3 = new WorkflowConnection($parentTask, $parentNextTask, WorkflowConnection::LABEL_NEXT);
+
+        $handler = new SingleConnectionHandler();
+        $actualConnection = $handler->handle($task, new Exchange());
+        $this->assertEquals($connection3, $actualConnection);
     }
 
     public function testNoConnection()
