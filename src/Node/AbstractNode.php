@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 use Phlow\Connection\Connection;
 
-trait WorkflowNodeTrait
+abstract class AbstractNode implements Node
 {
     private $incomingConnections = [];
 
