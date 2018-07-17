@@ -2,7 +2,7 @@
 
 namespace Phlow\Connection;
 
-use Phlow\Model\RecursiveNodeIterator;
+use Phlow\Node\RecursiveIterator as RecursiveNodeIterator;
 use Phlow\Node\Node;
 
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator

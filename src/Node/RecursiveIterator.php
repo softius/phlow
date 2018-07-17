@@ -1,12 +1,11 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Node;
 
 use Phlow\Connection\Connection;
 use Phlow\Connection\RecursiveIterator as RecursiveConnectionIterator;
-use Phlow\Node\Node;
 
-class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
+class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
      * RecursiveIterator constructor.

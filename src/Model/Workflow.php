@@ -4,6 +4,7 @@ namespace Phlow\Model;
 
 use Phlow\Event\StartEvent;
 use Phlow\Node\Node;
+use Phlow\Node\RecursiveIterator;
 use Phlow\Renderer\Renderer;
 
 /**
@@ -81,7 +82,7 @@ class Workflow
 
     public function render(Renderer $viewer): string
     {
-        return (string) $viewer->render(new RecursiveNodeIterator(
+        return (string) $viewer->render(new RecursiveIterator(
             $this->getAllByClass(StartEvent::class)[0]
         ));
     }
