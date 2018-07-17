@@ -2,10 +2,10 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Model\ExecutableNode;
 use Phlow\Model\ExecutableNodeTrait;
 use Phlow\Model\RenderableObject;
 use Phlow\Node\AbstractNode;
+use Phlow\Node\Executable;
 
 /**
  * Class Task
@@ -13,7 +13,7 @@ use Phlow\Node\AbstractNode;
  * It represents a single unit of work within the Workflow, which usually can not be broken down into further steps.
  * @package Phlow\Activity
  */
-class Task extends AbstractNode implements Activity, ExecutableNode
+class Task extends AbstractNode implements Activity, Executable
 {
     use ExecutableNodeTrait;
     use RenderableObject;

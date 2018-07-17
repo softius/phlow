@@ -1,13 +1,13 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Node;
 
 /**
- * Interface ExecutableNode
+ * Interface Executable
  * Indicates a Workflow Node that can be executed using the provided callback
  * @package Phlow\Model
  */
-interface ExecutableNode
+interface Executable
 {
     /**
      * Returns the callback associated with this Task
