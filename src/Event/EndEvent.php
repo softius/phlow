@@ -2,7 +2,7 @@
 
 namespace Phlow\Event;
 
-use Phlow\Model\RenderableNode;
+use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -13,5 +13,5 @@ use Phlow\Model\WorkflowNodeTrait;
 class EndEvent implements Event
 {
     use WorkflowNodeTrait;
-    use RenderableNode;
+    use RenderableObject;
 }

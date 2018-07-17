@@ -4,7 +4,7 @@ namespace Phlow\Model;
 
 class WorkflowConnection implements WorkflowObject
 {
-    use RenderableNode {
+    use RenderableObject {
         __toString as private getClassString;
     }
 

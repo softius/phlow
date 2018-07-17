@@ -4,7 +4,7 @@ namespace Phlow\Activity;
 
 use Phlow\Model\ExecutableNode;
 use Phlow\Model\ExecutableNodeTrait;
-use Phlow\Model\RenderableNode;
+use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -17,5 +17,5 @@ class Task implements Activity, ExecutableNode
 {
     use WorkflowNodeTrait;
     use ExecutableNodeTrait;
-    use RenderableNode;
+    use RenderableObject;
 }

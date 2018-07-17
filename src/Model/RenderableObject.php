@@ -7,7 +7,7 @@ namespace Phlow\Model;
  * Can be used to provide a default implementation for __toString magic method
  * @package Phlow\Model
  */
-trait RenderableNode
+trait RenderableObject
 {
     public function __toString()
     {
