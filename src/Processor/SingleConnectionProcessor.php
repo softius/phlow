@@ -2,7 +2,7 @@
 
 namespace Phlow\Processor;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Model\WorkflowNode;
 
@@ -19,19 +19,19 @@ class SingleConnectionProcessor implements Processor
      * If there are more than one outgoing connection, they will be ignored.
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowConnection
+     * @return Connection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): Connection
     {
-        if ($workflowNode->hasOutgoingConnections(WorkflowConnection::LABEL_PARENT)) {
-            $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_PARENT);
-            /** @var WorkflowConnection $connection */
+        if ($workflowNode->hasOutgoingConnections(Connection::LABEL_PARENT)) {
+            $connections = $workflowNode->getOutgoingConnections(Connection::LABEL_PARENT);
+            /** @var Connection $connection */
             $connection = $connections[0];
             return (new SingleConnectionProcessor())->handle($connection->getTarget(), $exchange);
         }
 
-        if ($workflowNode->hasOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {
-            $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_NEXT);
+        if ($workflowNode->hasOutgoingConnections(Connection::LABEL_NEXT)) {
+            $connections = $workflowNode->getOutgoingConnections(Connection::LABEL_NEXT);
             return $connections[0];
         }
 

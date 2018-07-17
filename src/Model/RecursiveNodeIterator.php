@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Connection\RecursiveIterator as RecursiveConnectionIterator;
 
 class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
@@ -15,8 +15,8 @@ class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
     {
         $items = [$node];
 
-        while (!empty($node) && $node->hasOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {
-            $connections = $node->getOutgoingConnections(WorkflowConnection::LABEL_NEXT);
+        while (!empty($node) && $node->hasOutgoingConnections(Connection::LABEL_NEXT)) {
+            $connections = $node->getOutgoingConnections(Connection::LABEL_NEXT);
             $node = $connections[0]->getTarget();
             $items[] = $node;
         }
@@ -32,7 +32,7 @@ class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function hasChildren()
     {
-        return $this->current()->hasOutgoingConnections(WorkflowConnection::LABEL_CHILD);
+        return $this->current()->hasOutgoingConnections(Connection::LABEL_CHILD);
     }
 
     /**

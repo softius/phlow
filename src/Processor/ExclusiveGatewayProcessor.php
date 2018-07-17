@@ -2,7 +2,7 @@
 
 namespace Phlow\Processor;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Model\WorkflowNode;
@@ -18,12 +18,12 @@ class ExclusiveGatewayProcessor implements Processor
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
      * @param WorkflowNode $workflowNode
      * @param Exchange $exchange
-     * @return WorkflowConnection
+     * @return Connection
      */
-    public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
+    public function handle(WorkflowNode $workflowNode, Exchange $exchange): Connection
     {
-        /** @var WorkflowConnection $connection */
-        foreach ($workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_CHILD) as $connection) {
+        /** @var Connection $connection */
+        foreach ($workflowNode->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {
             if (!$connection->isConditional()) {
                 continue;
             }

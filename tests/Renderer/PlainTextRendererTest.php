@@ -44,9 +44,9 @@ class PlainTextRendererTest extends TestCase
         $expectedOutput = implode(PHP_EOL, [
             '|-StartEvent',
             '|-ExclusiveGateway',
-            '| |-WorkflowConnection (isEven)',
+            '| |-Connection (isEven)',
             '| | \-Task',
-            '| \-WorkflowConnection (true)',
+            '| \-Connection (true)',
             '|   \-Task',
             '\-EndEvent',
         ]) . PHP_EOL;

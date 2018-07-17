@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 
 trait WorkflowNodeTrait
 {
@@ -10,12 +10,12 @@ trait WorkflowNodeTrait
 
     private $outgoingConnections = [];
 
-    public function addOutgoingConnection(WorkflowConnection $connection): void
+    public function addOutgoingConnection(Connection $connection): void
     {
         $this->outgoingConnections[] = $connection;
     }
 
-    public function addIncomingConnection(WorkflowConnection $connection): void
+    public function addIncomingConnection(Connection $connection): void
     {
         $this->incomingConnections[] = $connection;
     }
@@ -48,7 +48,7 @@ trait WorkflowNodeTrait
             return array_values(
                 array_filter(
                     $connections,
-                    function (WorkflowConnection $connection) use ($label) {
+                    function (Connection $connection) use ($label) {
                         return $connection->hasLabel($label);
                     }
                 )

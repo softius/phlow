@@ -3,7 +3,7 @@
 namespace Phlow\Tests\Gateway;
 
 use Phlow\Activity\Task;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Processor\ExclusiveGatewayProcessor;
@@ -19,8 +19,8 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $nextTask2 = new Task();
 
         $gateway = new ExclusiveGateway();
-        $connection1 = new WorkflowConnection($gateway, $nextTask, WorkflowConnection::LABEL_CHILD, 'num < 10');
-        $connection2 = new WorkflowConnection($gateway, $nextTask2, WorkflowConnection::LABEL_CHILD, 'num > 100');
+        $connection1 = new Connection($gateway, $nextTask, Connection::LABEL_CHILD, 'num < 10');
+        $connection2 = new Connection($gateway, $nextTask2, Connection::LABEL_CHILD, 'num > 100');
 
         $handler = new ExclusiveGatewayProcessor();
 

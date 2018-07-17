@@ -6,7 +6,7 @@ use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\UnmatchedConditionException;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use PHPUnit\Framework\TestCase;
 
 class SingleConnectionHandlerTest extends TestCase
@@ -16,8 +16,8 @@ class SingleConnectionHandlerTest extends TestCase
         $task = new Task();
         $nextTask = new Task();
         $anotherTask = new Task();
-        $connection1 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
-        $connection2 = new WorkflowConnection($task, $anotherTask, WorkflowConnection::LABEL_NEXT);
+        $connection1 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
+        $connection2 = new Connection($task, $anotherTask, Connection::LABEL_NEXT);
 
         $handler = new SingleConnectionProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
@@ -30,9 +30,9 @@ class SingleConnectionHandlerTest extends TestCase
         $parentTask = new Task();
         $nextTask = new Task();
         $parentNextTask = new Task();
-        $connection1 = new WorkflowConnection($task, $parentTask, WorkflowConnection::LABEL_PARENT);
-        $connection2 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
-        $connection3 = new WorkflowConnection($parentTask, $parentNextTask, WorkflowConnection::LABEL_NEXT);
+        $connection1 = new Connection($task, $parentTask, Connection::LABEL_PARENT);
+        $connection2 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
+        $connection3 = new Connection($parentTask, $parentNextTask, Connection::LABEL_NEXT);
 
         $handler = new SingleConnectionProcessor();
         $actualConnection = $handler->handle($task, new Exchange());

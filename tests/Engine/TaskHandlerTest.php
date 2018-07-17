@@ -3,7 +3,7 @@
 namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Processor\CallbackProcessor;
 use Phlow\Event\StartEvent;
@@ -15,7 +15,7 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
@@ -26,7 +26,7 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $task->addCallback(function ($in) {
             $in['num']++;
@@ -35,7 +35,7 @@ class TaskHandlerTest extends TestCase
 
         $handler = new CallbackProcessor();
         $exchange = new Exchange(['num' => 1]);
-        $actualConnection = $handler->handle($task, $exchange, WorkflowConnection::LABEL_NEXT);
+        $actualConnection = $handler->handle($task, $exchange, Connection::LABEL_NEXT);
         $this->assertEquals($connection, $actualConnection);
         $this->assertEquals(2, $exchange->getOut()['num']);
     }
@@ -44,7 +44,7 @@ class TaskHandlerTest extends TestCase
     {
         $task = new Task();
         $nextTask = new Task();
-        $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
+        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
         $actualConnection = $handler->handle($task, new Exchange());

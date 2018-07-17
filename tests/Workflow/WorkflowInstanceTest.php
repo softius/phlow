@@ -10,7 +10,7 @@ use Phlow\Model\Workflow;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Engine\WorkflowInstance;
 use Phlow\Engine\InvalidStateException;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Tests\Engine\TestLogger;
 use PHPUnit\Framework\TestCase;
 
@@ -177,7 +177,7 @@ class WorkflowInstanceTest extends TestCase
         $this->assertEquals(3, count($instance->getExecutionPath()));
         $path = iterator_to_array($instance->getExecutionPath());
         $this->assertInstanceOf(StartEvent::class, $path[0]);
-        $this->assertInstanceOf(WorkflowConnection::class, $path[1]);
+        $this->assertInstanceOf(Connection::class, $path[1]);
         $this->assertInstanceOf(EndEvent::class, $path[2]);
     }
 

@@ -3,7 +3,7 @@
 namespace Phlow\Model;
 
 use Phlow\Activity\Task;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use Phlow\Event\EndEvent;
 use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
@@ -76,9 +76,9 @@ class WorkflowBuilder
         if ($this->linkNodesFor instanceof WorkflowNode) {
             $this->connectGatewayPaths($node);
         } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Gateway) {
-            new WorkflowConnection($this->nodes->peek(), $node, WorkflowConnection::LABEL_CHILD, $this->lastExpression);
+            new Connection($this->nodes->peek(), $node, Connection::LABEL_CHILD, $this->lastExpression);
         } elseif (!$this->nodes->isEmpty()) {
-            new WorkflowConnection($this->nodes->peek(), $node, WorkflowConnection::LABEL_NEXT, $this->lastExpression);
+            new Connection($this->nodes->peek(), $node, Connection::LABEL_NEXT, $this->lastExpression);
         }
 
         $this->workflow->add($node);
@@ -95,10 +95,10 @@ class WorkflowBuilder
     private function connectGatewayPaths(WorkflowNode $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
-            new WorkflowConnection($source, $this->linkNodesFor, WorkflowConnection::LABEL_PARENT);
+            new Connection($source, $this->linkNodesFor, Connection::LABEL_PARENT);
         }
 
-        new WorkflowConnection($this->linkNodesFor, $target, WorkflowConnection::LABEL_NEXT);
+        new Connection($this->linkNodesFor, $target, Connection::LABEL_NEXT);
 
         $this->unlinkedNodes->remove($this->linkNodesFor);
         $this->linkNodesFor = null;

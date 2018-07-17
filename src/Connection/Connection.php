@@ -6,7 +6,7 @@ use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowObject;
 use Phlow\Model\WorkflowNode;
 
-class WorkflowConnection implements WorkflowObject
+class Connection implements WorkflowObject
 {
     use RenderableObject {
         __toString as private getClassString;

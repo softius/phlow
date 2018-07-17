@@ -12,9 +12,9 @@ class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
         $items = [];
 
         /**
-         * @var WorkflowConnection $connection
+         * @var Connection $connection
          */
-        foreach ($workflowObject->getOutgoingConnections(WorkflowConnection::LABEL_CHILD) as $connection) {
+        foreach ($workflowObject->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {
             $items[] = $connection;
         }
 

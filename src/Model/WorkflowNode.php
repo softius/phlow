@@ -1,7 +1,7 @@
 <?php
 namespace Phlow\Model;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 
 /**
  * Interface WorkflowNode
@@ -9,9 +9,9 @@ use Phlow\Connection\WorkflowConnection;
  */
 interface WorkflowNode extends WorkflowObject
 {
-    public function addOutgoingConnection(WorkflowConnection $connection): void;
+    public function addOutgoingConnection(Connection $connection): void;
 
-    public function addIncomingConnection(WorkflowConnection $connection): void;
+    public function addIncomingConnection(Connection $connection): void;
 
     public function getOutgoingConnections(int $label = null): array;
 

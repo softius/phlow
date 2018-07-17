@@ -5,7 +5,7 @@ namespace Phlow\Tests\Workflow;
 use Phlow\Activity\Task;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowBuilder;
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Connection\Connection;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase
@@ -54,8 +54,8 @@ class WorkflowBuilderTest extends TestCase
         $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
         $this->assertTrue($node instanceof ExclusiveGateway);
         $this->assertEquals(3, count($node->getOutgoingconnections()));
-        $this->assertEquals(2, count($node->getOutgoingconnections(WorkflowConnection::LABEL_CHILD)));
-        $this->assertEquals(1, count($node->getOutgoingconnections(WorkflowConnection::LABEL_NEXT)));
+        $this->assertEquals(2, count($node->getOutgoingconnections(Connection::LABEL_CHILD)));
+        $this->assertEquals(1, count($node->getOutgoingconnections(Connection::LABEL_NEXT)));
     }
 
     public function testNestedConditionalFlows()
@@ -83,7 +83,7 @@ class WorkflowBuilderTest extends TestCase
         $node = $workflow->getAllByClass(ExclusiveGateway::class)[1];
         $this->assertTrue($node instanceof ExclusiveGateway);
         $this->assertEquals(4, count($node->getOutgoingconnections()));
-        $this->assertEquals(3, count($node->getOutgoingconnections(WorkflowConnection::LABEL_CHILD)));
-        $this->assertEquals(1, count($node->getOutgoingconnections(WorkflowConnection::LABEL_NEXT)));
+        $this->assertEquals(3, count($node->getOutgoingconnections(Connection::LABEL_CHILD)));
+        $this->assertEquals(1, count($node->getOutgoingconnections(Connection::LABEL_NEXT)));
     }
 }
