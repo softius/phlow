@@ -1,10 +1,11 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Connection;
 
-use Phlow\Connection\WorkflowConnection;
+use Phlow\Model\RecursiveNodeIterator;
+use Phlow\Model\WorkflowNode;
 
-class RecursiveConnectionIterator extends \ArrayIterator implements \RecursiveIterator
+class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
     public function __construct(WorkflowNode $workflowObject)
     {
