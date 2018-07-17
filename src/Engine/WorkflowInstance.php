@@ -149,7 +149,7 @@ class WorkflowInstance implements LoggerAwareInterface
             /** @var Processor $handler */
             $handler = new $handlerClass;
 
-            $connection = $handler->handle($this->current(), $this->exchange);
+            $connection = $handler->process($this->current(), $this->exchange);
             $this->executionPath->add($connection);
             $this->nextNode = $connection->getTarget();
 

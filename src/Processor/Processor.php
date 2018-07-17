@@ -21,5 +21,5 @@ interface Processor
      * @param Exchange $exchange
      * @return Connection
      */
-    public function handle(Node $workflowNode, Exchange $exchange): Connection;
+    public function process(Node $workflowNode, Exchange $exchange): Connection;
 }

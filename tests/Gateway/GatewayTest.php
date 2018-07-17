@@ -25,14 +25,14 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $handler = new ExclusiveGatewayProcessor();
 
         $exchange = new Exchange((object) ['num' => 5]);
-        $this->assertEquals($connection1, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection1, $handler->process($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 50]);
         $this->expectException(UnmatchedConditionException::class);
-        $this->assertEquals($connection1, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection1, $handler->process($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 500]);
-        $this->assertEquals($connection2, $handler->handle($gateway, $exchange));
+        $this->assertEquals($connection2, $handler->process($gateway, $exchange));
     }
 
     public function testDefaultExpressionEngine()

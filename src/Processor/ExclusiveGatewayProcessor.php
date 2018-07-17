@@ -20,7 +20,7 @@ class ExclusiveGatewayProcessor implements Processor
      * @param Exchange $exchange
      * @return Connection
      */
-    public function handle(Node $workflowNode, Exchange $exchange): Connection
+    public function process(Node $workflowNode, Exchange $exchange): Connection
     {
         /** @var Connection $connection */
         foreach ($workflowNode->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {

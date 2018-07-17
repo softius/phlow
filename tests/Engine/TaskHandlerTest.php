@@ -18,7 +18,7 @@ class TaskHandlerTest extends TestCase
         $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
-        $actualConnection = $handler->handle($task, new Exchange());
+        $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
 
@@ -35,7 +35,7 @@ class TaskHandlerTest extends TestCase
 
         $handler = new CallbackProcessor();
         $exchange = new Exchange(['num' => 1]);
-        $actualConnection = $handler->handle($task, $exchange, Connection::LABEL_NEXT);
+        $actualConnection = $handler->process($task, $exchange, Connection::LABEL_NEXT);
         $this->assertEquals($connection, $actualConnection);
         $this->assertEquals(2, $exchange->getOut()['num']);
     }
@@ -47,7 +47,7 @@ class TaskHandlerTest extends TestCase
         $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
 
         $handler = new CallbackProcessor();
-        $actualConnection = $handler->handle($task, new Exchange());
+        $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
 
@@ -60,12 +60,12 @@ class TaskHandlerTest extends TestCase
 
         $handler = new CallbackProcessor();
         $this->expectExceptionMessage("testErrorHandling");
-        $handler->handle($task, new Exchange());
+        $handler->process($task, new Exchange());
     }
 
     public function testInvalidArguments()
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new CallbackProcessor())->handle(new StartEvent(), new Exchange());
+        (new CallbackProcessor())->process(new StartEvent(), new Exchange());
     }
 }

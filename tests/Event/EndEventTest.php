@@ -16,6 +16,6 @@ class EndEventTest extends TestCase
         $handler = new SingleConnectionProcessor();
 
         $this->expectException(UnmatchedConditionException::class);
-        $handler->handle($task, new Exchange());
+        $handler->process($task, new Exchange());
     }
 }

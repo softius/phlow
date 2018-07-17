@@ -21,13 +21,13 @@ class SingleConnectionProcessor implements Processor
      * @param Exchange $exchange
      * @return Connection
      */
-    public function handle(Node $workflowNode, Exchange $exchange): Connection
+    public function process(Node $workflowNode, Exchange $exchange): Connection
     {
         if ($workflowNode->hasOutgoingConnections(Connection::LABEL_PARENT)) {
             $connections = $workflowNode->getOutgoingConnections(Connection::LABEL_PARENT);
             /** @var Connection $connection */
             $connection = $connections[0];
-            return (new SingleConnectionProcessor())->handle($connection->getTarget(), $exchange);
+            return (new SingleConnectionProcessor())->process($connection->getTarget(), $exchange);
         }
 
         if ($workflowNode->hasOutgoingConnections(Connection::LABEL_NEXT)) {

@@ -20,7 +20,7 @@ class SingleConnectionHandlerTest extends TestCase
         $connection2 = new Connection($task, $anotherTask, Connection::LABEL_NEXT);
 
         $handler = new SingleConnectionProcessor();
-        $actualConnection = $handler->handle($task, new Exchange());
+        $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection1, $actualConnection);
     }
 
@@ -35,7 +35,7 @@ class SingleConnectionHandlerTest extends TestCase
         $connection3 = new Connection($parentTask, $parentNextTask, Connection::LABEL_NEXT);
 
         $handler = new SingleConnectionProcessor();
-        $actualConnection = $handler->handle($task, new Exchange());
+        $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection3, $actualConnection);
     }
 
@@ -43,6 +43,6 @@ class SingleConnectionHandlerTest extends TestCase
     {
         $handler = new SingleConnectionProcessor();
         $this->expectException(UnmatchedConditionException::class);
-        $handler->handle(new Task(), new Exchange());
+        $handler->process(new Task(), new Exchange());
     }
 }

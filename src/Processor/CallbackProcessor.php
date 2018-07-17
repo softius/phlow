@@ -22,7 +22,7 @@ class CallbackProcessor implements Processor
      * @return Connection
      * @throws \Exception
      */
-    public function handle(Node $workflowNode, Exchange $exchange): Connection
+    public function process(Node $workflowNode, Exchange $exchange): Connection
     {
         if (!($workflowNode instanceof Task)) {
             throw new \InvalidArgumentException("A workflow node of type Task was expected.");
@@ -39,6 +39,6 @@ class CallbackProcessor implements Processor
         }
 
         // Return next node
-        return (new SingleConnectionProcessor())->handle($workflowNode, $exchange);
+        return (new SingleConnectionProcessor())->process($workflowNode, $exchange);
     }
 }
