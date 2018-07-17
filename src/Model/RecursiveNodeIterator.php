@@ -12,7 +12,8 @@ class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
     {
         $items = [$node];
 
-        while (!empty($node) && $connections = $node->getOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {
+        while (!empty($node) && $node->hasOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {
+            $connections = $node->getOutgoingConnections(WorkflowConnection::LABEL_NEXT);
             $node = $connections[0]->getTarget();
             $items[] = $node;
         }
@@ -28,7 +29,7 @@ class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function hasChildren()
     {
-        return count($this->current()->getOutgoingConnections(WorkflowConnection::LABEL_CHILD)) > 0;
+        return $this->current()->hasOutgoingConnections(WorkflowConnection::LABEL_CHILD);
     }
 
     /**

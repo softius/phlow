@@ -14,4 +14,8 @@ interface WorkflowNode extends WorkflowObject
     public function getOutgoingConnections(int $label = null): array;
 
     public function getIncomingConnections(int $label = null): array;
+
+    public function hasOutgoingConnections(int $label = null): bool;
+
+    public function hasIncomingConnections(int $label = null): bool;
 }
