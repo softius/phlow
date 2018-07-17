@@ -2,10 +2,10 @@
 
 namespace Phlow\Activity;
 
-use Phlow\Model\ExecutableNodeTrait;
 use Phlow\Model\RenderableObject;
 use Phlow\Node\AbstractNode;
 use Phlow\Node\Executable;
+use Phlow\Node\ExecutableTrait;
 
 /**
  * Class Task
@@ -15,6 +15,6 @@ use Phlow\Node\Executable;
  */
 class Task extends AbstractNode implements Activity, Executable
 {
-    use ExecutableNodeTrait;
+    use ExecutableTrait;
     use RenderableObject;
 }

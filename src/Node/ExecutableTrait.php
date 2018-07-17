@@ -1,8 +1,8 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Node;
 
-trait ExecutableNodeTrait
+trait ExecutableTrait
 {
 
     /**
