@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Handler;
+namespace Phlow\Processor;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
@@ -8,11 +8,11 @@ use Phlow\Model\WorkflowNode;
 use Phlow\Model\WorkflowConnection;
 
 /**
- * Class TaskHandler
+ * Class CallbackProcessor
  * Executes the callback associated with the provided Workflow Node
  * @package Phlow\Handler
  */
-class ExecutableHandler implements Handler
+class CallbackProcessor implements Handler
 {
 
     /**
@@ -39,6 +39,6 @@ class ExecutableHandler implements Handler
         }
 
         // Return next node
-        return (new SingleConnectionHandler())->handle($workflowNode, $exchange);
+        return (new SingleConnectionProcessor())->handle($workflowNode, $exchange);
     }
 }

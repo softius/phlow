@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Handler;
+namespace Phlow\Processor;
 
 class UnmatchedConditionException extends \RuntimeException
 {

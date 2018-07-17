@@ -5,8 +5,8 @@ namespace Phlow\Tests\Gateway;
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Handler\ConditionalConnectionHandler;
-use Phlow\Handler\UnmatchedConditionException;
+use Phlow\Processor\ExclusiveGatewayProcessor;
+use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Tests\Engine\DummyExpressionEngine;
@@ -22,7 +22,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $connection1 = new WorkflowConnection($gateway, $nextTask, WorkflowConnection::LABEL_CHILD, 'num < 10');
         $connection2 = new WorkflowConnection($gateway, $nextTask2, WorkflowConnection::LABEL_CHILD, 'num > 100');
 
-        $handler = new ConditionalConnectionHandler();
+        $handler = new ExclusiveGatewayProcessor();
 
         $exchange = new Exchange((object) ['num' => 5]);
         $this->assertEquals($connection1, $handler->handle($gateway, $exchange));
@@ -37,13 +37,13 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 
     public function testDefaultExpressionEngine()
     {
-        $gateway = new ConditionalConnectionHandler();
+        $gateway = new ExclusiveGatewayProcessor();
         $this->assertTrue($gateway->getExpressionEngine() instanceof ExpressionEngine);
     }
 
     public function testCustomExpressionEngine()
     {
-        $gateway = new ConditionalConnectionHandler();
+        $gateway = new ExclusiveGatewayProcessor();
         $engine = new DummyExpressionEngine();
         $gateway->setExpressionEngine($engine);
         $this->assertEquals($engine, $gateway->getExpressionEngine());

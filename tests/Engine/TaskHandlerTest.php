@@ -4,7 +4,7 @@ namespace Phlow\Tests\Activity;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Handler\ExecutableHandler;
+use Phlow\Processor\CallbackProcessor;
 use Phlow\Event\StartEvent;
 use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ class TaskHandlerTest extends TestCase
         $nextTask = new Task();
         $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
 
-        $handler = new ExecutableHandler();
+        $handler = new CallbackProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
@@ -33,7 +33,7 @@ class TaskHandlerTest extends TestCase
             return $in;
         });
 
-        $handler = new ExecutableHandler();
+        $handler = new CallbackProcessor();
         $exchange = new Exchange(['num' => 1]);
         $actualConnection = $handler->handle($task, $exchange, WorkflowConnection::LABEL_NEXT);
         $this->assertEquals($connection, $actualConnection);
@@ -46,7 +46,7 @@ class TaskHandlerTest extends TestCase
         $nextTask = new Task();
         $connection = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
 
-        $handler = new ExecutableHandler();
+        $handler = new CallbackProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
@@ -58,7 +58,7 @@ class TaskHandlerTest extends TestCase
             throw new \Exception("testErrorHandling");
         });
 
-        $handler = new ExecutableHandler();
+        $handler = new CallbackProcessor();
         $this->expectExceptionMessage("testErrorHandling");
         $handler->handle($task, new Exchange());
     }
@@ -66,6 +66,6 @@ class TaskHandlerTest extends TestCase
     public function testInvalidArguments()
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new ExecutableHandler())->handle(new StartEvent(), new Exchange());
+        (new CallbackProcessor())->handle(new StartEvent(), new Exchange());
     }
 }

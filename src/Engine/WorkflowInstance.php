@@ -4,10 +4,10 @@ namespace Phlow\Engine;
 
 use Phlow\Activity\Task;
 use Phlow\Event\ErrorEvent;
-use Phlow\Handler\ConditionalConnectionHandler;
-use Phlow\Handler\Handler;
-use Phlow\Handler\SingleConnectionHandler;
-use Phlow\Handler\ExecutableHandler;
+use Phlow\Processor\ExclusiveGatewayProcessor;
+use Phlow\Processor\Handler;
+use Phlow\Processor\SingleConnectionProcessor;
+use Phlow\Processor\CallbackProcessor;
 use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
@@ -55,10 +55,10 @@ class WorkflowInstance implements LoggerAwareInterface
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
-        StartEvent::class => SingleConnectionHandler::class,
-        ErrorEvent::class => SingleConnectionHandler::class,
-        Task::class => ExecutableHandler::class,
-        ExclusiveGateway::class => ConditionalConnectionHandler::class
+        StartEvent::class => SingleConnectionProcessor::class,
+        ErrorEvent::class => SingleConnectionProcessor::class,
+        Task::class => CallbackProcessor::class,
+        ExclusiveGateway::class => ExclusiveGatewayProcessor::class
     ];
 
     /**

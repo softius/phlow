@@ -1,17 +1,17 @@
 <?php
 
-namespace Phlow\Handler;
+namespace Phlow\Processor;
 
 use Phlow\Engine\Exchange;
 use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
 
 /**
- * Class SingleConnectionHandler
+ * Class SingleConnectionProcessor
  * Suggests the next WorkflowNode by taking the first of the outgoing connections
  * @package Phlow\Handler
  */
-class SingleConnectionHandler implements Handler
+class SingleConnectionProcessor implements Handler
 {
 
     /**
@@ -27,7 +27,7 @@ class SingleConnectionHandler implements Handler
             $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_PARENT);
             /** @var WorkflowConnection $connection */
             $connection = $connections[0];
-            return (new SingleConnectionHandler())->handle($connection->getTarget(), $exchange);
+            return (new SingleConnectionProcessor())->handle($connection->getTarget(), $exchange);
         }
 
         if ($workflowNode->hasOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {

@@ -4,8 +4,8 @@ namespace Phlow\Tests\Engine;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Handler\SingleConnectionHandler;
-use Phlow\Handler\UnmatchedConditionException;
+use Phlow\Processor\SingleConnectionProcessor;
+use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Model\WorkflowConnection;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class SingleConnectionHandlerTest extends TestCase
         $connection1 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
         $connection2 = new WorkflowConnection($task, $anotherTask, WorkflowConnection::LABEL_NEXT);
 
-        $handler = new SingleConnectionHandler();
+        $handler = new SingleConnectionProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
         $this->assertEquals($connection1, $actualConnection);
     }
@@ -34,14 +34,14 @@ class SingleConnectionHandlerTest extends TestCase
         $connection2 = new WorkflowConnection($task, $nextTask, WorkflowConnection::LABEL_NEXT);
         $connection3 = new WorkflowConnection($parentTask, $parentNextTask, WorkflowConnection::LABEL_NEXT);
 
-        $handler = new SingleConnectionHandler();
+        $handler = new SingleConnectionProcessor();
         $actualConnection = $handler->handle($task, new Exchange());
         $this->assertEquals($connection3, $actualConnection);
     }
 
     public function testNoConnection()
     {
-        $handler = new SingleConnectionHandler();
+        $handler = new SingleConnectionProcessor();
         $this->expectException(UnmatchedConditionException::class);
         $handler->handle(new Task(), new Exchange());
     }

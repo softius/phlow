@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Handler;
+namespace Phlow\Processor;
 
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
@@ -8,11 +8,11 @@ use Phlow\Model\WorkflowConnection;
 use Phlow\Model\WorkflowNode;
 
 /**
- * Class ConditionalConnectionHandler
+ * Class ExclusiveGatewayProcessor
  * Suggests the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Handler
  */
-class ConditionalConnectionHandler implements Handler
+class ExclusiveGatewayProcessor implements Handler
 {
     /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
