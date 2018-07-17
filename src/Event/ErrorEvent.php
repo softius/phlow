@@ -4,6 +4,7 @@ namespace Phlow\Event;
 
 use Phlow\Model\ExceptionHandlerNode;
 use Phlow\Model\ExceptionHandlerTrait;
+use Phlow\Model\RenderableNode;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -16,8 +17,5 @@ class ErrorEvent implements Event, ExceptionHandlerNode
     use WorkflowNodeTrait;
     use ExceptionHandlerTrait;
 
-    public function __toString()
-    {
-        return 'ErrorEvent';
-    }
+    use RenderableNode;
 }

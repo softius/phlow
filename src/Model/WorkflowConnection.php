@@ -4,6 +4,10 @@ namespace Phlow\Model;
 
 class WorkflowConnection implements WorkflowObject
 {
+    use RenderableNode {
+        __toString as private getClassString;
+    }
+
     private $source;
     private $target;
     private $condition;
@@ -53,7 +57,8 @@ class WorkflowConnection implements WorkflowObject
 
     public function __toString()
     {
-        return ($this->isConditional()) ? sprintf("WorkflowConnection (%s)", $this->getCondition()) : "WorkflowConnection";
+        $default = $this->getClassString();
+        return ($this->isConditional()) ? sprintf("%s (%s)", $default, $this->getCondition()) : $default;
     }
 
     public function hasLabel(int $label): bool

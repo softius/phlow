@@ -4,6 +4,7 @@ namespace Phlow\Activity;
 
 use Phlow\Model\ExecutableNode;
 use Phlow\Model\ExecutableNodeTrait;
+use Phlow\Model\RenderableNode;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -16,9 +17,5 @@ class Task implements Activity, ExecutableNode
 {
     use WorkflowNodeTrait;
     use ExecutableNodeTrait;
-
-    public function __toString()
-    {
-        return 'Task';
-    }
+    use RenderableNode;
 }
