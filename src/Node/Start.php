@@ -3,8 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Model\RenderableObject;
-use Phlow\Node\WorkflowNodeTrait;
-use Phlow\Node\AbstractNode;
 
 /**
  * Class Start

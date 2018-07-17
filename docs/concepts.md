@@ -18,4 +18,4 @@ An activity denotes something that must be _done_.
 ## Gateways
 A gateway denotes forking and merging of workflow paths. 
 
-* **Exclusive Gateway**: Represents alternative flows in a process. Only one of the alternative paths can be taken.
+* **Exclusive Node**: Represents alternative flows in a process. Only one of the alternative paths can be taken.

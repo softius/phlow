@@ -8,7 +8,7 @@ use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
 use Phlow\Processor\ExclusiveGatewayProcessor;
 use Phlow\Processor\UnmatchedConditionException;
-use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Node\Choice;
 use Phlow\Tests\Engine\DummyExpressionEngine;
 
 class GatewayTest extends \PHPUnit\Framework\TestCase
@@ -18,7 +18,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         $nextTask = new Callback();
         $nextTask2 = new Callback();
 
-        $gateway = new ExclusiveGateway();
+        $gateway = new Choice();
         $connection1 = new Connection($gateway, $nextTask, Connection::LABEL_CHILD, 'num < 10');
         $connection2 = new Connection($gateway, $nextTask2, Connection::LABEL_CHILD, 'num > 100');
 

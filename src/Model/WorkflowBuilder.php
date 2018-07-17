@@ -7,8 +7,8 @@ use Phlow\Connection\Connection;
 use Phlow\Node\End;
 use Phlow\Node\Error;
 use Phlow\Node\Start;
-use Phlow\Gateway\ExclusiveGateway;
-use Phlow\Gateway\Gateway;
+use Phlow\Node\Choice;
+use Phlow\Node\Conditional;
 use Phlow\Node\Node;
 use Phlow\Util\HashMap;
 use Phlow\Util\Stack;
@@ -76,7 +76,7 @@ class WorkflowBuilder
     {
         if ($this->linkNodesFor instanceof Node) {
             $this->connectGatewayPaths($node);
-        } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Gateway) {
+        } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Conditional) {
             new Connection($this->nodes->peek(), $node, Connection::LABEL_CHILD, $this->lastExpression);
         } elseif (!$this->nodes->isEmpty()) {
             new Connection($this->nodes->peek(), $node, Connection::LABEL_NEXT, $this->lastExpression);
@@ -90,7 +90,7 @@ class WorkflowBuilder
 
     /**
      * Helper method.
-     * Establish a Connection between the Gateway's unlinked nodes and the parent Gateway
+     * Establish a Connection between the Node's unlinked nodes and the parent Node
      * @param Node $target
      */
     private function connectGatewayPaths(Node $target)
@@ -115,11 +115,11 @@ class WorkflowBuilder
     private function processGatewayPath(): void
     {
         $node = $this->nodes->peek();
-        while (!$this->nodes->isEmpty() && !($this->nodes->peek() instanceof Gateway)) {
+        while (!$this->nodes->isEmpty() && !($this->nodes->peek() instanceof Conditional)) {
             $this->nodes->pop();
         }
 
-        if (!($node instanceof Gateway) && !$this->nodes->isEmpty()) {
+        if (!($node instanceof Conditional) && !$this->nodes->isEmpty()) {
             $gateway = $this->nodes->peek();
 
             $nodes = $this->unlinkedNodes->exists($gateway) ? $this->unlinkedNodes->get($gateway) : [];
@@ -162,7 +162,7 @@ class WorkflowBuilder
     }
 
     /**
-     * It closes the most recent created Gateway which is still 'opened'.
+     * It closes the most recent created Node which is still 'opened'.
      * Otherwise, it creates an End instance for this workflow.
      * @return WorkflowBuilder
      */
@@ -174,8 +174,8 @@ class WorkflowBuilder
         }
 
         // A new End must be created in the following cases
-        // * There are no more unlinked nodes i.e. no Gateway was used in this Workflow
-        // * There is only one Gateway pending which must be linked with an End
+        // * There are no more unlinked nodes i.e. no Node was used in this Workflow
+        // * There is only one Node pending which must be linked with an End
         if (1 >= $this->unlinkedNodes->count()) {
             $this->add(new End());
         }
@@ -184,7 +184,7 @@ class WorkflowBuilder
     }
 
     /**
-     * Closes all the 'opened' Gateway instances and then it creates a new End instance for this Workflow.
+     * Closes all the 'opened' Node instances and then it creates a new End instance for this Workflow.
      * @see WorkflowBuilder::end()
      */
     public function endAll(): WorkflowBuilder
@@ -212,7 +212,7 @@ class WorkflowBuilder
     }
 
     /**
-     * Creates an ExclusiveGateway instance for this Workflow
+     * Creates an Choice instance for this Workflow
      * The result can be chained with when() and otherwise() to implement two or more paths.
      * @see WorkflowBuilder::when()
      * @see WorkflowBuilder::otherwise()
@@ -221,11 +221,11 @@ class WorkflowBuilder
      */
     public function choice(): WorkflowBuilder
     {
-        return $this->add(new ExclusiveGateway());
+        return $this->add(new Choice());
     }
 
     /**
-     * Add conditional path to the last created Gateway instance
+     * Add conditional path to the last created Node instance
      * @param $condition
      * @return WorkflowBuilder
      */
@@ -237,7 +237,7 @@ class WorkflowBuilder
     }
 
     /**
-     * Default path for the last created Gateway instance
+     * Default path for the last created Node instance
      * Alias for when(true)
      * @see WorkflowBuilder::when()
      * @return WorkflowBuilder

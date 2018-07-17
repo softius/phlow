@@ -52,7 +52,7 @@ The `end` method creates a new instance of EndEvent and appends it to the Workfl
 $builder->end();
 ```
 
-It is also possible to end all *opened* Gateway instances by calling `endAll` as below:
+It is also possible to end all *opened* Node instances by calling `endAll` as below:
 
 ``` php
 $builder->endAll();

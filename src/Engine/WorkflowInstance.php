@@ -10,7 +10,7 @@ use Phlow\Processor\SingleConnectionProcessor;
 use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\End;
 use Phlow\Node\Start;
-use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Node\Choice;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
 use Psr\Log\LoggerAwareInterface;
@@ -58,7 +58,7 @@ class WorkflowInstance implements LoggerAwareInterface
         Start::class => SingleConnectionProcessor::class,
         Error::class => SingleConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
-        ExclusiveGateway::class => ExclusiveGatewayProcessor::class
+        Choice::class => ExclusiveGatewayProcessor::class
     ];
 
     /**

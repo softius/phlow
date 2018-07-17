@@ -1,16 +1,15 @@
 <?php
 
-namespace Phlow\Gateway;
+namespace Phlow\Node;
 
 use Phlow\Model\RenderableObject;
-use Phlow\Node\AbstractNode;
 
 /**
- * Class ExclusiveGateway
+ * Class Choice
  * Represents alternative flows in a process. Only one of the alternative paths can be taken.
- * @package Phlow\Gateway
+ * @package Phlow\Node
  */
-class ExclusiveGateway extends AbstractNode implements Gateway
+class Choice extends AbstractNode implements Conditional
 {
     use RenderableObject;
 }

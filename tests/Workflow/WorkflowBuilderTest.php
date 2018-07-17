@@ -3,7 +3,7 @@
 namespace Phlow\Tests\Workflow;
 
 use Phlow\Node\Callback;
-use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Node\Choice;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Connection\Connection;
 use PHPUnit\Framework\TestCase;
@@ -50,9 +50,9 @@ class WorkflowBuilderTest extends TestCase
 
         $workflow = $builder->getWorkflow();
 
-        /** @var ExclusiveGateway $node */
-        $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
-        $this->assertTrue($node instanceof ExclusiveGateway);
+        /** @var Choice $node */
+        $node = $workflow->getAllByClass(Choice::class)[0];
+        $this->assertTrue($node instanceof Choice);
         $this->assertEquals(3, count($node->getOutgoingconnections()));
         $this->assertEquals(2, count($node->getOutgoingconnections(Connection::LABEL_CHILD)));
         $this->assertEquals(1, count($node->getOutgoingconnections(Connection::LABEL_NEXT)));
@@ -79,9 +79,9 @@ class WorkflowBuilderTest extends TestCase
 
         $workflow = $builder->getWorkflow();
 
-        /** @var ExclusiveGateway $node */
-        $node = $workflow->getAllByClass(ExclusiveGateway::class)[1];
-        $this->assertTrue($node instanceof ExclusiveGateway);
+        /** @var Choice $node */
+        $node = $workflow->getAllByClass(Choice::class)[1];
+        $this->assertTrue($node instanceof Choice);
         $this->assertEquals(4, count($node->getOutgoingconnections()));
         $this->assertEquals(3, count($node->getOutgoingconnections(Connection::LABEL_CHILD)));
         $this->assertEquals(1, count($node->getOutgoingconnections(Connection::LABEL_NEXT)));

@@ -43,7 +43,7 @@ class PlainTextRendererTest extends TestCase
 
         $expectedOutput = implode(PHP_EOL, [
             '|-Start',
-            '|-ExclusiveGateway',
+            '|-Choice',
             '| |-Connection (isEven)',
             '| | \-Callback',
             '| \-Connection (true)',

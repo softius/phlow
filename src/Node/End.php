@@ -3,7 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Model\RenderableObject;
-use Phlow\Node\AbstractNode;
 
 /**
  * Class End
