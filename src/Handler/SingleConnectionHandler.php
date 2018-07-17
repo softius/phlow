@@ -23,12 +23,18 @@ class SingleConnectionHandler implements Handler
      */
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
-        $connections = $workflowNode->getOutgoingConnections();
-        if (empty($connections)) {
-            throw new UnmatchedConditionException('No condition was matched');
+        if ($workflowNode->hasOutgoingConnections(WorkflowConnection::LABEL_PARENT)) {
+            $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_PARENT);
+            /** @var WorkflowConnection $connection */
+            $connection = $connections[0];
+            return (new SingleConnectionHandler())->handle($connection->getTarget(), $exchange);
         }
 
-        /** @var WorkflowConnection $connection */
-        return $connections[0];
+        if ($workflowNode->hasOutgoingConnections(WorkflowConnection::LABEL_NEXT)) {
+            $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_NEXT);
+            return $connections[0];
+        }
+
+        throw new UnmatchedConditionException('No condition was matched');
     }
 }

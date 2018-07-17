@@ -24,6 +24,16 @@ class ExecutionPathTest extends TestCase
         $this->assertEquals($nodes, iterator_to_array($path->getIterator()));
     }
 
+    public function testContains()
+    {
+        $nodes = [new StartEvent(), new EndEvent(), new EndEvent()];
+        $path = new ExecutionPath();
+        $path->add($nodes[0]);
+        $path->add($nodes[1]);
+        $this->assertTrue($path->contains($nodes[1]));
+        $this->assertFalse($path->contains($nodes[2]));
+    }
+
     public function testAddCount()
     {
         $nodes = [new StartEvent(), new EndEvent()];

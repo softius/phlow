@@ -57,4 +57,14 @@ class ExecutionPath implements \IteratorAggregate, \Countable
     {
         return $this->sequence->count();
     }
+
+    /**
+     * Returns true only and only if the provided Workflow Object is contained in the collection.
+     * @param WorkflowObject $workflowObject
+     * @return bool
+     */
+    public function contains(WorkflowObject $workflowObject)
+    {
+        return $this->sequence->contains($workflowObject);
+    }
 }

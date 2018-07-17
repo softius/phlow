@@ -4,17 +4,27 @@ namespace Phlow\Model;
 
 class WorkflowConnection implements WorkflowObject
 {
+    use RenderableObject {
+        __toString as private getClassString;
+    }
+
     private $source;
     private $target;
     private $condition;
+    private $label;
 
-    public function __construct(WorkflowNode $source, WorkflowNode $target, $condition = true)
+    public const LABEL_CHILD = 1;
+    public const LABEL_PARENT = 2;
+    public const LABEL_NEXT = 3;
+
+    public function __construct(WorkflowNode $source, WorkflowNode $target, int $label, $condition = true)
     {
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
 
         $this->source = $source;
         $this->target = $target;
+        $this->label = $label;
         $this->condition = $condition;
     }
 
@@ -28,6 +38,7 @@ class WorkflowConnection implements WorkflowObject
 
     /**
      * @return WorkflowNode
+     *
      */
     public function getTarget(): WorkflowNode
     {
@@ -42,5 +53,16 @@ class WorkflowConnection implements WorkflowObject
     public function isConditional()
     {
         return !empty($this->condition);
+    }
+
+    public function __toString()
+    {
+        $default = $this->getClassString();
+        return ($this->isConditional()) ? sprintf("%s (%s)", $default, $this->getCondition()) : $default;
+    }
+
+    public function hasLabel(int $label): bool
+    {
+        return $this->label === $label;
     }
 }

@@ -14,7 +14,6 @@ use Phlow\Model\WorkflowNode;
  */
 class ConditionalConnectionHandler implements Handler
 {
-
     /**
      * Returns the next WorkflowNode by evaluating all the conditions assigned on the outgoing connections
      * @param WorkflowNode $workflowNode
@@ -24,7 +23,7 @@ class ConditionalConnectionHandler implements Handler
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
         /** @var WorkflowConnection $connection */
-        foreach ($workflowNode->getOutgoingConnections() as $connection) {
+        foreach ($workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_CHILD) as $connection) {
             if (!$connection->isConditional()) {
                 continue;
             }
@@ -39,7 +38,6 @@ class ConditionalConnectionHandler implements Handler
 
         throw new UnmatchedConditionException('No condition was matched');
     }
-
 
     /**
      * @var ExpressionEngine

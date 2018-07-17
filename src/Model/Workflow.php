@@ -2,6 +2,9 @@
 
 namespace Phlow\Model;
 
+use Phlow\Event\StartEvent;
+use Phlow\Renderer\Renderer;
+
 /**
  * Class Workflow
  * @package Phlow\Workflow
@@ -73,5 +76,12 @@ class Workflow
         return $this->getAll(function ($node) use ($class) {
             return $node instanceof $class;
         });
+    }
+
+    public function render(Renderer $viewer): string
+    {
+        return (string) $viewer->render(new RecursiveNodeIterator(
+            $this->getAllByClass(StartEvent::class)[0]
+        ));
     }
 }

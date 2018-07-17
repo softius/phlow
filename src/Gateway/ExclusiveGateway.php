@@ -2,6 +2,7 @@
 
 namespace Phlow\Gateway;
 
+use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowNodeTrait;
 
 /**
@@ -12,4 +13,5 @@ use Phlow\Model\WorkflowNodeTrait;
 class ExclusiveGateway implements Gateway
 {
     use WorkflowNodeTrait;
+    use RenderableObject;
 }
