@@ -2,7 +2,7 @@
 
 namespace Phlow\Event;
 
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 /**
  * Interface Event

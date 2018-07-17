@@ -5,7 +5,7 @@ namespace Phlow\Processor;
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 /**
  * Class ExclusiveGatewayProcessor

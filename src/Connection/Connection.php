@@ -4,7 +4,7 @@ namespace Phlow\Connection;
 
 use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowObject;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 class Connection implements WorkflowObject
 {

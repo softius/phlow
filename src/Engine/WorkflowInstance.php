@@ -12,7 +12,7 @@ use Phlow\Event\EndEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Model\Workflow;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;

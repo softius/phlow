@@ -3,7 +3,7 @@
 namespace Phlow\Gateway;
 
 use Phlow\Model\RenderableObject;
-use Phlow\Model\WorkflowNodeTrait;
+use Phlow\Node\WorkflowNodeTrait;
 
 /**
  * Class ExclusiveGateway

@@ -1,7 +1,8 @@
 <?php
-namespace Phlow\Model;
+namespace Phlow\Node;
 
 use Phlow\Connection\Connection;
+use Phlow\Model\WorkflowObject;
 
 /**
  * Interface WorkflowNode

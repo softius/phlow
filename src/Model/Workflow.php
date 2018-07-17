@@ -3,6 +3,7 @@
 namespace Phlow\Model;
 
 use Phlow\Event\StartEvent;
+use Phlow\Node\WorkflowNode;
 use Phlow\Renderer\Renderer;
 
 /**

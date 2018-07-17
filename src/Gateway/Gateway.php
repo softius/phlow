@@ -2,7 +2,7 @@
 
 namespace Phlow\Gateway;
 
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 /**
  * Interface Gateway

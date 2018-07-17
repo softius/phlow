@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Model;
+namespace Phlow\Node;
 
 use Phlow\Connection\Connection;
 

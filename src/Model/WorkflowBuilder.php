@@ -9,6 +9,7 @@ use Phlow\Event\ErrorEvent;
 use Phlow\Event\StartEvent;
 use Phlow\Gateway\ExclusiveGateway;
 use Phlow\Gateway\Gateway;
+use Phlow\Node\WorkflowNode;
 use Phlow\Util\HashMap;
 use Phlow\Util\Stack;
 

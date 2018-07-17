@@ -4,7 +4,7 @@ namespace Phlow\Processor;
 
 use Phlow\Connection\Connection;
 use Phlow\Engine\Exchange;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 /**
  * Interface Processor

@@ -3,7 +3,7 @@
 namespace Phlow\Connection;
 
 use Phlow\Model\RecursiveNodeIterator;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {

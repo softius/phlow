@@ -4,7 +4,7 @@ namespace Phlow\Processor;
 
 use Phlow\Activity\Task;
 use Phlow\Engine\Exchange;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\WorkflowNode;
 use Phlow\Connection\Connection;
 
 /**

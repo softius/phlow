@@ -5,7 +5,7 @@ namespace Phlow\Activity;
 use Phlow\Model\ExecutableNode;
 use Phlow\Model\ExecutableNodeTrait;
 use Phlow\Model\RenderableObject;
-use Phlow\Model\WorkflowNodeTrait;
+use Phlow\Node\WorkflowNodeTrait;
 
 /**
  * Class Task
