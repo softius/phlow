@@ -53,7 +53,7 @@ class WorkflowConnection implements WorkflowObject
 
     public function __toString()
     {
-        return 'WorkflowConnection';
+        return ($this->isConditional()) ? sprintf("WorkflowConnection (%s)", $this->getCondition()) : "WorkflowConnection";
     }
 
     public function hasLabel(int $label): bool

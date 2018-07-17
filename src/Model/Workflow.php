@@ -80,7 +80,7 @@ class Workflow
 
     public function render(Renderer $viewer): string
     {
-        return (string) $viewer->render(new RecursiveIterator(
+        return (string) $viewer->render(new RecursiveNodeIterator(
             $this->getAllByClass(StartEvent::class)[0]
         ));
     }
