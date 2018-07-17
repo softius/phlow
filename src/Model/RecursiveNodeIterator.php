@@ -28,7 +28,7 @@ class RecursiveNodeIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function hasChildren()
     {
-        return count($this->current()->getOutgoingConnections(WorkflowConnection::LABEL_OPEN)) > 0;
+        return count($this->current()->getOutgoingConnections(WorkflowConnection::LABEL_CHILD)) > 0;
     }
 
     /**

@@ -13,8 +13,8 @@ class WorkflowConnection implements WorkflowObject
     private $condition;
     private $label;
 
-    public const LABEL_OPEN = 1;
-    public const LABEL_CLOSED = 2;
+    public const LABEL_CHILD = 1;
+    public const LABEL_PARENT = 2;
     public const LABEL_NEXT = 3;
 
     public function __construct(WorkflowNode $source, WorkflowNode $target, int $label, $condition = true)

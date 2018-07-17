@@ -54,7 +54,7 @@ class WorkflowBuilderTest extends TestCase
         $node = $workflow->getAllByClass(ExclusiveGateway::class)[0];
         $this->assertTrue($node instanceof ExclusiveGateway);
         $this->assertEquals(3, count($node->getOutgoingconnections()));
-        $this->assertEquals(2, count($node->getOutgoingconnections(WorkflowConnection::LABEL_OPEN)));
+        $this->assertEquals(2, count($node->getOutgoingconnections(WorkflowConnection::LABEL_CHILD)));
         $this->assertEquals(1, count($node->getOutgoingconnections(WorkflowConnection::LABEL_NEXT)));
     }
 
@@ -83,7 +83,7 @@ class WorkflowBuilderTest extends TestCase
         $node = $workflow->getAllByClass(ExclusiveGateway::class)[1];
         $this->assertTrue($node instanceof ExclusiveGateway);
         $this->assertEquals(4, count($node->getOutgoingconnections()));
-        $this->assertEquals(3, count($node->getOutgoingconnections(WorkflowConnection::LABEL_OPEN)));
+        $this->assertEquals(3, count($node->getOutgoingconnections(WorkflowConnection::LABEL_CHILD)));
         $this->assertEquals(1, count($node->getOutgoingconnections(WorkflowConnection::LABEL_NEXT)));
     }
 }

@@ -23,7 +23,7 @@ class SingleConnectionHandler implements Handler
      */
     public function handle(WorkflowNode $workflowNode, Exchange $exchange): WorkflowConnection
     {
-        $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_CLOSED);
+        $connections = $workflowNode->getOutgoingConnections(WorkflowConnection::LABEL_PARENT);
         if (count($connections) > 0) {
             /** @var WorkflowConnection $connection */
             $connection = $connections[0];

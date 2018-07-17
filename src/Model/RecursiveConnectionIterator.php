@@ -11,7 +11,7 @@ class RecursiveConnectionIterator extends \ArrayIterator implements \RecursiveIt
         /**
          * @var WorkflowConnection $connection
          */
-        foreach ($workflowObject->getOutgoingConnections(WorkflowConnection::LABEL_OPEN) as $connection) {
+        foreach ($workflowObject->getOutgoingConnections(WorkflowConnection::LABEL_CHILD) as $connection) {
             $items[] = $connection;
         }
 
