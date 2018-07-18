@@ -52,9 +52,9 @@ class WorkflowInstance implements LoggerAwareInterface
     private $executionPath;
 
     /**
-     * @var array Mapping between Workflow Nodes and Handlers
+     * @var array Mapping between Workflow Nodes and Processors
      */
-    private $handlers = [
+    private $processors = [
         Start::class => NextConnectionProcessor::class,
         Error::class => NextConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
@@ -76,7 +76,7 @@ class WorkflowInstance implements LoggerAwareInterface
 
     /**
      * Advances the Workflow to the next node until an End Node has been reached
-     * @throws UndefinedHandlerException
+     * @throws UndefinedProcessorException
      */
     public function execute(): void
     {
@@ -89,7 +89,7 @@ class WorkflowInstance implements LoggerAwareInterface
      * Proceeds to the next workflow node and executes it
      * @param int $howMany
      * @return object
-     * @throws UndefinedHandlerException
+     * @throws UndefinedProcessorException
      */
     public function advance($howMany = 1)
     {
@@ -143,13 +143,13 @@ class WorkflowInstance implements LoggerAwareInterface
 
         $nodeClass = get_class($this->current());
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
-        if (array_key_exists($nodeClass, $this->handlers)) {
-            $handlerClass = $this->handlers[$nodeClass];
+        if (array_key_exists($nodeClass, $this->processors)) {
+            $processorClass = $this->processors[$nodeClass];
 
-            /** @var Processor $handler */
-            $handler = new $handlerClass;
+            /** @var Processor $processor */
+            $processor = new $processorClass;
 
-            $connection = $handler->process($this->current(), $this->exchange);
+            $connection = $processor->process($this->current(), $this->exchange);
             $this->executionPath->add($connection);
             $this->nextNode = $connection->getTarget();
 
@@ -161,7 +161,7 @@ class WorkflowInstance implements LoggerAwareInterface
      * Handles a raised exception by moving the flow to an error event
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
-     * @throws UndefinedHandlerException
+     * @throws UndefinedProcessorException
      */
     private function handleException(\Exception $exception): void
     {
@@ -183,7 +183,7 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->logger->warning(
             sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
         );
-        throw new UndefinedHandlerException(
+        throw new UndefinedProcessorException(
             sprintf("The exception %s was thrown but no Error Node was found", get_class($exception))
         );
     }
