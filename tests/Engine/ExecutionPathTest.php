@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: iconstantinou
- * Date: 12/7/18
- * Time: 10:57 AM
- */
 
 namespace Phlow\Engine;
 
-use Phlow\Node\End;
-use Phlow\Node\Start;
+use Phlow\Node\Fake;
 use PHPUnit\Framework\TestCase;
 
 class ExecutionPathTest extends TestCase
@@ -17,7 +10,7 @@ class ExecutionPathTest extends TestCase
 
     public function testGetIterator()
     {
-        $nodes = [new Start(), new End()];
+        $nodes = [new Fake(), new Fake()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);
@@ -26,7 +19,7 @@ class ExecutionPathTest extends TestCase
 
     public function testContains()
     {
-        $nodes = [new Start(), new End(), new End()];
+        $nodes = [new Fake(), new Fake(), new Fake()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);
@@ -36,7 +29,7 @@ class ExecutionPathTest extends TestCase
 
     public function testAddCount()
     {
-        $nodes = [new Start(), new End()];
+        $nodes = [new Fake(), new Fake()];
         $path = new ExecutionPath();
         $path->add($nodes[0]);
         $path->add($nodes[1]);
