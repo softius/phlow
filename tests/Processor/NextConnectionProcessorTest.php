@@ -9,7 +9,7 @@ use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Connection\Connection;
 use PHPUnit\Framework\TestCase;
 
-class SingleConnectionHandlerTest extends TestCase
+class NextConnectionProcessorTest extends TestCase
 {
     public function testNextConnection()
     {
