@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Tests\Gateway;
+namespace Phlow\Tests\Node;
 
 use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
@@ -11,7 +11,7 @@ use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Node\Choice;
 use Phlow\Tests\Engine\DummyExpressionEngine;
 
-class GatewayTest extends \PHPUnit\Framework\TestCase
+class ChoiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testFlows()
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Phlow\Tests\Activity;
+namespace Phlow\Tests\Callback;
 
 use Phlow\Node\Callback;
 use PHPUnit\Framework\TestCase;
 
-class TaskTest extends TestCase
+class CallbackTest extends TestCase
 {
     public function testWithCallback()
     {

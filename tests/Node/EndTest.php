@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Tests\Event;
+namespace Phlow\Tests\Node;
 
 use Phlow\Engine\Exchange;
 use Phlow\Processor\SingleConnectionProcessor;
@@ -8,7 +8,7 @@ use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Node\End;
 use PHPUnit\Framework\TestCase;
 
-class EndEventTest extends TestCase
+class EndTest extends TestCase
 {
     public function testNext()
     {
