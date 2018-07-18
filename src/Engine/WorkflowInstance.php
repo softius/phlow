@@ -283,9 +283,12 @@ class WorkflowInstance implements LoggerAwareInterface
 
     public function render(Renderer $viewer): string
     {
+        $executionPath = $this->executionPath;
         $itr = new RecursiveIterator(
             $this->getWorkflow()->getAllByClass(Start::class)[0],
-            $this->getExecutionPath()
+            function ($workflowObject) use ($executionPath) {
+                return $executionPath->contains($workflowObject);
+            }
         );
         return (string) $viewer->render($itr);
     }

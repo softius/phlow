@@ -2,35 +2,33 @@
 
 namespace Phlow\Connection;
 
-use Phlow\Engine\ExecutionPath;
-use Phlow\Engine\ExecutionPathAwareInterface;
-use Phlow\Engine\ExecutionPathAwareTrait;
 use Phlow\Node\RecursiveIterator as RecursiveNodeIterator;
 use Phlow\Node\Node;
 
-class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator, ExecutionPathAwareInterface
+class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
-    use ExecutionPathAwareTrait;
+    /**
+     * @var callable Filter entries by the provided callback
+     */
+    private $accepts;
 
     /**
      * RecursiveIterator constructor.
      * @param Node $workflowObject
-     * @param ExecutionPath $executionPath
+     * @param callable $accepts
      */
-    public function __construct(Node $workflowObject, ExecutionPath $executionPath = null)
+    public function __construct(Node $workflowObject, callable $accepts = null)
     {
-        $this->setExecutionPath($executionPath);
         $items = [];
+        $this->accepts = $accepts;
 
         /**
          * @var Connection $connection
          */
         foreach ($workflowObject->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {
-            if (!empty($this->executionPath) && !$this->executionPath->contains($connection)) {
-                continue;
+            if (!is_callable($accepts) || call_user_func($accepts, $connection)) {
+                $items[] = $connection;
             }
-
-            $items[] = $connection;
         }
 
         parent::__construct($items);
@@ -55,6 +53,6 @@ class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator, Ex
      */
     public function getChildren()
     {
-        return new RecursiveNodeIterator($this->current()->getTarget(), $this->executionPath);
+        return new RecursiveNodeIterator($this->current()->getTarget(), $this->accepts);
     }
 }
