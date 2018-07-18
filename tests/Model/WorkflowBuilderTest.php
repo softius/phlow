@@ -1,32 +1,16 @@
 <?php
 
-namespace Phlow\Tests\Workflow;
+namespace Phlow\Tests\Model;
 
 use Phlow\Node\Callback;
 use Phlow\Node\Choice;
 use Phlow\Model\WorkflowBuilder;
 use Phlow\Connection\Connection;
+use Phlow\Node\Error;
 use PHPUnit\Framework\TestCase;
 
 class WorkflowBuilderTest extends TestCase
 {
-    public function testTask()
-    {
-        $builder = new WorkflowBuilder();
-        $builder
-            ->end()
-            ->callback(function ($d) {
-                return $d;
-            });
-
-        $workflow = $builder->getWorkflow();
-
-        /** @var Callback $node */
-        $task = $workflow->getAllByClass(Callback::class)[0];
-        $this->assertTrue($task instanceof Callback);
-        $this->assertTrue($task->hasCallback());
-    }
-
     public function testConditionalFlow()
     {
         $helloName  = function ($d) {
@@ -85,5 +69,26 @@ class WorkflowBuilderTest extends TestCase
         $this->assertEquals(4, count($node->getOutgoingconnections()));
         $this->assertEquals(3, count($node->getOutgoingconnections(Connection::LABEL_CHILD)));
         $this->assertEquals(1, count($node->getOutgoingconnections(Connection::LABEL_NEXT)));
+    }
+
+    public function testCatch()
+    {
+        $builder = new WorkflowBuilder();
+        $builder
+            ->catch(\RuntimeException::class)
+                ->callback()
+                ->end()
+            ->catchAll()
+                ->callback()
+                ->end();
+
+        $workflow = $builder->getWorkflow();
+        $nodes = $workflow->getAllByClass(Error::class);
+        $this->assertEquals(2, count($nodes));
+
+        /** @var Error $node */
+        $node = $nodes[0];
+        $this->assertTrue($node->hasExceptionClass());
+        $this->assertEquals(\RuntimeException::class, $node->getExceptionClass());
     }
 }

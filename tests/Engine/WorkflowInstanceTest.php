@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Tests\Workflow;
+namespace Phlow\Tests\Model;
 
 use Phlow\Node\Callback;
 use Phlow\Engine\UndefinedHandlerException;

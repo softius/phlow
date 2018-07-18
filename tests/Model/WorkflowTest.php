@@ -1,6 +1,6 @@
 <?php
 
-namespace Phlow\Tests\Workflow;
+namespace Phlow\Tests\Model;
 
 use Phlow\Node\End;
 use Phlow\Node\Start;
