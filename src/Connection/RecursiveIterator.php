@@ -7,15 +7,28 @@ use Phlow\Node\Node;
 
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
-    public function __construct(Node $workflowObject)
+    /**
+     * @var callable Filter entries by the provided callback
+     */
+    private $accepts;
+
+    /**
+     * RecursiveIterator constructor.
+     * @param Node $workflowObject
+     * @param callable $accepts
+     */
+    public function __construct(Node $workflowObject, callable $accepts = null)
     {
         $items = [];
+        $this->accepts = $accepts;
 
         /**
          * @var Connection $connection
          */
         foreach ($workflowObject->getOutgoingConnections(Connection::LABEL_CHILD) as $connection) {
-            $items[] = $connection;
+            if (!is_callable($accepts) || call_user_func($accepts, $connection)) {
+                $items[] = $connection;
+            }
         }
 
         parent::__construct($items);
@@ -40,6 +53,6 @@ class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function getChildren()
     {
-        return new RecursiveNodeIterator($this->current()->getTarget());
+        return new RecursiveNodeIterator($this->current()->getTarget(), $this->accepts);
     }
 }

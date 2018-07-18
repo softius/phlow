@@ -80,6 +80,10 @@ class Workflow
         });
     }
 
+    /**
+     * @param Renderer $viewer
+     * @return string
+     */
     public function render(Renderer $viewer): string
     {
         return (string) $viewer->render(new RecursiveIterator(

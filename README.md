@@ -19,7 +19,9 @@ Phlow is a framework agnostic solution.
 :white_check_mark: Callbacks\
 :white_check_mark: Boolean expressions for Conditions\
 :white_check_mark: PSR/3 Logger integration\
-:white_check_mark: Execution path replay
+:white_check_mark: Execution path replay\
+:white_check_mark: Workflow model in plain/text format\
+:white_check_mark: Execution path in plain/text format
 
 See the [Roadmap][link-roadmap] for more information about the upcoming releases.
 

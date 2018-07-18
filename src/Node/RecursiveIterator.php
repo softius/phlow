@@ -8,17 +8,25 @@ use Phlow\Connection\RecursiveIterator as RecursiveConnectionIterator;
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
+     * @var callable Filter entries by the provided callback
+     */
+    private $accepts;
+
+    /**
      * RecursiveIterator constructor.
      * @param Node $node
+     * @param callable|null $accepts
      */
-    public function __construct(Node $node)
+    public function __construct(Node $node, callable $accepts = null)
     {
+        $this->accepts = $accepts;
         $items = [$node];
-
         while (!empty($node) && $node->hasOutgoingConnections(Connection::LABEL_NEXT)) {
             $connections = $node->getOutgoingConnections(Connection::LABEL_NEXT);
             $node = $connections[0]->getTarget();
-            $items[] = $node;
+            if (!is_callable($accepts) || call_user_func($accepts, $node)) {
+                $items[] = $node;
+            }
         }
 
         parent::__construct($items);
@@ -43,6 +51,6 @@ class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function getChildren()
     {
-        return new RecursiveConnectionIterator($this->current());
+        return new RecursiveConnectionIterator($this->current(), $this->accepts);
     }
 }
