@@ -6,16 +6,22 @@ Workflow steps are useful to describe the process and consist of the following t
 ## Events
 An event denotes something that happens. 
 
-* **Start**: Acts as a workflow trigger. A workflow can have only Start Node.
+* **Start**: Acts as a workflow trigger. A workflow can have only one Start step.
 * **End**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
 * **Error**: Represents an exception within the workflow which might trigger a different path in workflow execution.
 
 ## Actions
-An actions denotes something that must be _done_. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
+An action denotes something that must be _done_. It also represents a single unit of work within the workflow, which usually can not be broken down into further steps.
 
-* **Callback**: A callback is a orkflow step that can invoke any [PHP callable](http://php.net/manual/en/language.types.callable.php).
+* **Callback**: A callback is a workflow step that can invoke any [PHP callable](http://php.net/manual/en/language.types.callable.php).
 
 ## Conditionals
-A conditional denotes forking workflow paths.
+A conditional indicates a point where the outcome of a decision dictates the next step. There can be multiple outcomes, but often there are just two. Based on the decision, the workflow brances to different parts of the flowcharts.
 
 * **Choice**: Represents alternative flows in a process. Only one of the alternative paths can be taken.
+
+## Exchange
+An Exchange is the message container holding the information during the entire execution of a Workflow. Each new Workflow instance an initial dataset which can be passed to create the first Exchange.
+
+## Processors
+Processors are being used by the Phow Engine when executing any workflow. Each workflow step is associated with a Processor which is responsible to modify the Exchange and/or calculate the next step.
