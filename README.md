@@ -67,6 +67,7 @@ $ composer require softius/phlow 0.3.0
 * [Workflow Builder][link-workflow-builder]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
+* [Error Handling][link-error-handling]
 * [FAQs][link-faqs]
  
 ## Testing
@@ -110,4 +111,5 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-workflow-builder]: https://github.com/softius/Phlow/blob/master/docs/workflow-builder.md
 [link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
 [link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
+[link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/error-handling.md
 [link-lamp-flowchart]: https://en.wikipedia.org/wiki/File:LampFlowchart.svg
