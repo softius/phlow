@@ -10,7 +10,7 @@ Of course, the first option is to wrap the `execute` method in a try-catch block
 ``` php
 // Setup your workflow
 try {
-  $workflow->execut();
+  $workflow->execute();
 } catch (\Exception $e) {
   // Handle the exception here
 }
