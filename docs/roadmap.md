@@ -1,7 +1,7 @@
 # Roadmap
 
 ## v0.2.0
-* Minise verbosity for Task Node
+* Minise verbosity for Callback
 * Integrate with PSR/3 Logger
 * Record execution path
 

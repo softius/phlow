@@ -10,10 +10,10 @@ An event denotes something that happens.
 * **End Node**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
 * **Error Node**: Represents an exception within the workflow which might trigger a different path in workflow execution.
 
-## Activities
-An activity denotes something that must be _done_.
+## Actions
+An actions denotes something that must be _done_. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
 
-* **Task**: A task is an atomic workflow step. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.
+* **Callback**: A callback is a orkflow step that can invoke any [PHP callable](http://php.net/manual/en/language.types.callable.php).
 
 ## Gateways
 A gateway denotes forking and merging of workflow paths. 

@@ -17,12 +17,12 @@ class ChildConnectionProcessorTest extends TestCase
 
     public function testProcess()
     {
-        $nextTask = new Fake();
-        $nextTask2 = new Fake();
+        $next = new Fake();
+        $next2 = new Fake();
 
         $gateway = new Choice();
-        $connection1 = new Connection($gateway, $nextTask, Connection::LABEL_CHILD, 'num < 10');
-        $connection2 = new Connection($gateway, $nextTask2, Connection::LABEL_CHILD, 'num > 100');
+        $connection1 = new Connection($gateway, $next, Connection::LABEL_CHILD, 'num < 10');
+        $connection2 = new Connection($gateway, $next2, Connection::LABEL_CHILD, 'num > 100');
 
         $processor = new ChildConnectionProcessor();
 

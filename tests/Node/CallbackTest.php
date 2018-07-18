@@ -9,21 +9,21 @@ class CallbackTest extends TestCase
 {
     public function testWithCallback()
     {
-        $task = new Callback();
+        $callback = new Callback();
         $cb = function ($d) {
             return $d;
         };
-        $task->addCallback($cb);
+        $callback->addCallback($cb);
 
-        $this->assertTrue($task->hasCallback());
-        $this->assertEquals($cb, $task->getCallback());
+        $this->assertTrue($callback->hasCallback());
+        $this->assertEquals($cb, $callback->getCallback());
     }
 
     public function testWithoutCallbacks()
     {
-        $task = new Callback();
-        $this->assertFalse($task->hasCallback());
+        $callback = new Callback();
+        $this->assertFalse($callback->hasCallback());
         $this->expectException(\UnexpectedValueException::class);
-        $task->getCallback();
+        $callback->getCallback();
     }
 }

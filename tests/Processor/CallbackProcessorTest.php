@@ -13,54 +13,54 @@ class CallbackProcessorTest extends TestCase
 {
     public function testWithoutCallback()
     {
-        $task = new Callback();
-        $nextTask = new Callback();
-        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
+        $callback = new Callback();
+        $nextcallback = new Callback();
+        $connection = new Connection($callback, $nextcallback, Connection::LABEL_NEXT);
 
         $processor = new CallbackProcessor();
-        $actualConnection = $processor->process($task, new Exchange());
+        $actualConnection = $processor->process($callback, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
 
     public function testWithCallback()
     {
-        $task = new Callback();
-        $nextTask = new Callback();
-        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
+        $callback = new Callback();
+        $nextcallback = new Callback();
+        $connection = new Connection($callback, $nextcallback, Connection::LABEL_NEXT);
 
-        $task->addCallback(function ($in) {
+        $callback->addCallback(function ($in) {
             $in['num']++;
             return $in;
         });
 
         $processor = new CallbackProcessor();
         $exchange = new Exchange(['num' => 1]);
-        $actualConnection = $processor->process($task, $exchange, Connection::LABEL_NEXT);
+        $actualConnection = $processor->process($callback, $exchange, Connection::LABEL_NEXT);
         $this->assertEquals($connection, $actualConnection);
         $this->assertEquals(2, $exchange->getOut()['num']);
     }
 
     public function testSuccess()
     {
-        $task = new Callback();
-        $nextTask = new Callback();
-        $connection = new Connection($task, $nextTask, Connection::LABEL_NEXT);
+        $callback = new Callback();
+        $nextcallback = new Callback();
+        $connection = new Connection($callback, $nextcallback, Connection::LABEL_NEXT);
 
         $processor = new CallbackProcessor();
-        $actualConnection = $processor->process($task, new Exchange());
+        $actualConnection = $processor->process($callback, new Exchange());
         $this->assertEquals($connection, $actualConnection);
     }
 
     public function testErrorHandling()
     {
-        $task = new Callback();
-        $task->addCallback(function ($in) {
+        $callback = new Callback();
+        $callback->addCallback(function ($in) {
             throw new \Exception("testErrorHandling");
         });
 
         $processor = new CallbackProcessor();
         $this->expectExceptionMessage("testErrorHandling");
-        $processor->process($task, new Exchange());
+        $processor->process($callback, new Exchange());
     }
 
     public function testInvalidArguments()

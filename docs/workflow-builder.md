@@ -13,7 +13,7 @@ $builder->start();
 
 ## Execute a callback
 
-The `callback` method creates a new instance of Task and appends it to the Workflow.
+The `callback` method creates a new instance of Callback and appends it to the Workflow.
 
 ``` php
 $builder->callback(function($data) {
@@ -26,7 +26,7 @@ $builder->callback(function($data) {
 Please note that the callback is left optional on purpose, so the same builder can be used for modeling only. The callback is required only when executing the workflow
 
 ``` php
-$builder->task();
+$builder->callback();
 ```
 
 ## Conditional Flow

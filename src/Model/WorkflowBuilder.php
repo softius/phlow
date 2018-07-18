@@ -198,17 +198,17 @@ class WorkflowBuilder
 
     /**
      * Creates a Callback instance for this workflow
-     * @param callable|null $callback
+     * @param callable|null $callable
      * @return WorkflowBuilder
      */
-    public function callback(callable $callback = null): WorkflowBuilder
+    public function callback(callable $callable = null): WorkflowBuilder
     {
-        $taskNode = new Callback();
-        if (!empty($callback)) {
-            $taskNode->addCallback($callback);
+        $callback = new Callback();
+        if (!empty($callable)) {
+            $callback->addCallback($callable);
         }
 
-        return $this->add($taskNode);
+        return $this->add($callback);
     }
 
     /**

@@ -1,5 +1,5 @@
 # Sequence Flow
-The following example demonstrates how to execute tasks in sequence. As part of the example, we display the sum of two random numbers.
+The following example demonstrates how to execute steps in sequence. As part of the example, we display the sum of two random numbers.
 
 ``` php
 require __DIR__.'/../vendor/autoload.php';
@@ -29,4 +29,4 @@ $instance->execute();
 foreach ($instance->getExecutionPath() as $obj) {
     print get_class($obj) . PHP_EOL;
 }
-``` 
+```
