@@ -4,9 +4,9 @@ namespace Phlow\Engine;
 
 use Phlow\Node\Callback;
 use Phlow\Node\Error;
-use Phlow\Processor\ExclusiveGatewayProcessor;
+use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\Processor;
-use Phlow\Processor\SingleConnectionProcessor;
+use Phlow\Processor\NextConnectionProcessor;
 use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\End;
 use Phlow\Node\Start;
@@ -55,10 +55,10 @@ class WorkflowInstance implements LoggerAwareInterface
      * @var array Mapping between Workflow Nodes and Handlers
      */
     private $handlers = [
-        Start::class => SingleConnectionProcessor::class,
-        Error::class => SingleConnectionProcessor::class,
+        Start::class => NextConnectionProcessor::class,
+        Error::class => NextConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
-        Choice::class => ExclusiveGatewayProcessor::class
+        Choice::class => ChildConnectionProcessor::class
     ];
 
     /**

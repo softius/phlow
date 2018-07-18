@@ -8,11 +8,11 @@ use Phlow\Engine\ExpressionEngine;
 use Phlow\Node\Node;
 
 /**
- * Class ExclusiveGatewayProcessor
+ * Class ChildConnectionProcessor
  * Suggests the next Node by evaluating all the conditions assigned on the outgoing connections
  * @package Phlow\Engine\Processor
  */
-class ExclusiveGatewayProcessor implements Processor
+class ChildConnectionProcessor implements Processor
 {
     /**
      * Returns the next Node by evaluating all the conditions assigned on the outgoing connections

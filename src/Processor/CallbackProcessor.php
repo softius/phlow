@@ -28,17 +28,17 @@ class CallbackProcessor implements Processor
             throw new \InvalidArgumentException("A workflow node of type Callback was expected.");
         }
 
-        /** @var Callback $task */
-        $task = $workflowNode;
+        /** @var Callback $callback */
+        $callback = $workflowNode;
         // Invoke callback
-        if ($task->hasCallback()) {
-            $callback = $task->getCallback();
+        if ($callback->hasCallback()) {
+            $callback = $callback->getCallback();
             $exchange->setOut(
                 call_user_func($callback, $exchange->getIn())
             );
         }
 
         // Return next node
-        return (new SingleConnectionProcessor())->process($workflowNode, $exchange);
+        return (new NextConnectionProcessor())->process($workflowNode, $exchange);
     }
 }

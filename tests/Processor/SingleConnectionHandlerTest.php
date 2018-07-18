@@ -4,7 +4,7 @@ namespace Phlow\Tests\Engine;
 
 use Phlow\Node\Callback;
 use Phlow\Engine\Exchange;
-use Phlow\Processor\SingleConnectionProcessor;
+use Phlow\Processor\NextConnectionProcessor;
 use Phlow\Processor\UnmatchedConditionException;
 use Phlow\Connection\Connection;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ class SingleConnectionHandlerTest extends TestCase
         $connection1 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
         $connection2 = new Connection($task, $anotherTask, Connection::LABEL_NEXT);
 
-        $handler = new SingleConnectionProcessor();
+        $handler = new NextConnectionProcessor();
         $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection1, $actualConnection);
     }
@@ -34,14 +34,14 @@ class SingleConnectionHandlerTest extends TestCase
         $connection2 = new Connection($task, $nextTask, Connection::LABEL_NEXT);
         $connection3 = new Connection($parentTask, $parentNextTask, Connection::LABEL_NEXT);
 
-        $handler = new SingleConnectionProcessor();
+        $handler = new NextConnectionProcessor();
         $actualConnection = $handler->process($task, new Exchange());
         $this->assertEquals($connection3, $actualConnection);
     }
 
     public function testNoConnection()
     {
-        $handler = new SingleConnectionProcessor();
+        $handler = new NextConnectionProcessor();
         $this->expectException(UnmatchedConditionException::class);
         $handler->process(new Callback(), new Exchange());
     }

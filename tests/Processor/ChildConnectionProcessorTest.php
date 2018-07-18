@@ -1,38 +1,40 @@
 <?php
 
-namespace Phlow\Tests\Node;
+namespace Phlow\Tests\Processor;
 
-use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
+use Phlow\Engine\EchoExpressionEngine;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
+use Phlow\Node\Choice;
+use Phlow\Node\Fake;
 use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\UnmatchedConditionException;
-use Phlow\Node\Choice;
-use Phlow\Tests\Engine\EchoExpressionEngine;
+use PHPUnit\Framework\TestCase;
 
-class ChoiceTest extends \PHPUnit\Framework\TestCase
+class ChildConnectionProcessorTest extends TestCase
 {
-    public function testFlows()
+
+    public function testProcess()
     {
-        $nextTask = new Callback();
-        $nextTask2 = new Callback();
+        $nextTask = new Fake();
+        $nextTask2 = new Fake();
 
         $gateway = new Choice();
         $connection1 = new Connection($gateway, $nextTask, Connection::LABEL_CHILD, 'num < 10');
         $connection2 = new Connection($gateway, $nextTask2, Connection::LABEL_CHILD, 'num > 100');
 
-        $handler = new ChildConnectionProcessor();
+        $processor = new ChildConnectionProcessor();
 
         $exchange = new Exchange((object) ['num' => 5]);
-        $this->assertEquals($connection1, $handler->process($gateway, $exchange));
+        $this->assertEquals($connection1, $processor->process($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 50]);
         $this->expectException(UnmatchedConditionException::class);
-        $this->assertEquals($connection1, $handler->process($gateway, $exchange));
+        $this->assertEquals($connection1, $processor->process($gateway, $exchange));
 
         $exchange = new Exchange((object) ['num' => 500]);
-        $this->assertEquals($connection2, $handler->process($gateway, $exchange));
+        $this->assertEquals($connection2, $processor->process($gateway, $exchange));
     }
 
     public function testDefaultExpressionEngine()
@@ -47,6 +49,6 @@ class ChoiceTest extends \PHPUnit\Framework\TestCase
         $engine = new EchoExpressionEngine();
         $gateway->setExpressionEngine($engine);
         $this->assertEquals($engine, $gateway->getExpressionEngine());
-        $this->assertEquals('DUMMY', $gateway->getExpressionEngine()->evaluate('value', ['value' => '100']));
+        $this->assertEquals('value', $gateway->getExpressionEngine()->evaluate('value', ['value' => '100']));
     }
 }

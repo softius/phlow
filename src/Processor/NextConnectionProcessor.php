@@ -7,11 +7,11 @@ use Phlow\Engine\Exchange;
 use Phlow\Node\Node;
 
 /**
- * Class SingleConnectionProcessor
+ * Class NextConnectionProcessor
  * Suggests the next Node by taking the first of the outgoing connections
  * @package Phlow\Processor
  */
-class SingleConnectionProcessor implements Processor
+class NextConnectionProcessor implements Processor
 {
 
     /**
@@ -27,7 +27,7 @@ class SingleConnectionProcessor implements Processor
             $connections = $workflowNode->getOutgoingConnections(Connection::LABEL_PARENT);
             /** @var Connection $connection */
             $connection = $connections[0];
-            return (new SingleConnectionProcessor())->process($connection->getTarget(), $exchange);
+            return (new NextConnectionProcessor())->process($connection->getTarget(), $exchange);
         }
 
         if ($workflowNode->hasOutgoingConnections(Connection::LABEL_NEXT)) {

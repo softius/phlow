@@ -9,7 +9,7 @@ use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\Start;
 use PHPUnit\Framework\TestCase;
 
-class TaskHandlerTest extends TestCase
+class CallbackProcessorTest extends TestCase
 {
     public function testWithoutCallback()
     {
