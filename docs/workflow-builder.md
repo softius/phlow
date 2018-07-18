@@ -13,7 +13,7 @@ $builder->start();
 
 ## Execute a callback
 
-The `callback` method creates a new instance of Task and appends it to the Workflow.
+The `callback` method creates a new instance of Callback and appends it to the Workflow.
 
 ``` php
 $builder->callback(function($data) {
@@ -26,12 +26,12 @@ $builder->callback(function($data) {
 Please note that the callback is left optional on purpose, so the same builder can be used for modeling only. The callback is required only when executing the workflow
 
 ``` php
-$builder->task();
+$builder->callback();
 ```
 
 ## Conditional Flow
 
-The `choice` method creates a new instance of ExclusiveGateway and appends it to the Workflow.
+The `choice` method creates a new instance of Cho and appends it to the Workflow.
 The result can be chained with `when` and / or `otherwise` methods, to define the conditional flows.
 
 ``` 
@@ -52,17 +52,17 @@ The `end` method creates a new instance of EndEvent and appends it to the Workfl
 $builder->end();
 ```
 
-It is also possible to end all *opened* Gateway instances by calling `endAll` as below:
+It is also possible to end all *opened* Node instances by calling `endAll` as below:
 
 ``` php
 $builder->endAll();
 ``` 
 
-### Catching Exceptions
+### Catching Errors
 
-The `catch` method creates a new instance of ErrorEvent.
+The `catch` method creates a new instance of Error.
 
-When executing the Workflow, the ErrorEvent will be triggered once an Exception matching the class is provided.
+When executing the Workflow, the Error will be triggered once an Exception matching the class is provided.
 
 ``` php
 $builder

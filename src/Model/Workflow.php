@@ -2,7 +2,9 @@
 
 namespace Phlow\Model;
 
-use Phlow\Event\StartEvent;
+use Phlow\Node\Start;
+use Phlow\Node\Node;
+use Phlow\Node\RecursiveIterator;
 use Phlow\Renderer\Renderer;
 
 /**
@@ -19,10 +21,10 @@ class Workflow
     /**
      * Adds the provided node in the list of nodes.
      * Maintains reference for all the nodes, that composite this workflow.
-     * @param WorkflowNode $node
-     * @return WorkflowNode
+     * @param Node $node
+     * @return Node
      */
-    public function add(WorkflowNode $node): WorkflowNode
+    public function add(Node $node): Node
     {
         $this->nodes[] = $node;
         return $node;
@@ -30,10 +32,10 @@ class Workflow
 
     /**
      * Adds the provided the nodes in this workflow
-     * @param WorkflowNode ...$nodes
+     * @param Node ...$nodes
      * @return void
      */
-    public function addAll(WorkflowNode ...$nodes): void
+    public function addAll(Node ...$nodes): void
     {
         foreach ($nodes as $node) {
             $this->add($node);
@@ -42,11 +44,11 @@ class Workflow
 
     /**
      * Removes the provided node from the list.
-     * @param WorkflowNode $node
+     * @param Node $node
      * @return void
      * @throws NotFoundException
      */
-    public function remove(WorkflowNode $node): void
+    public function remove(Node $node): void
     {
         $key = array_search($node, $this->nodes, true);
         if ($key === false) {
@@ -80,8 +82,8 @@ class Workflow
 
     public function render(Renderer $viewer): string
     {
-        return (string) $viewer->render(new RecursiveNodeIterator(
-            $this->getAllByClass(StartEvent::class)[0]
+        return (string) $viewer->render(new RecursiveIterator(
+            $this->getAllByClass(Start::class)[0]
         ));
     }
 }

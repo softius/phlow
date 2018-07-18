@@ -15,8 +15,8 @@ Phlow is a framework agnostic solution.
 ## Features
 :white_check_mark: Sequence flow\
 :white_check_mark: Conditional flow\
-:white_check_mark: Exception handling\
-:white_check_mark: Callable tasks\
+:white_check_mark: Error handling\
+:white_check_mark: Callbacks\
 :white_check_mark: Boolean expressions for Conditions\
 :white_check_mark: PSR/3 Logger integration\
 :white_check_mark: Execution path replay

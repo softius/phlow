@@ -1,7 +1,7 @@
 # Roadmap
 
 ## v0.2.0
-* Minise verbosity for Task Activity
+* Minise verbosity for Callback
 * Integrate with PSR/3 Logger
 * Record execution path
 
@@ -18,7 +18,7 @@
 * Go to workflow
 
 ## v0.6.0
-* Pluggable Node Handler / Workflow Builder
+* Pluggable Processors / Workflow Builder
 * Support for third-party solutions
 
 ## v0.7.0

@@ -19,11 +19,11 @@ class PlainTextRendererTest extends TestCase
             ->getWorkflow();
 
         $expectedOutput = implode(PHP_EOL, [
-            '|-StartEvent',
-            '|-Task',
-            '|-Task',
-            '|-Task',
-            '\-EndEvent',
+            '|-Start',
+            '|-Callback',
+            '|-Callback',
+            '|-Callback',
+            '\-End',
         ]) . PHP_EOL;
         $actualOutput = $workflow->render(new PlainTextRenderer());
         $this->assertEquals($expectedOutput, $actualOutput);
@@ -42,13 +42,13 @@ class PlainTextRendererTest extends TestCase
             ->getWorkflow();
 
         $expectedOutput = implode(PHP_EOL, [
-            '|-StartEvent',
-            '|-ExclusiveGateway',
-            '| |-WorkflowConnection (isEven)',
-            '| | \-Task',
-            '| \-WorkflowConnection (true)',
-            '|   \-Task',
-            '\-EndEvent',
+            '|-Start',
+            '|-Choice',
+            '| |-Connection (isEven)',
+            '| | \-Callback',
+            '| \-Connection (true)',
+            '|   \-Callback',
+            '\-End',
         ]) . PHP_EOL;
         $actualOutput = $workflow->render(new PlainTextRenderer());
         $this->assertEquals($expectedOutput, $actualOutput);

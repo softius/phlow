@@ -2,17 +2,17 @@
 
 namespace Phlow\Engine;
 
-use Phlow\Activity\Task;
-use Phlow\Event\ErrorEvent;
-use Phlow\Handler\ConditionalConnectionHandler;
-use Phlow\Handler\Handler;
-use Phlow\Handler\SingleConnectionHandler;
-use Phlow\Handler\ExecutableHandler;
-use Phlow\Event\EndEvent;
-use Phlow\Event\StartEvent;
-use Phlow\Gateway\ExclusiveGateway;
+use Phlow\Node\Callback;
+use Phlow\Node\Error;
+use Phlow\Processor\ChildConnectionProcessor;
+use Phlow\Processor\Processor;
+use Phlow\Processor\NextConnectionProcessor;
+use Phlow\Processor\CallbackProcessor;
+use Phlow\Node\End;
+use Phlow\Node\Start;
+use Phlow\Node\Choice;
 use Phlow\Model\Workflow;
-use Phlow\Model\WorkflowNode;
+use Phlow\Node\Node;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -37,12 +37,12 @@ class WorkflowInstance implements LoggerAwareInterface
     private $exchange;
 
     /**
-     * @var WorkflowNode Last executed node
+     * @var Node Last executed node
      */
     private $currentNode;
 
     /**
-     * @var WorkflowNode Next node to be executed
+     * @var Node Next node to be executed
      */
     private $nextNode;
 
@@ -52,13 +52,13 @@ class WorkflowInstance implements LoggerAwareInterface
     private $executionPath;
 
     /**
-     * @var array Mapping between Workflow Nodes and Handlers
+     * @var array Mapping between Workflow Nodes and Processors
      */
-    private $handlers = [
-        StartEvent::class => SingleConnectionHandler::class,
-        ErrorEvent::class => SingleConnectionHandler::class,
-        Task::class => ExecutableHandler::class,
-        ExclusiveGateway::class => ConditionalConnectionHandler::class
+    private $processors = [
+        Start::class => NextConnectionProcessor::class,
+        Error::class => NextConnectionProcessor::class,
+        Callback::class => CallbackProcessor::class,
+        Choice::class => ChildConnectionProcessor::class
     ];
 
     /**
@@ -75,8 +75,8 @@ class WorkflowInstance implements LoggerAwareInterface
     }
 
     /**
-     * Advances the Workflow to the next node until an End Event has been reached
-     * @throws UndefinedHandlerException
+     * Advances the Workflow to the next node until an End Node has been reached
+     * @throws UndefinedProcessorException
      */
     public function execute(): void
     {
@@ -89,7 +89,7 @@ class WorkflowInstance implements LoggerAwareInterface
      * Proceeds to the next workflow node and executes it
      * @param int $howMany
      * @return object
-     * @throws UndefinedHandlerException
+     * @throws UndefinedProcessorException
      */
     public function advance($howMany = 1)
     {
@@ -98,7 +98,7 @@ class WorkflowInstance implements LoggerAwareInterface
             $this->logger->info("Workflow execution initiated.");
         }
 
-        // Check that we haven't reach an EndEvent
+        // Check that we haven't reach an End
         if ($this->isCompleted()) {
             throw new InvalidStateException('Workflow execution has reached an End event and can not advance further.');
         }
@@ -143,13 +143,13 @@ class WorkflowInstance implements LoggerAwareInterface
 
         $nodeClass = get_class($this->current());
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
-        if (array_key_exists($nodeClass, $this->handlers)) {
-            $handlerClass = $this->handlers[$nodeClass];
+        if (array_key_exists($nodeClass, $this->processors)) {
+            $processorClass = $this->processors[$nodeClass];
 
-            /** @var Handler $handler */
-            $handler = new $handlerClass;
+            /** @var Processor $processor */
+            $processor = new $processorClass;
 
-            $connection = $handler->handle($this->current(), $this->exchange);
+            $connection = $processor->process($this->current(), $this->exchange);
             $this->executionPath->add($connection);
             $this->nextNode = $connection->getTarget();
 
@@ -161,7 +161,7 @@ class WorkflowInstance implements LoggerAwareInterface
      * Handles a raised exception by moving the flow to an error event
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
-     * @throws UndefinedHandlerException
+     * @throws UndefinedProcessorException
      */
     private function handleException(\Exception $exception): void
     {
@@ -183,8 +183,8 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->logger->warning(
             sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
         );
-        throw new UndefinedHandlerException(
-            sprintf("The exception %s was thrown but no Error Event was found", get_class($exception))
+        throw new UndefinedProcessorException(
+            sprintf("The exception %s was thrown but no Error Node was found", get_class($exception))
         );
     }
 
@@ -199,7 +199,7 @@ class WorkflowInstance implements LoggerAwareInterface
             return;
         }
 
-        $startEvents = $this->workflow->getAllByClass(StartEvent::class);
+        $startEvents = $this->workflow->getAllByClass(Start::class);
         if (empty($startEvents)) {
             throw new InvalidStateException('Start event is missing.');
         }
@@ -213,13 +213,13 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     private function getErrorEvents(): array
     {
-        $errorEvents = $this->workflow->getAllByClass(ErrorEvent::class);
+        $errorEvents = $this->workflow->getAllByClass(Error::class);
         if (empty($errorEvents)) {
             throw new InvalidStateException('Error events are missing');
         }
 
         $errorEventsMap = [];
-        /** @var ErrorEvent $errorEvent */
+        /** @var Error $errorEvent */
         foreach ($errorEvents as $errorEvent) {
             $errorEventsMap[$errorEvent->getExceptionClass()] = $errorEvent;
         }
@@ -233,7 +233,7 @@ class WorkflowInstance implements LoggerAwareInterface
      */
     public function isCompleted(): bool
     {
-        return $this->currentNode instanceof EndEvent;
+        return $this->currentNode instanceof End;
     }
 
     /**
@@ -247,9 +247,9 @@ class WorkflowInstance implements LoggerAwareInterface
 
     /**
      * Returns the last executed node.
-     * @return WorkflowNode
+     * @return Node
      */
-    public function current(): WorkflowNode
+    public function current(): Node
     {
         if (!empty($this->currentNode)) {
             return $this->currentNode;
@@ -258,7 +258,7 @@ class WorkflowInstance implements LoggerAwareInterface
         throw new InvalidStateException('Execution has not been initiated for this Workflow.');
     }
 
-    public function next(): WorkflowNode
+    public function next(): Node
     {
         return $this->nextNode;
     }
