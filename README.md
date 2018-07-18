@@ -26,9 +26,9 @@ Phlow is a framework agnostic solution.
 See the [Roadmap][link-roadmap] for more information about the upcoming releases.
 
 ## Getting Started
-The following image illustrates a simple approval process. Once the author composes a new article, the article gets reviewed by the reviewer. Based on the result of the review, the reviewer can request further updates or publish the article.
+The following image illustrates a simple process for dealing with a non-functioning lamp. Once a non-functioning lamp is found, the flow evaluates whether the lamp is plugged in.  If not, it evaluates whether the lamp has been burned out. In any case, particular actions must be taken i.e. replace the lamp.
 
-<img src="https://raw.githubusercontent.com/softius/Phlow/master/docs/article-approval.svg?sanitize=true">
+[![A simple flowchart for troubleshooting a broken lamp.][img-lamp-flowchart]][link-lamp-flowchart]
 
 Also, the following code illustrates the model for the same process. 
 
@@ -36,13 +36,13 @@ Also, the following code illustrates the model for the same process.
 $builder = new WorkflowBuilder();
 $builder
   ->start()
-  ->callback()          // Compose article
-  ->callback()          // Review article
-  ->choice()        // Approved?
-  ->when('approved == true')
-    ->callback()    // Publish article
+  ->choice()
+  ->when('isPluggedIn')
+    ->callback()          // Plug in lamp
+  ->when('isBurnedOut')
+    ->callback()          // Replace lamp
   ->otherwise()
-    ->callback()    // Update Article
+    ->callback()          // Repair lamp
   ->endAll()
 ```
 
@@ -95,6 +95,8 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [ico-downloads]: https://img.shields.io/packagist/dt/softius/phlow.svg?style=flat-square
 [ico-coverage]: https://img.shields.io/codeclimate/coverage-letter/softius/Phlow.svg?style=flat-square
 
+[img-lamp-flowchart]: https://upload.wikimedia.org/wikipedia/commons/9/91/LampFlowchart.svg
+
 [link-packagist]: https://packagist.org/packages/softius/phlow
 [link-travis]: https://travis-ci.org/softius/phlow
 [link-downloads]: https://packagist.org/packages/softius/phlow
@@ -108,3 +110,4 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-workflow-builder]: https://github.com/softius/Phlow/blob/master/docs/workflow-builder.md
 [link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
 [link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
+[link-lamp-flowchart]: https://en.wikipedia.org/wiki/File:LampFlowchart.svg
