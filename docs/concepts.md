@@ -6,9 +6,9 @@ Workflow steps are useful to describe the process and consist of the following t
 ## Events
 An event denotes something that happens. 
 
-* **Start Node**: Acts as a workflow trigger. A workflow can have only Start Node.
-* **End Node**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
-* **Error Node**: Represents an exception within the workflow which might trigger a different path in workflow execution.
+* **Start**: Acts as a workflow trigger. A workflow can have only Start Node.
+* **End**: Represents the result of the process and indicates that the workflow has reached the completion phase.  
+* **Error   **: Represents an exception within the workflow which might trigger a different path in workflow execution.
 
 ## Actions
 An actions denotes something that must be _done_. It represents a single unit of work within the workflow, which usually can not be broken down into further steps.

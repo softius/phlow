@@ -58,11 +58,11 @@ It is also possible to end all *opened* Node instances by calling `endAll` as be
 $builder->endAll();
 ``` 
 
-### Catching Exceptions
+### Catching Errors
 
-The `catch` method creates a new instance of ErrorEvent.
+The `catch` method creates a new instance of Error.
 
-When executing the Workflow, the ErrorEvent will be triggered once an Exception matching the class is provided.
+When executing the Workflow, the Error will be triggered once an Exception matching the class is provided.
 
 ``` php
 $builder

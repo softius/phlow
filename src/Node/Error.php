@@ -9,8 +9,8 @@ use Phlow\Model\RenderableObject;
  * Represents an exception within the workflow which might trigger a different path in workflow execution.
  * @package Phlow\Node
  */
-class Error extends AbstractNode implements Event, ExceptionHandler
+class Error extends AbstractNode implements Event, ErrorHandler
 {
-    use ExceptionHandlerTrait;
+    use ErrorHandlerTrait;
     use RenderableObject;
 }

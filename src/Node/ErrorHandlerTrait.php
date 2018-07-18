@@ -2,7 +2,7 @@
 
 namespace Phlow\Node;
 
-trait ExceptionHandlerTrait
+trait ErrorHandlerTrait
 {
     /**
      * @var string Exception class associated with this Node

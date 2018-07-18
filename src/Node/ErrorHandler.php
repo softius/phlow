@@ -3,11 +3,11 @@
 namespace Phlow\Node;
 
 /**
- * Interface ExceptionHandler
+ * Interface ErrorHandler
  * Indicates a Workflow Node that can consume and handle Exceptions thrown during Workflow execution.
  * @package Phlow\Model
  */
-interface ExceptionHandler
+interface ErrorHandler
 {
     /**
      * Adds a new Exception class that can be handled by this Node
