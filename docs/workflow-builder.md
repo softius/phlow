@@ -5,7 +5,7 @@ The following examples can help you get started with the WorkflowBuilder:
 
 ## Initiate a Workflow
 
-The `start` method creates a new instance of StartEvent and appends it to the Workflow. 
+The `start` method creates a new instance of `Phlow\Node\Start` and appends it to the Workflow. No configuration is needed for this node.
 
 ``` php
 $builder->start();
@@ -13,7 +13,7 @@ $builder->start();
 
 ## Execute a callback
 
-The `callback` method creates a new instance of Callback and appends it to the Workflow.
+The `callback` method creates a new instance of `Phlow\Node\Callback` and appends it to the Workflow. This node accepts an optional callback which be invoked during execution. 
 
 ``` php
 $builder->callback(function($data) {
@@ -31,7 +31,7 @@ $builder->callback();
 
 ## Conditional Flow
 
-The `choice` method creates a new instance of Cho and appends it to the Workflow.
+The `choice` method creates a new instance of `Phlow\Node\Choice` and appends it to the Workflow.
 The result can be chained with `when` and / or `otherwise` methods, to define the conditional flows.
 
 ``` 
@@ -46,13 +46,13 @@ $builder
 
 ## Terminating a Workflow
 
-The `end` method creates a new instance of EndEvent and appends it to the Workflow.
+The `end` method creates a new instance of `Phlow\Node\End` and appends it to the Workflow. No configuration is needed for this node.
 
 ``` php
 $builder->end();
 ```
 
-It is also possible to end all *opened* Node instances by calling `endAll` as below:
+It is also possible to end all *opened* node instances by calling `endAll` as below:
 
 ``` php
 $builder->endAll();
