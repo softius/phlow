@@ -1,7 +1,7 @@
 # Concepts
 Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
 
-Workflow steps are useful to describe the process and consist of the following tree categories: activities, events and gateways.  
+Workflow steps are useful to describe the process and consist of the following tree categories: actions, events and conditionals.  
 
 ## Events
 An event denotes something that happens. 
@@ -15,7 +15,7 @@ An actions denotes something that must be _done_. It represents a single unit of
 
 * **Callback**: A callback is a orkflow step that can invoke any [PHP callable](http://php.net/manual/en/language.types.callable.php).
 
-## Gateways
-A gateway denotes forking and merging of workflow paths. 
+## Conditionals
+A conditional denotes forking workflow paths.
 
-* **Exclusive Node**: Represents alternative flows in a process. Only one of the alternative paths can be taken.
+* **Choice**: Represents alternative flows in a process. Only one of the alternative paths can be taken.

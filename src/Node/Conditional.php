@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 /**
  * Interface Node
- * A gateway denotes forking and merging of workflow paths.
+ * A Conditional denotes forking of workflow paths.
  * @package Phlow\Node
  */
 interface Conditional extends Node

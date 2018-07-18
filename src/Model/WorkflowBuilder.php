@@ -75,7 +75,7 @@ class WorkflowBuilder
     private function add(Node $node): WorkflowBuilder
     {
         if ($this->linkNodesFor instanceof Node) {
-            $this->connectGatewayPaths($node);
+            $this->connectConditionalPaths($node);
         } elseif (!$this->nodes->isEmpty() && $this->nodes->peek() instanceof  Conditional) {
             new Connection($this->nodes->peek(), $node, Connection::LABEL_CHILD, $this->lastExpression);
         } elseif (!$this->nodes->isEmpty()) {
@@ -93,7 +93,7 @@ class WorkflowBuilder
      * Establish a Connection between the Node's unlinked nodes and the parent Node
      * @param Node $target
      */
-    private function connectGatewayPaths(Node $target)
+    private function connectConditionalPaths(Node $target)
     {
         foreach ($this->unlinkedNodes->get($this->linkNodesFor) as $source) {
             new Connection($source, $this->linkNodesFor, Connection::LABEL_PARENT);
@@ -106,13 +106,13 @@ class WorkflowBuilder
     }
 
     /**
-     * Extra processing for Gateways methods like when, otherwise and end.
+     * Extra processing for Conditional methods like when, otherwise and end.
      * Maintains the unlinked Nodes for each path so that they can be linked later on.
      * @see WorkflowBuilder::when()
      * @see WorkflowBuilder::otherwise()
-     * @see WorkflowBuilder::connectGatewayPaths()
+     * @see WorkflowBuilder::connectConditionalPaths()
      */
-    private function processGatewayPath(): void
+    private function processConditionalPath(): void
     {
         $node = $this->nodes->peek();
         while (!$this->nodes->isEmpty() && !($this->nodes->peek() instanceof Conditional)) {
@@ -120,11 +120,11 @@ class WorkflowBuilder
         }
 
         if (!($node instanceof Conditional) && !$this->nodes->isEmpty()) {
-            $gateway = $this->nodes->peek();
+            $conditional = $this->nodes->peek();
 
-            $nodes = $this->unlinkedNodes->exists($gateway) ? $this->unlinkedNodes->get($gateway) : [];
+            $nodes = $this->unlinkedNodes->exists($conditional) ? $this->unlinkedNodes->get($conditional) : [];
             $nodes[] = $node;
-            $this->unlinkedNodes->put($gateway, $nodes);
+            $this->unlinkedNodes->put($conditional, $nodes);
         }
     }
 
@@ -169,7 +169,7 @@ class WorkflowBuilder
     public function end(): WorkflowBuilder
     {
         if (!$this->unlinkedNodes->isEmpty()) {
-            $this->processGatewayPath();
+            $this->processConditionalPath();
             $this->linkNodesFor = !$this->nodes->isEmpty() ? $this->nodes->pop() : null;
         }
 
@@ -231,7 +231,7 @@ class WorkflowBuilder
      */
     public function when($condition): WorkflowBuilder
     {
-        $this->processGatewayPath();
+        $this->processConditionalPath();
         $this->lastExpression = $condition;
         return $this;
     }

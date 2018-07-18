@@ -31,7 +31,7 @@ $builder->callback();
 
 ## Conditional Flow
 
-The `choice` method creates a new instance of ExclusiveGateway and appends it to the Workflow.
+The `choice` method creates a new instance of Cho and appends it to the Workflow.
 The result can be chained with `when` and / or `otherwise` methods, to define the conditional flows.
 
 ``` 

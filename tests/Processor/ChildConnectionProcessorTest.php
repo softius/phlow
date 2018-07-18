@@ -20,35 +20,35 @@ class ChildConnectionProcessorTest extends TestCase
         $next = new Fake();
         $next2 = new Fake();
 
-        $gateway = new Choice();
-        $connection1 = new Connection($gateway, $next, Connection::LABEL_CHILD, 'num < 10');
-        $connection2 = new Connection($gateway, $next2, Connection::LABEL_CHILD, 'num > 100');
+        $choice = new Choice();
+        $connection1 = new Connection($choice, $next, Connection::LABEL_CHILD, 'num < 10');
+        $connection2 = new Connection($choice, $next2, Connection::LABEL_CHILD, 'num > 100');
 
         $processor = new ChildConnectionProcessor();
 
         $exchange = new Exchange((object) ['num' => 5]);
-        $this->assertEquals($connection1, $processor->process($gateway, $exchange));
+        $this->assertEquals($connection1, $processor->process($choice, $exchange));
 
         $exchange = new Exchange((object) ['num' => 50]);
         $this->expectException(UnmatchedConditionException::class);
-        $this->assertEquals($connection1, $processor->process($gateway, $exchange));
+        $this->assertEquals($connection1, $processor->process($choice, $exchange));
 
         $exchange = new Exchange((object) ['num' => 500]);
-        $this->assertEquals($connection2, $processor->process($gateway, $exchange));
+        $this->assertEquals($connection2, $processor->process($choice, $exchange));
     }
 
     public function testDefaultExpressionEngine()
     {
-        $gateway = new ChildConnectionProcessor();
-        $this->assertTrue($gateway->getExpressionEngine() instanceof ExpressionEngine);
+        $processor = new ChildConnectionProcessor();
+        $this->assertTrue($processor->getExpressionEngine() instanceof ExpressionEngine);
     }
 
     public function testCustomExpressionEngine()
     {
-        $gateway = new ChildConnectionProcessor();
+        $processor = new ChildConnectionProcessor();
         $engine = new EchoExpressionEngine();
-        $gateway->setExpressionEngine($engine);
-        $this->assertEquals($engine, $gateway->getExpressionEngine());
-        $this->assertEquals('value', $gateway->getExpressionEngine()->evaluate('value', ['value' => '100']));
+        $processor->setExpressionEngine($engine);
+        $this->assertEquals($engine, $processor->getExpressionEngine());
+        $this->assertEquals('value', $processor->getExpressionEngine()->evaluate('value', ['value' => '100']));
     }
 }
