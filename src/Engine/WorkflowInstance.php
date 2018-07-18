@@ -4,6 +4,7 @@ namespace Phlow\Engine;
 
 use Phlow\Node\Callback;
 use Phlow\Node\Error;
+use Phlow\Node\RecursiveIterator;
 use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\Processor;
 use Phlow\Processor\NextConnectionProcessor;
@@ -13,6 +14,7 @@ use Phlow\Node\Start;
 use Phlow\Node\Choice;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
+use Phlow\Renderer\Renderer;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -277,5 +279,14 @@ class WorkflowInstance implements LoggerAwareInterface
     public function getWorkflow(): Workflow
     {
         return $this->workflow;
+    }
+
+    public function render(Renderer $viewer): string
+    {
+        $itr = new RecursiveIterator(
+            $this->getWorkflow()->getAllByClass(Start::class)[0],
+            $this->getExecutionPath()
+        );
+        return (string) $viewer->render($itr);
     }
 }

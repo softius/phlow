@@ -4,20 +4,31 @@ namespace Phlow\Node;
 
 use Phlow\Connection\Connection;
 use Phlow\Connection\RecursiveIterator as RecursiveConnectionIterator;
+use Phlow\Engine\ExecutionPath;
+use Phlow\Engine\ExecutionPathAwareInterface;
+use Phlow\Engine\ExecutionPathAwareTrait;
 
-class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
+class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator, ExecutionPathAwareInterface
 {
+    use ExecutionPathAwareTrait;
+
     /**
      * RecursiveIterator constructor.
      * @param Node $node
+     * @param ExecutionPath|null $executionPath
      */
-    public function __construct(Node $node)
+    public function __construct(Node $node, ExecutionPath $executionPath = null)
     {
-        $items = [$node];
+        $this->setExecutionPath($executionPath);
 
+        $items = [$node];
         while (!empty($node) && $node->hasOutgoingConnections(Connection::LABEL_NEXT)) {
             $connections = $node->getOutgoingConnections(Connection::LABEL_NEXT);
             $node = $connections[0]->getTarget();
+            if (!empty($this->executionPath) && !$this->executionPath->contains($node)) {
+                continue;
+            }
+
             $items[] = $node;
         }
 
@@ -43,6 +54,6 @@ class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
      */
     public function getChildren()
     {
-        return new RecursiveConnectionIterator($this->current());
+        return new RecursiveConnectionIterator($this->current(), $this->executionPath);
     }
 }
