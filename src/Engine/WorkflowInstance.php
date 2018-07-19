@@ -80,11 +80,14 @@ class WorkflowInstance implements LoggerAwareInterface
      * Advances the Workflow to the next node until an End Node has been reached
      * @throws UndefinedProcessorException
      */
-    public function execute(): void
+    public function execute()
     {
+        $output = null;
         while (!$this->isCompleted()) {
-            $this->advance();
+            $output = $this->advance();
         }
+
+        return $output;
     }
 
     /**
