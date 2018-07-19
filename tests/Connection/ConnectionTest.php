@@ -3,7 +3,9 @@
 namespace Phlow\Tests\Connection;
 
 use Phlow\Connection\Connection;
+use Phlow\Expression\Simple;
 use Phlow\Node\Fake;
+use Phlow\Tests\Expression\TestExpression;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionTest extends TestCase
@@ -20,7 +22,8 @@ class ConnectionTest extends TestCase
     {
         $source = new Fake();
         $target = new Fake();
-        $connection = new Connection($source, $target, Connection::LABEL_NEXT, '1 == 1');
+        $expression = new TestExpression();
+        $connection = new Connection($source, $target, Connection::LABEL_NEXT, $expression);
         $this->assertTrue($connection->isConditional());
     }
 
@@ -44,8 +47,9 @@ class ConnectionTest extends TestCase
     {
         $source = new Fake();
         $target = new Fake();
-        $connection = new Connection($source, $target, Connection::LABEL_NEXT, '1 == 1');
-        $this->assertEquals('1 == 1', $connection->getCondition());
+        $expression = new TestExpression();
+        $connection = new Connection($source, $target, Connection::LABEL_NEXT, $expression);
+        $this->assertEquals($expression, $connection->getCondition());
     }
 
     public function testToString()

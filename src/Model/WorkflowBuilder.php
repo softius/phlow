@@ -2,6 +2,9 @@
 
 namespace Phlow\Model;
 
+use Phlow\Engine\ExpressionEngine;
+use Phlow\Expression\Simple as SimpleExpression;
+use Phlow\Expression\Callback as CallbackExpression;
 use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Node\End;
@@ -227,12 +230,20 @@ class WorkflowBuilder
     /**
      * Add conditional path to the last created Node instance
      * @param $condition
+     * @throws \InvalidArgumentException
      * @return WorkflowBuilder
      */
     public function when($condition): WorkflowBuilder
     {
         $this->processConditionalPath();
-        $this->lastExpression = $condition;
+        if (is_string($condition)) {
+            $this->lastExpression = new SimpleExpression($condition);
+        } elseif (is_callable($condition)) {
+            $this->lastExpression = new CallbackExpression($condition);
+        } else {
+            throw new \InvalidArgumentException();
+        }
+
         return $this;
     }
 
