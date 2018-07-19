@@ -2,7 +2,7 @@
 
 namespace Phlow\Model;
 
-use Phlow\Engine\ExpressionEngine;
+use Phlow\Expression\Expression;
 use Phlow\Expression\Simple as SimpleExpression;
 use Phlow\Expression\Callback as CallbackExpression;
 use Phlow\Node\Callback;
@@ -12,6 +12,7 @@ use Phlow\Node\Error;
 use Phlow\Node\Start;
 use Phlow\Node\Choice;
 use Phlow\Node\Conditional;
+use Phlow\Node\Filter;
 use Phlow\Node\Node;
 use Phlow\Util\HashMap;
 use Phlow\Util\Stack;
@@ -229,21 +230,14 @@ class WorkflowBuilder
 
     /**
      * Add conditional path to the last created Node instance
-     * @param $condition
+     * @param $predicate
      * @throws \InvalidArgumentException
      * @return WorkflowBuilder
      */
-    public function when($condition): WorkflowBuilder
+    public function when($predicate): WorkflowBuilder
     {
         $this->processConditionalPath();
-        if (is_string($condition)) {
-            $this->lastExpression = new SimpleExpression($condition);
-        } elseif (is_callable($condition)) {
-            $this->lastExpression = new CallbackExpression($condition);
-        } else {
-            throw new \InvalidArgumentException();
-        }
-
+        $this->lastExpression = $this->buildExpression($predicate);
         return $this;
     }
 
@@ -256,5 +250,31 @@ class WorkflowBuilder
     public function otherwise(): WorkflowBuilder
     {
         return $this->when('true');
+    }
+
+    /**
+     * Keeps all the elements of the collection that satisfy the predicate.
+     * The order of the elements is preserved.
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
+    public function filter($predicate): WorkflowBuilder
+    {
+        return $this->add(new Filter($this->buildExpression($predicate)));
+    }
+
+    /**
+     * @param $expression
+     * @return Expression
+     */
+    private function buildExpression($expression): Expression
+    {
+        if (is_string($expression)) {
+            return new SimpleExpression($expression);
+        } elseif (is_callable($expression)) {
+            return new CallbackExpression($expression);
+        } else {
+            throw new \InvalidArgumentException();
+        }
     }
 }

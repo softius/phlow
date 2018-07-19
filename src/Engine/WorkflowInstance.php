@@ -12,6 +12,7 @@ use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\End;
 use Phlow\Node\Start;
 use Phlow\Node\Choice;
+use Phlow\Node\Filter;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
 use Phlow\Renderer\Renderer;
@@ -60,7 +61,8 @@ class WorkflowInstance implements LoggerAwareInterface
         Start::class => NextConnectionProcessor::class,
         Error::class => NextConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
-        Choice::class => ChildConnectionProcessor::class
+        Choice::class => ChildConnectionProcessor::class,
+        Filter::class => CallbackProcessor::class,
     ];
 
     /**
