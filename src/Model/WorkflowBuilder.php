@@ -12,6 +12,7 @@ use Phlow\Node\Error;
 use Phlow\Node\Find;
 use Phlow\Node\First;
 use Phlow\Node\Last;
+use Phlow\Node\Sort;
 use Phlow\Node\Start;
 use Phlow\Node\Choice;
 use Phlow\Node\Conditional;
@@ -279,6 +280,11 @@ class WorkflowBuilder
     public function last(): WorkflowBuilder
     {
         return $this->add(new Last());
+    }
+
+    public function sort($predicate): WorkflowBuilder
+    {
+        return $this->add(new Sort($this->buildExpression($predicate)));
     }
 
     /**
