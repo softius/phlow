@@ -4,6 +4,8 @@ namespace Phlow\Engine;
 
 use Phlow\Node\Callback;
 use Phlow\Node\Error;
+use Phlow\Node\Find;
+use Phlow\Node\First;
 use Phlow\Node\RecursiveIterator;
 use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\Processor;
@@ -63,6 +65,8 @@ class WorkflowInstance implements LoggerAwareInterface
         Callback::class => CallbackProcessor::class,
         Choice::class => ChildConnectionProcessor::class,
         Filter::class => CallbackProcessor::class,
+        First::class => CallbackProcessor::class,
+        Find::class => CallbackProcessor::class
     ];
 
     /**

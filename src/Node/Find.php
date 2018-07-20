@@ -4,15 +4,9 @@ namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
-use function \DusanKasan\Knapsack\filter;
+use function \DusanKasan\Knapsack\find;
 
-/**
- * Class Filter
- * Keeps all the elements of the collection that satisfy the predicate.
- * The order of the elements is preserved.
- * @package Phlow\Node
- */
-class Filter extends AbstractNode implements Action, Executable
+class Find extends AbstractNode implements Executable
 {
     use RenderableObject;
     use ExecutableTrait;
@@ -20,7 +14,7 @@ class Filter extends AbstractNode implements Action, Executable
     public function __construct(Expression $filter = null)
     {
         $this->addCallback(function ($collection) use ($filter) {
-            return filter(
+            return find(
                 $collection,
                 function ($current, $key) use ($filter) {
                     return $filter->evaluate(['current' => $current, 'key' => $key]);
