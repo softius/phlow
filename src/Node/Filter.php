@@ -8,8 +8,9 @@ use function \DusanKasan\Knapsack\filter;
 
 /**
  * Class Filter
- * Keeps all the elements of the collection that satisfy the predicate.
+ * Keeps all the elements of the collection that satisfy the given predicate.
  * The order of the elements is preserved.
+ * Upon processing the Exchange will hold a lazy Collection
  * @package Phlow\Node
  */
 class Filter extends AbstractNode implements Action, Executable

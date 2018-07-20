@@ -6,6 +6,12 @@ use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
 use function \DusanKasan\Knapsack\find;
 
+/**
+ * Class Find
+ * Keeps only the first element that satisfies the predicate.
+ * Upon processing, the Exchange will hold a single element (not a Collection).
+ * @package Phlow\Node
+ */
 class Find extends AbstractNode implements Executable
 {
     use RenderableObject;

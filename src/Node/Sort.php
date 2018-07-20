@@ -6,6 +6,12 @@ use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
 use function DusanKasan\Knapsack\sort;
 
+/**
+ * Class Sort
+ * Sorts the collection according to the provided expression (compare function).
+ * Upon processing, the Exchange will hold a non-lazy Collection.
+ * @package Phlow\Node
+ */
 class Sort extends AbstractNode implements Action, Executable
 {
     use RenderableObject;
