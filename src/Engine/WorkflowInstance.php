@@ -6,6 +6,7 @@ use Phlow\Node\Callback;
 use Phlow\Node\Error;
 use Phlow\Node\Find;
 use Phlow\Node\First;
+use Phlow\Node\Last;
 use Phlow\Node\RecursiveIterator;
 use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\Processor;
@@ -66,7 +67,8 @@ class WorkflowInstance implements LoggerAwareInterface
         Choice::class => ChildConnectionProcessor::class,
         Filter::class => CallbackProcessor::class,
         First::class => CallbackProcessor::class,
-        Find::class => CallbackProcessor::class
+        Find::class => CallbackProcessor::class,
+        Last::class => CallbackProcessor::class,
     ];
 
     /**
