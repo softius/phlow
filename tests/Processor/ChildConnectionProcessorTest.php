@@ -6,6 +6,7 @@ use Phlow\Connection\Connection;
 use Phlow\Engine\EchoExpressionEngine;
 use Phlow\Engine\Exchange;
 use Phlow\Engine\ExpressionEngine;
+use Phlow\Expression\Simple;
 use Phlow\Node\Choice;
 use Phlow\Node\Fake;
 use Phlow\Processor\ChildConnectionProcessor;
@@ -21,8 +22,18 @@ class ChildConnectionProcessorTest extends TestCase
         $next2 = new Fake();
 
         $choice = new Choice();
-        $connection1 = new Connection($choice, $next, Connection::LABEL_CHILD, 'num < 10');
-        $connection2 = new Connection($choice, $next2, Connection::LABEL_CHILD, 'num > 100');
+        $connection1 = new Connection(
+            $choice,
+            $next,
+            Connection::LABEL_CHILD,
+            new Simple('num < 10')
+        );
+        $connection2 = new Connection(
+            $choice,
+            $next2,
+            Connection::LABEL_CHILD,
+            new Simple('num > 100')
+        );
 
         $processor = new ChildConnectionProcessor();
 
@@ -35,20 +46,5 @@ class ChildConnectionProcessorTest extends TestCase
 
         $exchange = new Exchange((object) ['num' => 500]);
         $this->assertEquals($connection2, $processor->process($choice, $exchange));
-    }
-
-    public function testDefaultExpressionEngine()
-    {
-        $processor = new ChildConnectionProcessor();
-        $this->assertTrue($processor->getExpressionEngine() instanceof ExpressionEngine);
-    }
-
-    public function testCustomExpressionEngine()
-    {
-        $processor = new ChildConnectionProcessor();
-        $engine = new EchoExpressionEngine();
-        $processor->setExpressionEngine($engine);
-        $this->assertEquals($engine, $processor->getExpressionEngine());
-        $this->assertEquals('value', $processor->getExpressionEngine()->evaluate('value', ['value' => '100']));
     }
 }

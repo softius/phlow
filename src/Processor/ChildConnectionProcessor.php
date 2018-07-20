@@ -28,39 +28,12 @@ class ChildConnectionProcessor implements Processor
                 continue;
             }
 
-            $expression = $connection->getCondition();
             $context = (array) $exchange->getIn();
-            $isTrue = $this->getExpressionEngine()->evaluate($expression, $context);
-            if ($isTrue) {
+            if ($connection->getCondition()->evaluate($context)) {
                 return $connection;
             }
         }
 
         throw new UnmatchedConditionException('No condition was matched');
-    }
-
-    /**
-     * @var ExpressionEngine
-     */
-    private $expressionEngine;
-
-    /**
-     * @return ExpressionEngine
-     */
-    public function getExpressionEngine(): ExpressionEngine
-    {
-        if (empty($this->expressionEngine)) {
-            $this->expressionEngine = new ExpressionEngine();
-        }
-
-        return $this->expressionEngine;
-    }
-
-    /**
-     * @param ExpressionEngine $expressionEngine
-     */
-    public function setExpressionEngine(ExpressionEngine $expressionEngine): void
-    {
-        $this->expressionEngine = $expressionEngine;
     }
 }

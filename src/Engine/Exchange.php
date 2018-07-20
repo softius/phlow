@@ -25,6 +25,11 @@ class Exchange
     private $exception;
 
     /**
+     * @var bool
+     */
+    private $hasOutbound;
+
+    /**
      * Exchange constructor.
      * @param null $inbound
      */
@@ -32,6 +37,7 @@ class Exchange
     {
         $this->inbound = $inbound;
         $this->outbound = null;
+        $this->hasOutbound = false;
     }
 
     /**
@@ -59,6 +65,7 @@ class Exchange
     public function setOut($outbound)
     {
         $this->outbound = $outbound;
+        $this->hasOutbound = true;
     }
 
     /**
@@ -67,7 +74,7 @@ class Exchange
      */
     public function hasOut(): bool
     {
-        return !empty($this->outbound);
+        return $this->hasOutbound;
     }
 
     /**

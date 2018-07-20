@@ -2,13 +2,22 @@
 
 namespace Phlow\Model;
 
+use Phlow\Expression\Expression;
+use Phlow\Expression\Simple as SimpleExpression;
+use Phlow\Expression\Callback as CallbackExpression;
 use Phlow\Node\Callback;
 use Phlow\Connection\Connection;
 use Phlow\Node\End;
 use Phlow\Node\Error;
+use Phlow\Node\Find;
+use Phlow\Node\First;
+use Phlow\Node\Last;
+use Phlow\Node\Map;
+use Phlow\Node\Sort;
 use Phlow\Node\Start;
 use Phlow\Node\Choice;
 use Phlow\Node\Conditional;
+use Phlow\Node\Filter;
 use Phlow\Node\Node;
 use Phlow\Util\HashMap;
 use Phlow\Util\Stack;
@@ -226,13 +235,14 @@ class WorkflowBuilder
 
     /**
      * Add conditional path to the last created Node instance
-     * @param $condition
+     * @param $predicate
+     * @throws \InvalidArgumentException
      * @return WorkflowBuilder
      */
-    public function when($condition): WorkflowBuilder
+    public function when($predicate): WorkflowBuilder
     {
         $this->processConditionalPath();
-        $this->lastExpression = $condition;
+        $this->lastExpression = $this->buildExpression($predicate);
         return $this;
     }
 
@@ -245,5 +255,78 @@ class WorkflowBuilder
     public function otherwise(): WorkflowBuilder
     {
         return $this->when('true');
+    }
+
+    /**
+     * Creates a Filter instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
+    public function filter($predicate): WorkflowBuilder
+    {
+        return $this->add(new Filter($this->buildExpression($predicate)));
+    }
+
+    /**
+     * Creates a First instance for this Workflow
+     * @return WorkflowBuilder
+     */
+    public function first(): WorkflowBuilder
+    {
+        return $this->add(new First());
+    }
+
+    /**
+     * Creates a Find instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
+    public function find($predicate): WorkflowBuilder
+    {
+        return $this->add(new Find($this->buildExpression($predicate)));
+    }
+
+    /**
+     * Creates a Last instance for this Workflow
+     * @return WorkflowBuilder
+     */
+    public function last(): WorkflowBuilder
+    {
+        return $this->add(new Last());
+    }
+
+    /**
+     * Creates a Sort instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
+    public function sort($predicate): WorkflowBuilder
+    {
+        return $this->add(new Sort($this->buildExpression($predicate)));
+    }
+
+    /**
+     * Creates a Map instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
+    public function map($predicate): WorkflowBuilder
+    {
+        return $this->add(new Map($this->buildExpression($predicate)));
+    }
+
+    /**
+     * @param $expression
+     * @return Expression
+     */
+    private function buildExpression($expression): Expression
+    {
+        if (is_string($expression)) {
+            return new SimpleExpression($expression);
+        } elseif (is_callable($expression)) {
+            return new CallbackExpression($expression);
+        } else {
+            throw new \InvalidArgumentException();
+        }
     }
 }

@@ -4,7 +4,12 @@ namespace Phlow\Engine;
 
 use Phlow\Node\Callback;
 use Phlow\Node\Error;
+use Phlow\Node\Find;
+use Phlow\Node\First;
+use Phlow\Node\Last;
+use Phlow\Node\Map;
 use Phlow\Node\RecursiveIterator;
+use Phlow\Node\Sort;
 use Phlow\Processor\ChildConnectionProcessor;
 use Phlow\Processor\Processor;
 use Phlow\Processor\NextConnectionProcessor;
@@ -12,6 +17,7 @@ use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\End;
 use Phlow\Node\Start;
 use Phlow\Node\Choice;
+use Phlow\Node\Filter;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
 use Phlow\Renderer\Renderer;
@@ -60,7 +66,13 @@ class WorkflowInstance implements LoggerAwareInterface
         Start::class => NextConnectionProcessor::class,
         Error::class => NextConnectionProcessor::class,
         Callback::class => CallbackProcessor::class,
-        Choice::class => ChildConnectionProcessor::class
+        Choice::class => ChildConnectionProcessor::class,
+        Filter::class => CallbackProcessor::class,
+        First::class => CallbackProcessor::class,
+        Find::class => CallbackProcessor::class,
+        Last::class => CallbackProcessor::class,
+        Sort::class => CallbackProcessor::class,
+        Map::class => CallbackProcessor::class,
     ];
 
     /**
@@ -80,11 +92,14 @@ class WorkflowInstance implements LoggerAwareInterface
      * Advances the Workflow to the next node until an End Node has been reached
      * @throws UndefinedProcessorException
      */
-    public function execute(): void
+    public function execute()
     {
+        $output = null;
         while (!$this->isCompleted()) {
-            $this->advance();
+            $output = $this->advance();
         }
+
+        return $output;
     }
 
     /**
@@ -164,12 +179,14 @@ class WorkflowInstance implements LoggerAwareInterface
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
      * @throws UndefinedProcessorException
+     * @throws \Exception
      */
     private function handleException(\Exception $exception): void
     {
         $this->logger->warning(
             sprintf('Exception %s occurred while executing %s', get_class($exception), get_class($this->current()))
         );
+
         $errorEvents = $this->getErrorEvents();
         $exceptionClass = get_class($exception);
         while (!empty($exceptionClass)) {
@@ -185,9 +202,8 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->logger->warning(
             sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
         );
-        throw new UndefinedProcessorException(
-            sprintf("The exception %s was thrown but no Error Node was found", get_class($exception))
-        );
+
+        throw $exception;
     }
 
     /**
@@ -216,9 +232,6 @@ class WorkflowInstance implements LoggerAwareInterface
     private function getErrorEvents(): array
     {
         $errorEvents = $this->workflow->getAllByClass(Error::class);
-        if (empty($errorEvents)) {
-            throw new InvalidStateException('Error events are missing');
-        }
 
         $errorEventsMap = [];
         /** @var Error $errorEvent */

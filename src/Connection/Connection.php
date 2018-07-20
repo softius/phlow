@@ -2,6 +2,7 @@
 
 namespace Phlow\Connection;
 
+use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
 use Phlow\Model\WorkflowObject;
 use Phlow\Node\Node;
@@ -21,7 +22,7 @@ class Connection implements WorkflowObject
     public const LABEL_PARENT = 2;
     public const LABEL_NEXT = 3;
 
-    public function __construct(Node $source, Node $target, int $label, $condition = true)
+    public function __construct(Node $source, Node $target, int $label, Expression $condition = null)
     {
         $source->addOutgoingConnection($this);
         $target->addIncomingConnection($this);
@@ -49,12 +50,12 @@ class Connection implements WorkflowObject
         return $this->target;
     }
 
-    public function getCondition()
+    public function getCondition(): Expression
     {
         return $this->condition;
     }
 
-    public function isConditional()
+    public function isConditional(): bool
     {
         return !empty($this->condition);
     }
