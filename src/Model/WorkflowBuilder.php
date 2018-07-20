@@ -258,8 +258,7 @@ class WorkflowBuilder
     }
 
     /**
-     * Keeps all the elements of the collection that satisfy the predicate.
-     * The order of the elements is preserved.
+     * Creates a Filter instance for this Workflow
      * @param $predicate
      * @return WorkflowBuilder
      */
@@ -268,26 +267,49 @@ class WorkflowBuilder
         return $this->add(new Filter($this->buildExpression($predicate)));
     }
 
+    /**
+     * Creates a First instance for this Workflow
+     * @return WorkflowBuilder
+     */
     public function first(): WorkflowBuilder
     {
         return $this->add(new First());
     }
 
+    /**
+     * Creates a Find instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
     public function find($predicate): WorkflowBuilder
     {
         return $this->add(new Find($this->buildExpression($predicate)));
     }
 
+    /**
+     * Creates a Last instance for this Workflow
+     * @return WorkflowBuilder
+     */
     public function last(): WorkflowBuilder
     {
         return $this->add(new Last());
     }
 
+    /**
+     * Creates a Sort instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
     public function sort($predicate): WorkflowBuilder
     {
         return $this->add(new Sort($this->buildExpression($predicate)));
     }
 
+    /**
+     * Creates a Map instance for this Workflow
+     * @param $predicate
+     * @return WorkflowBuilder
+     */
     public function map($predicate): WorkflowBuilder
     {
         return $this->add(new Map($this->buildExpression($predicate)));
