@@ -104,12 +104,12 @@ class WorkflowInstanceTest extends TestCase
         $builder
             ->start()
             ->callback(function () {
-                throw new \Exception();
+                throw new \BadFunctionCallException();
             })
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(InvalidStateException::class);
+        $this->expectException(\BadFunctionCallException::class);
         $instance->advance(2);
     }
 
@@ -131,7 +131,7 @@ class WorkflowInstanceTest extends TestCase
             ->end();
         $instance = new WorkflowInstance($builder->getWorkflow(), ['num' => 10]);
 
-        $this->expectException(UndefinedProcessorException::class);
+        $this->expectException(\BadFunctionCallException::class);
         $instance->advance(2);
     }
 

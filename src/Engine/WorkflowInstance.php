@@ -169,12 +169,14 @@ class WorkflowInstance implements LoggerAwareInterface
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
      * @throws UndefinedProcessorException
+     * @throws \Exception
      */
     private function handleException(\Exception $exception): void
     {
         $this->logger->warning(
             sprintf('Exception %s occurred while executing %s', get_class($exception), get_class($this->current()))
         );
+
         $errorEvents = $this->getErrorEvents();
         $exceptionClass = get_class($exception);
         while (!empty($exceptionClass)) {
@@ -190,9 +192,8 @@ class WorkflowInstance implements LoggerAwareInterface
         $this->logger->warning(
             sprintf('Exception %s was not handled for %s', get_class($exception), get_class($this->current()))
         );
-        throw new UndefinedProcessorException(
-            sprintf("The exception %s was thrown but no Error Node was found", get_class($exception))
-        );
+
+        throw $exception;
     }
 
     /**
@@ -221,9 +222,6 @@ class WorkflowInstance implements LoggerAwareInterface
     private function getErrorEvents(): array
     {
         $errorEvents = $this->workflow->getAllByClass(Error::class);
-        if (empty($errorEvents)) {
-            throw new InvalidStateException('Error events are missing');
-        }
 
         $errorEventsMap = [];
         /** @var Error $errorEvent */
