@@ -7,6 +7,7 @@ use Phlow\Node\Error;
 use Phlow\Node\Find;
 use Phlow\Node\First;
 use Phlow\Node\Last;
+use Phlow\Node\Map;
 use Phlow\Node\RecursiveIterator;
 use Phlow\Node\Sort;
 use Phlow\Processor\ChildConnectionProcessor;
@@ -71,6 +72,7 @@ class WorkflowInstance implements LoggerAwareInterface
         Find::class => CallbackProcessor::class,
         Last::class => CallbackProcessor::class,
         Sort::class => CallbackProcessor::class,
+        Map::class => CallbackProcessor::class,
     ];
 
     /**
