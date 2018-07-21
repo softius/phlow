@@ -33,7 +33,9 @@ class Simple implements Expression
      */
     public function evaluate($context = null)
     {
-        return $this->language->evaluate($this->expression, (array) $context);
+        $arrayContext = (array) $context;
+        $arrayContext['this'] = $context;
+        return $this->language->evaluate($this->expression, $arrayContext);
     }
 
     /**
