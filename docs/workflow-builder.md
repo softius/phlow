@@ -11,7 +11,7 @@ The `start` method creates a new instance of `Phlow\Node\Start` and appends it t
 $builder->start();
 ```
 
-## Execute a callback
+## Execute a Callback
 
 The `callback` method creates a new instance of `Phlow\Node\Callback` and appends it to the Workflow. This node accepts an optional callback which be invoked during execution. 
 
@@ -58,7 +58,7 @@ It is also possible to end all *opened* node instances by calling `endAll` as be
 $builder->endAll();
 ``` 
 
-### Catching Errors
+## Catching Errors
 
 The `catch` method creates a new instance of Error.
 
@@ -79,3 +79,6 @@ $builder
     ->callback()
     ->end();
 ```
+
+## Collections
+The [following operations](workflow-builder-collections.md) can be used when working with Collections. By Collections we refer to any variable that it is an array or an object implementing Traversable

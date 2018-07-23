@@ -1,8 +1,5 @@
 # Error handling
-By default Phlow is completely transparent when it comes to Exceptions, meaning that Phlow will not modify any raised Exception.
-On the contrary, any raised exceptions are left un-caught and it is up to you on how they can be handled.
-
-There are two options to catch and handle Exceptions.
+By default Phlow is completely transparent when it comes to Exceptions, meaning that Phlow will not attempt to catch or modify any raised Exception. On the contrary, any raised Exceptions are left un-caught and it is up to you on how they can be handled. There are two options to catch and handle Exceptions: 1) using PHP `try-catch` or 2) using Builder's fluent API.
 
 ## PHP try-catch
 Of course, the first option is to wrap the `execute` method in a try-catch block. 
