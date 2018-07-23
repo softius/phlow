@@ -1,6 +1,6 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=c1a3b937a16d5eb43731e6dcb97f4a14f066a63feefd90937e897f0be7518b5d
+    - CC_TEST_REPORTER_ID=396afd1ff0a56dc3ecd79a8fe39a716bf8663d047b2676f8928f783016606134
 
 language: php
 
