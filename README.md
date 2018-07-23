@@ -63,7 +63,7 @@ $ composer require softius/phlow 0.3.0
 ```
 
 ## Documentation
-* [Overview][link-concepts]
+* [Overview][link-overview]
 * [Workflow Model][link-workflow-model]
 * [Workflow Engine][link-workflow-engine]
 * [Workflow Builder][link-workflow-builder]
@@ -106,7 +106,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
 [link-apache-camel]: http://camel.apache.org
-[link-concepts]: https://github.com/softius/phlow/blob/master/docs/concepts.md
+[link-overview]: https://github.com/softius/phlow/blob/master/docs/README.md
 [link-roadmap]: https://github.com/softius/phlow/blob/master/docs/roadmap.md
 [link-faqs]: https://github.com/softius/phlow/blob/master/docs/faqs.md
 [link-workflow-model]: https://github.com/softius/phlow/blob/master/docs/workflow-model.md
