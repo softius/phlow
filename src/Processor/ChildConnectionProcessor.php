@@ -28,7 +28,7 @@ class ChildConnectionProcessor implements Processor
                 continue;
             }
 
-            $context = (array) $exchange->getIn();
+            $context = $exchange->getIn();
             if ($connection->getCondition()->evaluate($context)) {
                 return $connection;
             }
