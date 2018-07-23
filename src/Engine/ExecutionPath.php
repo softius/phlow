@@ -2,15 +2,13 @@
 
 namespace Phlow\Engine;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Phlow\Model\WorkflowObject;
 use Traversable;
 
 class ExecutionPath implements \IteratorAggregate, \Countable
 {
     /**
-     * @var Collection Sequence of Workflow Connectors and Nodes
+     * @var array Sequence of Workflow Connectors and Nodes
      */
     private $sequence;
 
@@ -19,7 +17,7 @@ class ExecutionPath implements \IteratorAggregate, \Countable
      */
     public function __construct()
     {
-        $this->sequence = new ArrayCollection();
+        $this->sequence = [];
     }
 
     /**
@@ -29,7 +27,7 @@ class ExecutionPath implements \IteratorAggregate, \Countable
      */
     public function add(WorkflowObject $element)
     {
-        $this->sequence->add($element);
+        array_push($this->sequence, $element);
     }
 
     /**
@@ -41,7 +39,7 @@ class ExecutionPath implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return $this->sequence->getIterator();
+        return new \ArrayIterator($this->sequence);
     }
 
     /**
@@ -55,7 +53,7 @@ class ExecutionPath implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return $this->sequence->count();
+        return count($this->sequence);
     }
 
     /**
@@ -65,6 +63,6 @@ class ExecutionPath implements \IteratorAggregate, \Countable
      */
     public function contains(WorkflowObject $workflowObject)
     {
-        return $this->sequence->contains($workflowObject);
+        return in_array($workflowObject, $this->sequence, true);
     }
 }
