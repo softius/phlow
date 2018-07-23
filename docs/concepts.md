@@ -60,6 +60,6 @@ The above example will output:
 Further information and examples are available for the [Workflow Engine](workflow-engine.md).
 
 ## Workflow Builder
-In the previous sections, we've used the Workflow Builder to create some Workflow Models. The Workflow Builder provides a fluent API that facilates the construction of new models while making it more human readable. While it is possible to glue multiple Workflow Nodes together without using the builder, this approach is quite verbose.
+In the previous sections, we've used the Workflow Builder to create some Workflow Models. The Workflow Builder provides a fluent API that facilates the construction of new models. While it is possible to glue multiple Workflow Nodes together without using the builder, this approach is quite verbose.
 
 Further information and examples are available for the [Workflow Builder](workflow-builder.md).
