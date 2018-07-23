@@ -23,7 +23,7 @@ class Simple implements Expression
     public function __construct(string $expression, ExpressionLanguage $language = null)
     {
         $this->expression = $expression;
-        $this->language = $language ?? new ExpressionLanguage();
+        $this->language = $language ?? new SimpleLanguage();
     }
 
     /**
@@ -33,7 +33,9 @@ class Simple implements Expression
      */
     public function evaluate($context = null)
     {
-        return $this->language->evaluate($this->expression, (array) $context);
+        $arrayContext = (array) $context;
+        $arrayContext['this'] = $context;
+        return $this->language->evaluate($this->expression, $arrayContext);
     }
 
     /**
