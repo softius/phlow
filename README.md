@@ -90,12 +90,12 @@ If you discover any security related issues, please email softius@gmail.com inst
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/softius/Phlow.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/softius/phlow.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/softius/Phlow/master.svg?style=flat-square
-[ico-maintenance]: https://img.shields.io/codeclimate/maintainability/softius/Phlow.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/softius/phlow/master.svg?style=flat-square
+[ico-maintenance]: https://img.shields.io/codeclimate/maintainability/softius/phlow.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/softius/phlow.svg?style=flat-square
-[ico-coverage]: https://img.shields.io/codeclimate/coverage-letter/softius/Phlow.svg?style=flat-square
+[ico-coverage]: https://img.shields.io/codeclimate/coverage-letter/softius/phlow.svg?style=flat-square
 
 [img-lamp-flowchart]: https://upload.wikimedia.org/wikipedia/commons/9/91/LampFlowchart.svg
 
@@ -106,12 +106,12 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-contributors]: ../../contributors
 [link-bpmn2]: http://www.bpmn.org/
 [link-apache-camel]: http://camel.apache.org
-[link-concepts]: https://github.com/softius/Phlow/blob/master/docs/concepts.md
-[link-roadmap]: https://github.com/softius/Phlow/blob/master/docs/roadmap.md
-[link-faqs]: https://github.com/softius/Phlow/blob/master/docs/faqs.md
-[link-workflow-builder]: https://github.com/softius/Phlow/blob/master/docs/workflow-builder.md
-[link-sequence-flow]: https://github.com/softius/Phlow/blob/master/docs/sequence-flow.md
-[link-conditional-flow]: https://github.com/softius/Phlow/blob/master/docs/conditional-flow.md
-[link-error-handling]: https://github.com/softius/Phlow/blob/master/docs/error-handling.md
-[link-collections]: https://github.com/softius/Phlow/blob/master/docs/collections.md
+[link-concepts]: https://github.com/softius/phlow/blob/master/docs/concepts.md
+[link-roadmap]: https://github.com/softius/phlow/blob/master/docs/roadmap.md
+[link-faqs]: https://github.com/softius/phlow/blob/master/docs/faqs.md
+[link-workflow-builder]: https://github.com/softius/phlow/blob/master/docs/workflow-builder.md
+[link-sequence-flow]: https://github.com/softius/phlow/blob/master/docs/sequence-flow.md
+[link-conditional-flow]: https://github.com/softius/phlow/blob/master/docs/conditional-flow.md
+[link-error-handling]: https://github.com/softius/phlow/blob/master/docs/error-handling.md
+[link-collections]: https://github.com/softius/phlow/blob/master/docs/collections.md
 [link-lamp-flowchart]: https://en.wikipedia.org/wiki/File:LampFlowchart.svg
