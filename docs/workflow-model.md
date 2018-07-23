@@ -1,7 +1,7 @@
 # Workflow Model
 A Workflow Model represents the actual process which can be a pipeline, an ETL or a complicated business process. In either case, the Workflow Model specifies all the expected actions and logic that construct the process. Keep in mind that the Workflow Model does not hold information about execution or runtime specifics. In particular, information about the process input, output or even execution path can be found only using the Workflow Engine.
 
-## Building a new model
+## Build a new workflow
 
 A Workflow Model can be constructed using the Builder fluent API. Here is a simple example to get you started:
 
@@ -15,7 +15,7 @@ $workflow = (new WorkflowBuilder())
   ->getWorkflow();
 ```
 
-## Visualisations
+## Render a workflow
 
 A Workflow Model can be visualised which is particularly useful not only for troubleshooting but also when you want to display the model to the end user. Currently it is only possible to render it as plain text but there are plans to add HTML and SVG support in near future. Here is a short example on how you can render the Workflow Model created in the previous example:
 
@@ -65,3 +65,5 @@ A conditional indicates a point where the outcome of a decision dictates the nex
 
 * **Choice**: Represents alternative flows in a process. Only one of the alternative paths can be taken.
 
+## Expressions
+Even at the stage of building a new workflow, you will need to define some Expressions especially when working with Conditionals or Collections. The Expression can be defined as a [PHP callable](http://php.net/manual/en/language.types.callable.php) or as a `string` using [Symfony Expression Language](http://symfony.com/doc/current/components/expression_language.html).
