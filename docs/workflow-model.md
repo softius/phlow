@@ -31,7 +31,21 @@ The above example will output:
 \-End
 ```
 
-## Workflow Steps / Nodes
+## Error Handling
+By default Phlow is completely transparent when it comes to Exceptions, meaning that Phlow will not attempt to catch or modify any raised Exception. On the contrary, any raised Exceptions are left un-caught and it is up to you on how they can be handled.
+
+Here is a short example on how you can model an catch-all error handler using Builder's fluent API. There are other options of course, which can be found in the dedicated section of [Error Handling](error-handling.md)
+
+``` php
+$builder
+  ->catchAll()
+  ->callback(function($e) {
+    // handle the exception
+  })
+  ->end();
+```
+
+## Workflow Nodes (Steps)
 Each Workflow Model is decomposed to a list of steps, the Workflow Nodes. Workflow Nodes are useful to describe the process and consist of the following tree categories: actions, events and conditionals.
 
 ### Events
