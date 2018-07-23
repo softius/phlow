@@ -1,4 +1,4 @@
-# Concepts
+# Overview
 Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
 
 ## Workflow Model
