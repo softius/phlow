@@ -1,6 +1,39 @@
 # Concepts
 Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
 
+## Workflow Model
+A Workflow Model represents the actual process which can be a pipeline, an ETL or a complicated business process. In either case, the Workflow Model specifies all the expected actions and logic that construct the process. Keep in mind that the Workflow Model does not hold information about execution or runtime specifics. In particular, information about the process input, output or even execution path can be found only using the Workflow Engine.
+
+A Workflow Model can be constructed using the Builder fluent API. Here is a simple example to get you started:
+
+``` php
+$workflow = (new WorkflowBuilder())
+  ->start()
+  ->callback(function () {
+     // do some cool stuff
+  })
+  ->end()
+  ->getWorkflow();
+```
+
+A Workflow Model can be visualised which is particularly useful not only for troubleshooting but also when you want to display the model to the end user. Currently it is only possible to render it as plain text but there are plans to add HTML and SVG support in near future. Here is a short example on how you can render the Workflow Model created in the previous example:
+
+``` php
+print $workflow->render(new PlainTextRenderer());
+```
+
+The above example will output:
+
+```
+|-Start
+|-Callback
+\-End
+```
+Further information and examples are available for the [Workflow Model](workflow-model.md).
+
+## Previous
+Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
+
 Workflow steps are useful to describe the process and consist of the following tree categories: actions, events and conditionals.  
 
 ## Events
