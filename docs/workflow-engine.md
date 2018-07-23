@@ -40,10 +40,8 @@ The above example will output:
 \-End
 ```
 
-## Other Concepts
-
-# Exchange
+## Exchange & Messages
 An Exchange is the message container holding the information during the entire execution of a Workflow. The Exchange consists of the inbound message, the outbound message and the Exception raised, if any.
 
-# Processors
-Processors are being used by the Workflow Engine when executing any workflow. Behinde the scenes, each Workflow Node is associated with a Processor which is responsible to produce the outbound message and calculate the next step.
+## Processors
+Processors are being used by the Workflow Engine when executing any workflow. Behind the scenes, each Workflow Node is associated with a Processor which is responsible to produce the outbound message and calculate the next step. Currently, the Processors are predefined but there are plans to allow third-party processors that will extend the Phlow.
