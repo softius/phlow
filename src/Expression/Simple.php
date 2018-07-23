@@ -23,7 +23,7 @@ class Simple implements Expression
     public function __construct(string $expression, ExpressionLanguage $language = null)
     {
         $this->expression = $expression;
-        $this->language = $language ?? new ExpressionLanguage();
+        $this->language = $language ?? new SimpleLanguage();
     }
 
     /**
