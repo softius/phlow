@@ -31,6 +31,34 @@ The above example will output:
 ```
 Further information and examples are available for the [Workflow Model](workflow-model.md).
 
+## Workflow Engine
+Once the Workflow Model bas been constructed, it can be executed by creating a new instance. The instance represents a single execution of the given Workflow Model and holds information about the current status (in progress, completed), the last exchanged message along with the execution path.
+
+During the execution, information is exchanged between each Workflow Node. In particular, each Node accepts an inboud message and procude the outbound message. The initial inbound message can be specified when instantiating the process while the last outbound message is the execution's result.
+
+Here is a short example to get you started:
+
+``` php
+$instance = new WorkflowInstance($workflow, $input);
+$output = $instance->execute();
+```
+
+Similar to Workflow Model, you can also visualise the execution path:
+
+``` php
+print $instavce->render(new PlainTextRenderer());
+```
+
+The above example will output:
+
+```
+|-Start
+|-Callback
+\-End
+```
+
+Further information and examples are available for the [Workflow Engine](workflow-engine.md).
+
 ## Previous
 Phlow utilises the notion of workflow to model a process of any kind, through which a piece of work passes from initiation to completion. Each workflow must have a clear starting step (initiation), one or more intermediate steps (execution) and one or more ending steps (completion).
 
