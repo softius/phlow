@@ -63,12 +63,12 @@ $ composer require softius/phlow 0.3.0
 ```
 
 ## Documentation
-* [Concepts][link-concepts]
+* [Overview][link-concepts]
+* [Workflow Model][link-workflow-model]
+* [Workflow Engine][link-workflow-engine]
 * [Workflow Builder][link-workflow-builder]
 * [Sequence Flow - Example][link-sequence-flow]
 * [Conditional Flow - Example][link-conditional-flow]
-* [Error Handling][link-error-handling]
-* [Collections][link-collections]
 * [FAQs][link-faqs]
  
 ## Testing
@@ -109,9 +109,9 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [link-concepts]: https://github.com/softius/phlow/blob/master/docs/concepts.md
 [link-roadmap]: https://github.com/softius/phlow/blob/master/docs/roadmap.md
 [link-faqs]: https://github.com/softius/phlow/blob/master/docs/faqs.md
+[link-workflow-model]: https://github.com/softius/phlow/blob/master/docs/workflow-model.md
+[link-workflow-engine]: https://github.com/softius/phlow/blob/master/docs/workflow-engine.md
 [link-workflow-builder]: https://github.com/softius/phlow/blob/master/docs/workflow-builder.md
 [link-sequence-flow]: https://github.com/softius/phlow/blob/master/docs/sequence-flow.md
 [link-conditional-flow]: https://github.com/softius/phlow/blob/master/docs/conditional-flow.md
-[link-error-handling]: https://github.com/softius/phlow/blob/master/docs/error-handling.md
-[link-collections]: https://github.com/softius/phlow/blob/master/docs/collections.md
 [link-lamp-flowchart]: https://en.wikipedia.org/wiki/File:LampFlowchart.svg
