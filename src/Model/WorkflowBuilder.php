@@ -56,14 +56,15 @@ class WorkflowBuilder
 
     /**
      * WorkflowBuilder constructor.
+     * @param string|null $id Workflow's identifier
      */
-    public function __construct()
+    public function __construct(string $id = null)
     {
         $this->lastExpression = null;
         $this->nodes = new Stack();
         $this->unlinkedNodes = new HashMap();
         $this->linkNodesFor = null;
-        $this->workflow = new Workflow();
+        $this->workflow = new Workflow($id);
     }
 
     /**

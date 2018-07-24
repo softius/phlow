@@ -2,6 +2,7 @@
 
 namespace Phlow\Tests\Model;
 
+use Phlow\Model\WorkflowBuilder;
 use Phlow\Node\End;
 use Phlow\Node\Start;
 use Phlow\Model\NotFoundException;
@@ -30,6 +31,15 @@ class WorkflowTest extends \PHPUnit\Framework\TestCase
 
         $workflow->remove($end);
         $this->assertEquals(1, count($workflow->getAll()));
+    }
+
+    public function testId()
+    {
+        $workflow = new Workflow();
+        $this->assertNull($workflow->getId());
+
+        $workflow = new Workflow('ID');
+        $this->assertEquals('ID', $workflow->getId());
     }
 
     private function getWorkflow()
