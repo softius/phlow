@@ -19,6 +19,20 @@ class Workflow
     private $nodes = [];
 
     /**
+     * @var null|string Workflow Identifier
+     */
+    private $id;
+
+    /**
+     * Workflow constructor.
+     * @param string|null $id
+     */
+    public function __construct(string $id = null)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Adds the provided node in the list of nodes.
      * Maintains reference for all the nodes, that composite this workflow.
      * @param Node $node
@@ -89,5 +103,14 @@ class Workflow
         return (string) $viewer->render(new RecursiveIterator(
             $this->getAllByClass(Start::class)[0]
         ));
+    }
+
+    /**
+     * Returns the workflow's identifier
+     * @return null|string
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 }
