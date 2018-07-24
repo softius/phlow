@@ -92,7 +92,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/softius/phlow.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/softius/phlow/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/softius/Phlow/master.svg?style=flat-square
 [ico-maintenance]: https://img.shields.io/codeclimate/maintainability/softius/phlow.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/softius/phlow.svg?style=flat-square
 [ico-coverage]: https://img.shields.io/codeclimate/coverage-letter/softius/phlow.svg?style=flat-square
@@ -100,7 +100,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [img-lamp-flowchart]: https://upload.wikimedia.org/wikipedia/commons/9/91/LampFlowchart.svg
 
 [link-packagist]: https://packagist.org/packages/softius/phlow
-[link-travis]: https://travis-ci.org/softius/phlow
+[link-travis]: https://travis-ci.org/softius/Phlow
 [link-downloads]: https://packagist.org/packages/softius/phlow
 [link-author]: https://github.com/softius
 [link-contributors]: ../../contributors
