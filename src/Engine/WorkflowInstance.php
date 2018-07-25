@@ -50,7 +50,7 @@ class WorkflowInstance implements LoggerAwareInterface
     private $currentNode;
 
     /**
-     * @var Node Next node to be executed
+     * @var Node|null Next node to be executed
      */
     private $nextNode;
 
