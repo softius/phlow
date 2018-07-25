@@ -19,6 +19,10 @@ class Sort extends AbstractNode implements Action, Executable
 
     public function __construct(Expression $filter = null)
     {
+        if (empty($filter)) {
+            return;
+        }
+
         $this->addCallback(function ($collection) use ($filter) {
             return sort(
                 $collection,

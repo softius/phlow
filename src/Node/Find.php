@@ -19,6 +19,10 @@ class Find extends AbstractNode implements Executable
 
     public function __construct(Expression $filter = null)
     {
+        if (empty($filter)) {
+            return;
+        }
+
         $this->addCallback(function ($collection) use ($filter) {
             return find(
                 $collection,

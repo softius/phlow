@@ -19,6 +19,10 @@ class Map extends AbstractNode implements Executable
 
     public function __construct(Expression $expression = null)
     {
+        if (empty($expression)) {
+            return;
+        }
+
         $this->addCallback(function ($collection) use ($expression) {
             return map(
                 $collection,
