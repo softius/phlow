@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
-use function \DusanKasan\Knapsack\filter;
+use function \DusanKasan\Knapsack\filter as filterCollection;
 
 /**
  * Class Filter
@@ -25,7 +25,7 @@ class Filter extends AbstractNode implements Action, Executable
         }
 
         $this->addCallback(function ($collection) use ($filter) {
-            return filter(
+            return filterCollection(
                 $collection,
                 function ($current, $key) use ($filter) {
                     return $filter->evaluate(['current' => $current, 'key' => $key]);

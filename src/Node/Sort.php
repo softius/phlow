@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
-use function DusanKasan\Knapsack\sort;
+use function DusanKasan\Knapsack\sort as sortCollection;
 
 /**
  * Class Sort
@@ -24,7 +24,7 @@ class Sort extends AbstractNode implements Action, Executable
         }
 
         $this->addCallback(function ($collection) use ($filter) {
-            return sort(
+            return sortCollection(
                 $collection,
                 function ($a, $b) use ($filter) {
                     return $filter->evaluate(['a' => $a, 'b' => $b]);

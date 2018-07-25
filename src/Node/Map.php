@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
-use function DusanKasan\Knapsack\map;
+use function DusanKasan\Knapsack\map as mapCollection;
 
 /**
  * Class Map
@@ -24,7 +24,7 @@ class Map extends AbstractNode implements Executable
         }
 
         $this->addCallback(function ($collection) use ($expression) {
-            return map(
+            return mapCollection(
                 $collection,
                 function ($current, $key) use ($expression) {
                     return $expression->evaluate(['current' => $current, 'key' => $key]);

@@ -4,7 +4,7 @@ namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
 use Phlow\Model\RenderableObject;
-use function \DusanKasan\Knapsack\find;
+use function \DusanKasan\Knapsack\find as findCollection;
 
 /**
  * Class Find
@@ -24,7 +24,7 @@ class Find extends AbstractNode implements Executable
         }
 
         $this->addCallback(function ($collection) use ($filter) {
-            return find(
+            return findCollection(
                 $collection,
                 function ($current, $key) use ($filter) {
                     return $filter->evaluate(['current' => $current, 'key' => $key]);
