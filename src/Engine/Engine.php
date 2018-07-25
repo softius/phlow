@@ -21,6 +21,7 @@ use Phlow\Node\Find;
 use Phlow\Node\First;
 use Phlow\Node\Last;
 use Phlow\Node\Map;
+use Psr\Log\NullLogger;
 
 class Engine implements LoggerAwareInterface
 {
@@ -41,6 +42,7 @@ class Engine implements LoggerAwareInterface
      */
     public function __construct()
     {
+        $this->logger = new NullLogger();
         $this->processorRepository = new Repository();
 
         // $this->processorsRepository->register(Node::class, , NextConnectionProcessor::class);
@@ -95,18 +97,35 @@ class Engine implements LoggerAwareInterface
 
     /**
      * Creates and returns a new Instance for the given Workflow
-     * @param string $id
+     * @param Workflow $workflow
      * @param $input
      * @return WorkflowInstance
      */
-    public function createInstance(string $id, $input): WorkflowInstance
+    public function createInstance($workflow, $input): WorkflowInstance
     {
-        $instance = new WorkflowInstance($this, $this->get($id), $input);
-        if ($this->logger !== null) {
-            $instance->setLogger($this->logger);
-        }
+        $instance = new WorkflowInstance($this, $workflow, $input);
+        $instance->setLogger($this->logger);
 
         return $instance;
+    }
+
+    /**
+     * Executes the current node and moves the node pointer to the next node
+     * @param WorkflowInstance $instance
+     */
+    public function processInstance(WorkflowInstance $instance): void
+    {
+        $node = $instance->current();
+        $nodeClass = get_class($node);
+        $this->logger->info(sprintf('Workflow execution reached %s', $node));
+        if ($this->getProcessorRepository()->has($nodeClass)) {
+            $processor = $this->getProcessorRepository()->getInstance($nodeClass);
+            $connection = $processor->process($node, $instance->getExchange());
+            $instance->followConnection($connection);
+            $this->logger->info(sprintf('Workflow execution completed for %s', $node));
+//        } else {
+//            throw new \Exception('Processor not found');
+        }
     }
 
     /**

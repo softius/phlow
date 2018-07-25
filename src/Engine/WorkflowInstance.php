@@ -2,6 +2,7 @@
 
 namespace Phlow\Engine;
 
+use Phlow\Connection\Connection;
 use Phlow\Node\Error;
 use Phlow\Node\RecursiveIterator;
 use Phlow\Node\End;
@@ -101,7 +102,7 @@ class WorkflowInstance implements LoggerAwareInterface
         // Retrieve and execute the next node
         $this->initNodes();
         try {
-            $this->handleCurrentNode();
+            $this->engine->processInstance($this);
         } catch (\Exception $e) {
             $this->handleException($e);
         }
@@ -130,25 +131,6 @@ class WorkflowInstance implements LoggerAwareInterface
     }
 
     /**
-     * Executes the current node and moves the node pointer to the next node
-     */
-    private function handleCurrentNode(): void
-    {
-        $this->executionPath->add($this->current());
-
-        $nodeClass = get_class($this->current());
-        $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
-        if ($this->engine->getProcessorRepository()->has($nodeClass)) {
-            $processor = $this->engine->getProcessorRepository()->getInstance($nodeClass);
-            $connection = $processor->process($this->current(), $this->exchange);
-            $this->executionPath->add($connection);
-            $this->nextNode = $connection->getTarget();
-
-            $this->logger->info(sprintf('Workflow execution completed for %s', $nodeClass));
-        }
-    }
-
-    /**
      * Handles a raised exception by moving the flow to an error event
      * If no error handling was configured, another Exception will be thrown halting the execution
      * @param \Exception $exception
@@ -166,7 +148,7 @@ class WorkflowInstance implements LoggerAwareInterface
         while (!empty($exceptionClass)) {
             if (array_key_exists($exceptionClass, $errorEvents)) {
                 $this->currentNode = $errorEvents[$exceptionClass];
-                $this->handleCurrentNode();
+                $this->engine->processInstance($this);
                 return;
             }
 
@@ -197,6 +179,7 @@ class WorkflowInstance implements LoggerAwareInterface
         }
 
         $this->currentNode = $startEvents[0];
+        $this->executionPath->add($this->currentNode);
         $this->nextNode = null;
     }
 
@@ -289,5 +272,25 @@ class WorkflowInstance implements LoggerAwareInterface
     public function getEngine(): Engine
     {
         return $this->engine;
+    }
+
+    public function followConnection(Connection $connection)
+    {
+        $this->executionPath->add($connection);
+        $this->moveTo($connection->getTarget());
+    }
+
+    public function moveTo(Node $node)
+    {
+        $this->executionPath->add($node);
+        $this->nextNode = $node;
+    }
+
+    /**
+     * @return Exchange
+     */
+    public function getExchange(): Exchange
+    {
+        return $this->exchange;
     }
 }

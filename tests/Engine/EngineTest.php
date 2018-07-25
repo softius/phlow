@@ -11,11 +11,11 @@ class EngineTest extends TestCase
 
     public function testCreateInstance()
     {
-        $workflow = new Workflow('test');
+        $workflow = new Workflow('id');
         $engine = new Engine();
         $engine->add($workflow);
 
-        $instance = $engine->createInstance('test', []);
+        $instance = $engine->createInstance($workflow, []);
         $this->assertEquals($workflow, $instance->getWorkflow());
     }
 

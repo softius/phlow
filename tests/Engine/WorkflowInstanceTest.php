@@ -13,14 +13,25 @@ use Phlow\Engine\InvalidStateException;
 use Phlow\Connection\Connection;
 use Phlow\Tests\Engine\TestLogger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class WorkflowInstanceTest extends TestCase
 {
+    /**
+     * @var Engine
+     */
     private $engine;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     public function setUp()
     {
         $this->engine = new Engine();
+        $this->logger = new TestLogger();
+        $this->engine->setLogger($this->logger);
     }
 
     public function testAdvance()
@@ -159,9 +170,7 @@ class WorkflowInstanceTest extends TestCase
 
     public function testLogger()
     {
-        $logger = new TestLogger();
         $instance = $this->getPipeline();
-        $instance->setLogger($logger);
         $instance->execute();
 
         // 1. Workflow execution initiated
@@ -169,7 +178,7 @@ class WorkflowInstanceTest extends TestCase
         // 3/5/7. Start/Callback/Callback executed
         // 8. Workflow execution reached Phlow\Node\End
         // 9. Workflow execution completed
-        $this->assertEquals(9, count($logger->getAllRecords()));
+        $this->assertEquals(9, count($this->logger->getAllRecords()));
     }
 
     public function testExecutionPath()
@@ -228,6 +237,6 @@ class WorkflowInstanceTest extends TestCase
             ->end();
 
         $in = ['a' => null, 'b' => null, 'c' => null];
-        return new WorkflowInstance($this->engine, $builder->getWorkflow(), $in);
+        return $this->engine->createInstance($builder->getWorkflow(), $in);
     }
 }
