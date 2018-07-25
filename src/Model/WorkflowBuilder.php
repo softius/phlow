@@ -30,7 +30,7 @@ use Phlow\Util\Stack;
 class WorkflowBuilder
 {
     /**
-     * @var string The last expression mentioned
+     * @var Expression The last expression mentioned
      */
     private $lastExpression;
 
