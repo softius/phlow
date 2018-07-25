@@ -3,8 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
-use Phlow\Model\RenderableObject;
-use function \DusanKasan\Knapsack\filter as filterCollection;
 
 /**
  * Class Filter
@@ -13,22 +11,19 @@ use function \DusanKasan\Knapsack\filter as filterCollection;
  * Upon processing the Exchange will hold a lazy Collection
  * @package Phlow\Node
  */
-class Filter extends AbstractNode implements Action, Executable
+class Filter extends AbstractExecutableNode implements Action, Executable
 {
-    use RenderableObject;
-    use ExecutableTrait;
-
     public function __construct(Expression $expression = null)
     {
-        if (empty($expression)) {
-            return;
+        if (!empty($expression)) {
+            $this->wrapCallback(
+                '\DusanKasan\Knapsack\filter',
+                [
+                    function ($current, $key) use ($expression) {
+                        return $expression->evaluate(['current' => $current, 'key' => $key]);
+                    }
+                ]
+            );
         }
-
-        $this->wrapCallback(
-            '\DusanKasan\Knapsack\filter',
-            [function ($current, $key) use ($expression) {
-                return $expression->evaluate(['current' => $current, 'key' => $key]);
-            }]
-        );
     }
 }
