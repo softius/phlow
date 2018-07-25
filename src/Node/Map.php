@@ -3,8 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
-use Phlow\Model\RenderableObject;
-use function DusanKasan\Knapsack\map;
 
 /**
  * Class Map
@@ -12,20 +10,19 @@ use function DusanKasan\Knapsack\map;
  * The callback must return the new instance of the item, thus creating a new collection of items.
  * @package Phlow\Node
  */
-class Map extends AbstractNode implements Executable
+class Map extends AbstractExecutableNode implements Action, Executable
 {
-    use RenderableObject;
-    use ExecutableTrait;
-
     public function __construct(Expression $expression = null)
     {
-        $this->addCallback(function ($collection) use ($expression) {
-            return map(
-                $collection,
-                function ($current, $key) use ($expression) {
-                    return $expression->evaluate(['current' => $current, 'key' => $key]);
-                }
+        if (!empty($expression)) {
+            $this->wrapCallback(
+                '\DusanKasan\Knapsack\map',
+                [
+                    function ($current, $key) use ($expression) {
+                        return $expression->evaluate(['current' => $current, 'key' => $key]);
+                    }
+                ]
             );
-        });
+        }
     }
 }

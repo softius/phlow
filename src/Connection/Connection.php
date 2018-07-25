@@ -13,15 +13,37 @@ class Connection implements WorkflowObject
         __toString as private getClassString;
     }
 
+    /**
+     * @var Node
+     */
     private $source;
+
+    /**
+     * @var Node
+     */
     private $target;
+
+    /**
+     * @var Expression
+     */
     private $condition;
+
+    /**
+     * @var int
+     */
     private $label;
 
     public const LABEL_CHILD = 1;
     public const LABEL_PARENT = 2;
     public const LABEL_NEXT = 3;
 
+    /**
+     * Connection constructor.
+     * @param Node $source
+     * @param Node $target
+     * @param int $label
+     * @param Expression|null $condition
+     */
     public function __construct(Node $source, Node $target, int $label, Expression $condition = null)
     {
         $source->addOutgoingConnection($this);

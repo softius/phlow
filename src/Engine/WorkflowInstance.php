@@ -50,7 +50,7 @@ class WorkflowInstance implements LoggerAwareInterface
     private $currentNode;
 
     /**
-     * @var Node Next node to be executed
+     * @var Node|null Next node to be executed
      */
     private $nextNode;
 
@@ -273,7 +273,10 @@ class WorkflowInstance implements LoggerAwareInterface
         throw new InvalidStateException('Execution has not been initiated for this Workflow.');
     }
 
-    public function next(): Node
+    /**
+     * @return Node|null
+     */
+    public function next(): ?Node
     {
         return $this->nextNode;
     }

@@ -21,7 +21,7 @@ trait ErrorHandlerTrait
 
     /**
      * Returns the Exception class associated with this Node
-     * @return mixed
+     * @return string
      */
     public function getExceptionClass(): string
     {

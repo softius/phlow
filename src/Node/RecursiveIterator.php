@@ -8,7 +8,7 @@ use Phlow\Connection\RecursiveIterator as RecursiveConnectionIterator;
 class RecursiveIterator extends \ArrayIterator implements \RecursiveIterator
 {
     /**
-     * @var callable Filter entries by the provided callback
+     * @var callable|null Filter entries by the provided callback
      */
     private $accepts;
 
