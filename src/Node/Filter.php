@@ -18,19 +18,17 @@ class Filter extends AbstractNode implements Action, Executable
     use RenderableObject;
     use ExecutableTrait;
 
-    public function __construct(Expression $filter = null)
+    public function __construct(Expression $expression = null)
     {
-        if (empty($filter)) {
+        if (empty($expression)) {
             return;
         }
 
-        $this->addCallback(function ($collection) use ($filter) {
-            return filterCollection(
-                $collection,
-                function ($current, $key) use ($filter) {
-                    return $filter->evaluate(['current' => $current, 'key' => $key]);
-                }
-            );
-        });
+        $this->wrapCallback(
+            '\DusanKasan\Knapsack\filter',
+            [function ($current, $key) use ($expression) {
+                return $expression->evaluate(['current' => $current, 'key' => $key]);
+            }]
+        );
     }
 }

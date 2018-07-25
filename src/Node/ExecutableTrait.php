@@ -43,4 +43,17 @@ trait ExecutableTrait
     {
         return is_callable($this->callback);
     }
+
+    /**
+     * Wraps a the provided callback with the given arguments in callback accepting only the inbound message
+     * @param callable $callback
+     * @param array $extraArgs
+     */
+    public function wrapCallback(callable $callback, array $extraArgs): void
+    {
+        $this->addCallback(function ($in) use ($callback, $extraArgs) {
+            $args = array_merge([$in], $extraArgs);
+            return call_user_func_array($callback, $args);
+        });
+    }
 }

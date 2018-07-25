@@ -17,19 +17,17 @@ class Sort extends AbstractNode implements Action, Executable
     use RenderableObject;
     use ExecutableTrait;
 
-    public function __construct(Expression $filter = null)
+    public function __construct(Expression $expression = null)
     {
-        if (empty($filter)) {
+        if (empty($expression)) {
             return;
         }
 
-        $this->addCallback(function ($collection) use ($filter) {
-            return sortCollection(
-                $collection,
-                function ($a, $b) use ($filter) {
-                    return $filter->evaluate(['a' => $a, 'b' => $b]);
-                }
-            );
-        });
+        $this->wrapCallback(
+            '\DusanKasan\Knapsack\sort',
+            [function ($a, $b) use ($expression) {
+                return $expression->evaluate(['a' => $a, 'b' => $b]);
+            }]
+        );
     }
 }

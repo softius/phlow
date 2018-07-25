@@ -23,13 +23,11 @@ class Map extends AbstractNode implements Executable
             return;
         }
 
-        $this->addCallback(function ($collection) use ($expression) {
-            return mapCollection(
-                $collection,
-                function ($current, $key) use ($expression) {
-                    return $expression->evaluate(['current' => $current, 'key' => $key]);
-                }
-            );
-        });
+        $this->wrapCallback(
+            '\DusanKasan\Knapsack\find',
+            [function ($current, $key) use ($expression) {
+                return $expression->evaluate(['current' => $current, 'key' => $key]);
+            }]
+        );
     }
 }
