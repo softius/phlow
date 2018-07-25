@@ -4,7 +4,7 @@ The following example demonstrates how to apply conditions and branching in your
 ``` php
 require __DIR__.'/../vendor/autoload.php';
 
-$flow = (new \Phlow\Model\WorkflowBuilder())
+$workflow = (new \Phlow\Model\WorkflowBuilder())
     ->start()
     ->choice()
     ->when('number < 100')
@@ -18,7 +18,8 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
     ->endAll()
     ->getWorkflow();
 
-$instance = new \Phlow\Engine\WorkflowInstance($flow, ['number' => 99]);
+$engine = new \Phlow\Engine\Engine();
+$instance = $engine->createInstance($workflow, ['number' => 99]);
 $instance->execute();
 
 print $flow->render(new \Phlow\Renderer\PlainTextRenderer());

@@ -39,7 +39,8 @@ During the execution, information is exchanged between each Workflow Node. In pa
 Here is a short example to get you started:
 
 ``` php
-$instance = new WorkflowInstance($workflow, $input);
+$engine = new Engine();
+$instance = $engine->createInstance($workflow, $input);
 $output = $instance->execute();
 ```
 

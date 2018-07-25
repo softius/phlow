@@ -49,8 +49,8 @@ $builder
 Once the model bas been built, it can be executed by creating a new instance. At this point it is possible to pass some data that could be made available throughout the process. The data can be any object which could be also updated as part of the process.
 
 ``` php
-$workflow = $builder->getWorkflow();
-$instance = new WorkflowInstance($workflow, $data);
+$engine = new Engine();
+$instance = $engine->createInstance($builder->getWorkflow(), $input);
 $instance->execute();
 ```
 

@@ -7,14 +7,16 @@ During the execution, information is exchanged between each Workflow Node. In pa
 Here is a short example to get you started:
 
 ``` php
-$instance = new WorkflowInstance($workflow, $input);
+$engine = new Engine();
+$instance = $engine->createInstance($workflow, $input);
 $output = $instance->execute();
 ```
 
 It is also possible to advance the workflow for only one node. In this case, the execution will proceed to the next node and return the generated outbound message.
 
 ``` php
-$instance = new WorkflowInstance($workflow, $input);
+$engine = new Engine();
+$instance = $engine->createInstance($workflow, $input);
 $output = $instance->advance();
 ```
 

@@ -4,7 +4,7 @@ The following example demonstrates how to execute steps in sequence. As part of 
 ``` php
 require __DIR__.'/../vendor/autoload.php';
 
-$flow = (new \Phlow\Model\WorkflowBuilder())
+$workflow = (new \Phlow\Model\WorkflowBuilder())
     ->start()
     ->callback(function ($data) {
         $data['a'] = rand(1, 100);
@@ -22,7 +22,8 @@ $flow = (new \Phlow\Model\WorkflowBuilder())
     ->end()
     ->getWorkflow();
 
-$instance = new \Phlow\Engine\WorkflowInstance($flow, []);
+$engine = new \Phlow\Engine\Engine();
+$instance = $engine->createInstance($workflow, []);
 $instance->execute();
 
 print $flow->render(new \Phlow\Renderer\PlainTextRenderer());
