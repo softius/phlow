@@ -6,7 +6,7 @@ trait ExecutableTrait
 {
 
     /**
-     * @var array Callback to be invoked when processing this Callback
+     * @var callable Callback to be invoked when processing this Callback
      */
     private $callback = null;
 
