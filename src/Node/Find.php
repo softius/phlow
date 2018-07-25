@@ -3,8 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
-use Phlow\Model\RenderableObject;
-use function \DusanKasan\Knapsack\find as findCollection;
 
 /**
  * Class Find
@@ -12,22 +10,19 @@ use function \DusanKasan\Knapsack\find as findCollection;
  * Upon processing, the Exchange will hold a single element (not a Collection).
  * @package Phlow\Node
  */
-class Find extends AbstractNode implements Executable
+class Find extends AbstractExecutableNode implements Action, Executable
 {
-    use RenderableObject;
-    use ExecutableTrait;
-
     public function __construct(Expression $expression = null)
     {
-        if (empty($expression)) {
-            return;
+        if (!empty($expression)) {
+            $this->wrapCallback(
+                '\DusanKasan\Knapsack\find',
+                [
+                    function ($current, $key) use ($expression) {
+                        return $expression->evaluate(['current' => $current, 'key' => $key]);
+                    }
+                ]
+            );
         }
-
-        $this->wrapCallback(
-            '\DusanKasan\Knapsack\find',
-            [function ($current, $key) use ($expression) {
-                return $expression->evaluate(['current' => $current, 'key' => $key]);
-            }]
-        );
     }
 }

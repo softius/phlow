@@ -3,7 +3,6 @@
 namespace Phlow\Node;
 
 use Phlow\Expression\Expression;
-use Phlow\Model\RenderableObject;
 
 /**
  * Class Sort
