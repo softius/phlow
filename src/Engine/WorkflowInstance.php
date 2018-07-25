@@ -2,22 +2,10 @@
 
 namespace Phlow\Engine;
 
-use Phlow\Node\Callback;
 use Phlow\Node\Error;
-use Phlow\Node\Find;
-use Phlow\Node\First;
-use Phlow\Node\Last;
-use Phlow\Node\Map;
 use Phlow\Node\RecursiveIterator;
-use Phlow\Node\Sort;
-use Phlow\Processor\ChildConnectionProcessor;
-use Phlow\Processor\Processor;
-use Phlow\Processor\NextConnectionProcessor;
-use Phlow\Processor\CallbackProcessor;
 use Phlow\Node\End;
 use Phlow\Node\Start;
-use Phlow\Node\Choice;
-use Phlow\Node\Filter;
 use Phlow\Model\Workflow;
 use Phlow\Node\Node;
 use Phlow\Renderer\Renderer;
@@ -60,28 +48,18 @@ class WorkflowInstance implements LoggerAwareInterface
     private $executionPath;
 
     /**
-     * @var array Mapping between Workflow Nodes and Processors
+     * @var Engine|null The Engine created this instance
      */
-    private $processors = [
-        Start::class => NextConnectionProcessor::class,
-        Error::class => NextConnectionProcessor::class,
-        Callback::class => CallbackProcessor::class,
-        Choice::class => ChildConnectionProcessor::class,
-        Filter::class => CallbackProcessor::class,
-        First::class => CallbackProcessor::class,
-        Find::class => CallbackProcessor::class,
-        Last::class => CallbackProcessor::class,
-        Sort::class => CallbackProcessor::class,
-        Map::class => CallbackProcessor::class,
-    ];
+    private $engine;
 
     /**
      * WorkflowInstance constructor.
      * @param Workflow $workflow
      * @param $inbound
      */
-    public function __construct(Workflow $workflow, $inbound)
+    public function __construct(Engine $engine, Workflow $workflow, $inbound)
     {
+        $this->engine = $engine;
         $this->workflow = $workflow;
         $this->exchange = new Exchange($inbound);
         $this->setLogger(new NullLogger());
@@ -160,12 +138,8 @@ class WorkflowInstance implements LoggerAwareInterface
 
         $nodeClass = get_class($this->current());
         $this->logger->info(sprintf('Workflow execution reached %s', $nodeClass));
-        if (array_key_exists($nodeClass, $this->processors)) {
-            $processorClass = $this->processors[$nodeClass];
-
-            /** @var Processor $processor */
-            $processor = new $processorClass;
-
+        if ($this->engine->getProcessorRepository()->has($nodeClass)) {
+            $processor = $this->engine->getProcessorRepository()->getInstance($nodeClass);
             $connection = $processor->process($this->current(), $this->exchange);
             $this->executionPath->add($connection);
             $this->nextNode = $connection->getTarget();
@@ -307,5 +281,13 @@ class WorkflowInstance implements LoggerAwareInterface
             }
         );
         return (string) $viewer->render($itr);
+    }
+
+    /**
+     * @return null|Engine
+     */
+    public function getEngine(): Engine
+    {
+        return $this->engine;
     }
 }

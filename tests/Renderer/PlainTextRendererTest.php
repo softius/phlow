@@ -2,6 +2,7 @@
 
 namespace Phlow\Tests\Renderer;
 
+use Phlow\Engine\Engine;
 use Phlow\Engine\WorkflowInstance;
 use Phlow\Renderer\PlainTextRenderer;
 use PHPUnit\Framework\TestCase;
@@ -41,7 +42,7 @@ class PlainTextRendererTest extends TestCase
             ->end()
             ->getWorkflow();
 
-        $instance = new WorkflowInstance($workflow, []);
+        $instance = new WorkflowInstance(new Engine(), $workflow, []);
         $instance->execute();
 
         $expectedOutput = implode(PHP_EOL, [
@@ -92,7 +93,7 @@ class PlainTextRendererTest extends TestCase
             ->endAll()
             ->getWorkflow();
 
-        $instance = new WorkflowInstance($workflow, []);
+        $instance = new WorkflowInstance(new Engine(), $workflow, []);
         $instance->execute();
 
         $expectedOutput = implode(PHP_EOL, [
